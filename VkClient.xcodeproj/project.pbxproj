@@ -9,21 +9,21 @@
 /* Begin PBXBuildFile section */
 		153F21A32577F3780018A18D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21A22577F3780018A18D /* AppDelegate.swift */; };
 		153F21A52577F3780018A18D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21A42577F3780018A18D /* SceneDelegate.swift */; };
-		153F21A72577F3780018A18D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21A62577F3780018A18D /* ViewController.swift */; };
 		153F21AA2577F3780018A18D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 153F21A82577F3780018A18D /* Main.storyboard */; };
 		153F21AC2577F37B0018A18D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 153F21AB2577F37B0018A18D /* Assets.xcassets */; };
 		153F21AF2577F37B0018A18D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 153F21AD2577F37B0018A18D /* LaunchScreen.storyboard */; };
+		153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21B82577F6FF0018A18D /* LoginFormController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		153F219F2577F3780018A18D /* VkClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VkClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		153F21A22577F3780018A18D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		153F21A42577F3780018A18D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		153F21A62577F3780018A18D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		153F21A92577F3780018A18D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		153F21AB2577F37B0018A18D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		153F21AE2577F37B0018A18D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		153F21B02577F37B0018A18D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		153F21B82577F6FF0018A18D /* LoginFormController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,8 +58,8 @@
 			children = (
 				153F21A22577F3780018A18D /* AppDelegate.swift */,
 				153F21A42577F3780018A18D /* SceneDelegate.swift */,
-				153F21A62577F3780018A18D /* ViewController.swift */,
 				153F21A82577F3780018A18D /* Main.storyboard */,
+				153F21B82577F6FF0018A18D /* LoginFormController.swift */,
 				153F21AB2577F37B0018A18D /* Assets.xcassets */,
 				153F21AD2577F37B0018A18D /* LaunchScreen.storyboard */,
 				153F21B02577F37B0018A18D /* Info.plist */,
@@ -137,7 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				153F21A72577F3780018A18D /* ViewController.swift in Sources */,
+				153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
 				153F21A52577F3780018A18D /* SceneDelegate.swift in Sources */,
 			);
@@ -289,14 +289,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DQ48S8SUS4;
 				INFOPLIST_FILE = VkClient/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ru.50.AlexanderFomin.VkClient;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.AlexanderFomin86.VkClient2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -308,14 +309,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DQ48S8SUS4;
 				INFOPLIST_FILE = VkClient/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ru.50.AlexanderFomin.VkClient;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.AlexanderFomin86.VkClient2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
