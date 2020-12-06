@@ -38,6 +38,9 @@ class LoginFormController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWasShown), name: UIResponder.keyboardWillShowNotification, object: nil)
         // Второе — когда она пропадает
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillBeHidden(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        // Прячем TabBar на login screen 
+        tabBarController?.tabBar.isHidden = true
         }
     
     override func viewWillDisappear(_ animated: Bool) {
