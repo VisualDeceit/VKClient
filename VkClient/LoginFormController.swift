@@ -13,6 +13,10 @@ class LoginFormController: UIViewController {
     @IBOutlet var passwordInput: UITextField!
     @IBOutlet var scrollView: UIScrollView!
     
+    @IBAction func unwind( _ seg: UIStoryboardSegue) {
+        loginInput.text = ""
+        passwordInput.text = ""
+    }
     
     //проверка авторизации
     private func userCheck() -> Bool {
@@ -21,7 +25,7 @@ class LoginFormController: UIViewController {
             return false
         }
         
-        return login == "test@mail.ru" && password == "0000"
+        return login == "0" && password == "0"
     }
     
     // предупреждение
