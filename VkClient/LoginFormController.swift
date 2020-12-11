@@ -13,16 +13,41 @@ class LoginFormController: UIViewController {
     @IBOutlet var passwordInput: UITextField!
     @IBOutlet var scrollView: UIScrollView!
     
-    @IBAction func loginButtonPressed(_ sender: Any) {
-        let login = loginInput.text
-        let password = passwordInput.text
-        
-        if login == "test@mail.ru", password == "0000" {
-            print("Успешная авторизация")
-        } else {
-            print("Ошибка авторизации")
-        }
+    @IBAction func unwind( _ seg: UIStoryboardSegue) {
+        loginInput.text = ""
+        passwordInput.text = ""
     }
+    
+    //проверка авторизации
+    private func userCheck() -> Bool {
+        guard let login = loginInput.text,
+              let password = passwordInput.text else {
+            return false
+        }
+        
+        return login == "0" && password == "0"
+    }
+    
+    // предупреждение
+    private func showAlert(){
+        let alert = UIAlertController(title: "Error", message: "Invalid username or password", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: {_ in
+            self.loginInput.text = ""
+            self.passwordInput.text = ""
+        })
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        guard userCheck() else {
+            showAlert()
+            return false
+        }
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Жест нажатия
@@ -38,6 +63,9 @@ class LoginFormController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWasShown), name: UIResponder.keyboardWillShowNotification, object: nil)
         // Второе — когда она пропадает
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillBeHidden(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        // Прячем TabBar на login screen 
+        tabBarController?.tabBar.isHidden = true
         }
     
     override func viewWillDisappear(_ animated: Bool) {
