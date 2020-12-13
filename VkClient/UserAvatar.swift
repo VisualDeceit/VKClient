@@ -9,15 +9,15 @@ import UIKit
 
 class UserAvatar: UIView {
 
-    let logo = UIImageView()
+    var logo = UIImageView()
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        logo.frame(forAlignmentRect: rect)
-        logo.layer.cornerRadius = 10
+        logo.frame = rect
+        logo.layer.cornerRadius = logo.frame.height / 2
         logo.clipsToBounds = true
-        addSubview(logo)
+        self.addSubview(logo)
     }
-    
+   
 }

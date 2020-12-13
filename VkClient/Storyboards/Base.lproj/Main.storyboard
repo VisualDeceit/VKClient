@@ -126,35 +126,35 @@
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="friendCell" id="bUw-4E-NXr" customClass="FriendTableViewCell" customModule="VkClient" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="70.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bUw-4E-NXr" id="aK1-t1-VTe">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bUw-4E-NXr" id="aK1-t1-VTe">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ruC-BN-I1F">
-                                            <rect key="frame" x="10" y="10" width="50" height="50.5"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="50" id="SwT-DT-sex"/>
-                                                <constraint firstAttribute="height" constant="50" id="UFq-px-R3l"/>
-                                            </constraints>
-                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RT-nZ-k3T">
                                             <rect key="frame" x="70" y="25" width="295" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oHQ-2u-zWy" customClass="UserAvatar" customModule="VkClient" customModuleProvider="target">
+                                            <rect key="frame" x="10" y="10" width="50" height="50.5"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="QLv-AK-Ygp"/>
+                                                <constraint firstAttribute="height" constant="50" id="ifw-T1-ryV"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="ruC-BN-I1F" firstAttribute="top" secondItem="aK1-t1-VTe" secondAttribute="top" constant="10" id="21p-vz-T2B"/>
-                                        <constraint firstItem="ruC-BN-I1F" firstAttribute="leading" secondItem="aK1-t1-VTe" secondAttribute="leading" constant="10" id="CVW-Qc-NWC"/>
-                                        <constraint firstItem="ruC-BN-I1F" firstAttribute="centerY" secondItem="aK1-t1-VTe" secondAttribute="centerY" id="PE9-Az-Tcx"/>
-                                        <constraint firstAttribute="trailing" secondItem="0RT-nZ-k3T" secondAttribute="trailing" constant="10" id="aNz-hx-drT"/>
-                                        <constraint firstItem="0RT-nZ-k3T" firstAttribute="leading" secondItem="ruC-BN-I1F" secondAttribute="trailing" constant="10" id="fIz-8V-T33"/>
-                                        <constraint firstItem="0RT-nZ-k3T" firstAttribute="centerY" secondItem="aK1-t1-VTe" secondAttribute="centerY" id="wvz-7u-WAq"/>
+                                        <constraint firstItem="0RT-nZ-k3T" firstAttribute="centerY" secondItem="aK1-t1-VTe" secondAttribute="centerY" id="7ak-Xm-zV5"/>
+                                        <constraint firstItem="0RT-nZ-k3T" firstAttribute="leading" secondItem="oHQ-2u-zWy" secondAttribute="trailing" constant="10" id="EZ6-Ul-sgP"/>
+                                        <constraint firstItem="oHQ-2u-zWy" firstAttribute="top" secondItem="aK1-t1-VTe" secondAttribute="top" constant="10" id="IBG-gJ-2V3"/>
+                                        <constraint firstAttribute="trailing" secondItem="0RT-nZ-k3T" secondAttribute="trailing" constant="10" id="JTx-FQ-9h0"/>
+                                        <constraint firstItem="oHQ-2u-zWy" firstAttribute="centerY" secondItem="aK1-t1-VTe" secondAttribute="centerY" id="XWE-Dq-Sba"/>
+                                        <constraint firstItem="oHQ-2u-zWy" firstAttribute="leading" secondItem="aK1-t1-VTe" secondAttribute="leading" constant="10" id="pKW-Vh-GdE"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="friendAvatar" destination="ruC-BN-I1F" id="cGW-Ha-ehs"/>
+                                    <outlet property="friendAvatar" destination="oHQ-2u-zWy" id="pKf-Es-CBN"/>
                                     <outlet property="friendName" destination="0RT-nZ-k3T" id="WmC-mU-qel"/>
                                     <segue destination="E2E-tI-6dW" kind="show" identifier="showUserPhotos" id="akZ-cI-laP"/>
                                 </connections>

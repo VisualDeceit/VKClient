@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         func randomAlbum() -> [Photo] {
             var photo = Photo(img: UIImage(), likes: Likes(user_likes: 0, count: 0))
             var album = [Photo]()
-            for _ in 1...Int.random(in: 1..<5){
+            for _ in 1...Int.random(in: 1..<2){
                 let url = URL(string: "https://picsum.photos/150")
                 let data = try? Data(contentsOf: url!)
                 let img = UIImage(data: data!)
