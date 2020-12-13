@@ -30,7 +30,7 @@ class GroupsTableViewController: UITableViewController {
         else { return UITableViewCell() }
         
         cell.groupName.text = userGroups[indexPath.row].name
-        cell.groupImage.image = userGroups[indexPath.row].photo_50!
+        cell.groupImage.image = userGroups[indexPath.row].logo ?? UIImage()
         
         return cell
     }

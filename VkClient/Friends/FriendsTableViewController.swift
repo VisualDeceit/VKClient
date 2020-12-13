@@ -30,7 +30,7 @@ class FriendsTableViewController: UITableViewController {
             return UITableViewCell()
         }
         cell.friendName.text = "\(friends[indexPath.row].first_name) \(friends[indexPath.row].last_name)"
-        cell.friendAvatar.image = friends[indexPath.row].photo_50
+        cell.friendAvatar.image = #imageLiteral(resourceName: "camera_50") //friends[indexPath.row].photo_50
         
         return cell
     }

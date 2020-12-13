@@ -32,7 +32,7 @@ class AllGroupsTableViewController: UITableViewController {
         else { return UITableViewCell()}
         
         cell.groupName.text = allGroups[indexPath.row].name
-        cell.groupImage.image = allGroups[indexPath.row].photo_50!
+        cell.groupImage.image = allGroups[indexPath.row].logo!
         
         return cell
     }
