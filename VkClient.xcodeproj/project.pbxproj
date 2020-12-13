@@ -22,6 +22,7 @@
 		153F21AC2577F37B0018A18D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 153F21AB2577F37B0018A18D /* Assets.xcassets */; };
 		153F21AF2577F37B0018A18D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 153F21AD2577F37B0018A18D /* LaunchScreen.storyboard */; };
 		153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21B82577F6FF0018A18D /* LoginFormController.swift */; };
+		15B17600258621F500042450 /* UserAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* UserAvatar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		153F21AE2577F37B0018A18D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		153F21B02577F37B0018A18D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		153F21B82577F6FF0018A18D /* LoginFormController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormController.swift; sourceTree = "<group>"; };
+		15B175FF258621F500042450 /* UserAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,19 +113,28 @@
 		153F21A12577F3780018A18D /* VkClient */ = {
 			isa = PBXGroup;
 			children = (
+				15B176022586222500042450 /* Storyboards */,
 				1504D9362583BE9A00B4EBEE /* FriendPhotos */,
 				1504D92B2583AD3E00B4EBEE /* Groups */,
 				1504D92A2583AD3000B4EBEE /* Friends */,
 				1504D9292583AD2200B4EBEE /* Model */,
 				153F21A22577F3780018A18D /* AppDelegate.swift */,
-				153F21A42577F3780018A18D /* SceneDelegate.swift */,
-				153F21A82577F3780018A18D /* Main.storyboard */,
 				153F21B82577F6FF0018A18D /* LoginFormController.swift */,
+				15B175FF258621F500042450 /* UserAvatar.swift */,
+				153F21A42577F3780018A18D /* SceneDelegate.swift */,
 				153F21AB2577F37B0018A18D /* Assets.xcassets */,
-				153F21AD2577F37B0018A18D /* LaunchScreen.storyboard */,
 				153F21B02577F37B0018A18D /* Info.plist */,
 			);
 			path = VkClient;
+			sourceTree = "<group>";
+		};
+		15B176022586222500042450 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				153F21A82577F3780018A18D /* Main.storyboard */,
+				153F21AD2577F37B0018A18D /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,6 +211,7 @@
 				1504D93C2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift in Sources */,
 				1504D9402583D16100B4EBEE /* GroupsTableViewController.swift in Sources */,
 				1504D9342583AE9500B4EBEE /* Data.swift in Sources */,
+				15B17600258621F500042450 /* UserAvatar.swift in Sources */,
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
