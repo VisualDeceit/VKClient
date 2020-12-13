@@ -11,7 +11,8 @@ import UIKit
 
 class PhotoCollectionViewController: UICollectionViewController {
     
-    var userId: Int = 0
+    //var userId: Int = 0
+    var user = User(first_name: "", last_name: "", album: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +26,7 @@ class PhotoCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  friends[userId].album?.count ?? 0
+        return  user.album?.count ?? 0
     }
 
     
@@ -34,9 +35,9 @@ class PhotoCollectionViewController: UICollectionViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCollectionViewCell
         else { return PhotoCollectionViewCell() }
         
-        cell.photo.image = friends[userId].album![indexPath.row].img
-        cell.likeControl.likesCount = friends[userId].album![indexPath.row].like.count
-        cell.likeControl.isLiked = friends[userId].album![indexPath.row].like.userLikes
+        cell.photo.image = user.album![indexPath.row].img
+        cell.likeControl.likesCount = user.album![indexPath.row].like.count
+        cell.likeControl.isLiked = user.album![indexPath.row].like.userLikes
         
         return cell
     }

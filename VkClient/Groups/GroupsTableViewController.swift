@@ -9,6 +9,17 @@ import UIKit
 
 class GroupsTableViewController: UITableViewController {
 
+    var userGroups = [Group]()
+    
+    func fillData() {
+       userGroups.append(Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4")))
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fillData() 
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -58,7 +69,7 @@ class GroupsTableViewController: UITableViewController {
             { return }
             
             if let indexPath = allGroupsController.tableView.indexPathForSelectedRow {
-                let group = allGroups[indexPath.row]
+                let group = allGroupsController.allGroups[indexPath.row]
                 if !userGroups.contains(group) {
                     userGroups.append(group)
                     tableView.reloadData()

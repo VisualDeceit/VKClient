@@ -45,9 +45,5 @@ struct Like {
 }
 
 
-var friends = [User]()
-var allGroups = [Group]()
-var userGroups = [Group]()
-//var photos = [UIImage]()
 
 
