@@ -13,6 +13,8 @@ class PhotoCollectionViewController: UICollectionViewController {
 
     var album = [Photo]()
     
+    var userId: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -25,7 +27,7 @@ class PhotoCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  album.count //friendsphotos.count
+        return  friends[userId].album?.count ?? 0//album.count //friendsphotos.count
     }
 
     
@@ -34,8 +36,8 @@ class PhotoCollectionViewController: UICollectionViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCollectionViewCell
         else { return PhotoCollectionViewCell() }
         
-        cell.photo.image = album[indexPath.row].img //photos[indexPath.row]
-    
+        //cell.photo.image = album[indexPath.row].img //photos[indexPath.row]
+        cell.photo.image = friends[userId].album![indexPath.row].img
         return cell
     }
 }

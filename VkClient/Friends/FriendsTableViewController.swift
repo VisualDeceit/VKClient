@@ -10,6 +10,8 @@ import UIKit
 
 class FriendsTableViewController: UITableViewController {
     
+    var userId = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -33,6 +35,21 @@ class FriendsTableViewController: UITableViewController {
         cell.friendAvatar.image = #imageLiteral(resourceName: "camera_50") //friends[indexPath.row].photo_50
         
         return cell
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        userId = indexPath.row
+        print(userId)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == "showUserPhotos",
+              let controller = segue.destination as? PhotoCollectionViewController else { return }
+        
+        //controller.album = friends[userId].album!
+        controller.userId = userId
+        controller.collectionView.reloadData() 
     }
     
   
