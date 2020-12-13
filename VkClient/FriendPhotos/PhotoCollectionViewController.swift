@@ -35,6 +35,9 @@ class PhotoCollectionViewController: UICollectionViewController {
         else { return PhotoCollectionViewCell() }
         
         cell.photo.image = friends[userId].album![indexPath.row].img
+        cell.likeControl.likesCount = friends[userId].album![indexPath.row].like.count
+        cell.likeControl.isLiked = friends[userId].album![indexPath.row].like.userLikes
+        
         return cell
     }
 }

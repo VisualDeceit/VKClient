@@ -36,11 +36,11 @@ extension Group: Equatable {}
 
 struct Photo {
     var img: UIImage
-    var likes: Likes
+    var like: Like
 }
 
-struct Likes {
-    var user_likes: Int
+struct Like {
+    var userLikes: Bool
     var count: Int
 }
 

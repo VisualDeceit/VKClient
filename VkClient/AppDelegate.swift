@@ -15,14 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func fillUsersData() {
     
         func randomAlbum() -> [Photo] {
-            var photo = Photo(img: UIImage(), likes: Likes(user_likes: 0, count: 0))
+            var photo = Photo(img: UIImage(), like: Like(userLikes: false, count: 0))
             var album = [Photo]()
-            for _ in 1...Int.random(in: 1..<2){
+            for _ in 1...Int.random(in: 1..<10){
                 let url = URL(string: "https://picsum.photos/150")
                 let data = try? Data(contentsOf: url!)
                 let img = UIImage(data: data!)
                 photo.img = img!
-                photo.likes.count = Int.random(in: 0..<50)
+                photo.like.count = Int.random(in: 0..<50)
                 album.append(photo)
             }
             return album

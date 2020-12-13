@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="Bmy-fy-HRx">
-                                        <rect key="frame" x="87.5" y="187" width="200" height="293"/>
+                                        <rect key="frame" x="87.5" y="234" width="200" height="199"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E-mail or login" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rCK-Sx-EjO">
                                                 <rect key="frame" x="0.0" y="0.0" width="109.5" height="20.5"/>
@@ -57,8 +57,9 @@
                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dcy-N5-amk">
-                                                <rect key="frame" x="0.0" y="165" width="200" height="128"/>
-                                                <state key="normal" title="Log In" image="hea">
+                                                <rect key="frame" x="0.0" y="165" width="200" height="34"/>
+                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="Log In">
                                                     <color key="titleColor" red="1" green="0.99998790029999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 </state>
                                                 <connections>
@@ -71,7 +72,7 @@
                                         </constraints>
                                     </stackView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="VK_Logo" translatesAutoresizingMaskIntoConstraints="NO" id="HjN-sK-znw">
-                                        <rect key="frame" x="87.5" y="17" width="200" height="160"/>
+                                        <rect key="frame" x="87.5" y="64" width="200" height="160"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="160" id="AoO-Xx-6L4"/>
@@ -286,19 +287,28 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Ym-3G-hSF">
-                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="120"/>
                                         </imageView>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y2H-O6-3Ld" customClass="LikeControl" customModule="VkClient" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="120" width="150" height="30"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="sGJ-Qo-xJT"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="5Ym-3G-hSF" firstAttribute="centerY" secondItem="Gsa-j1-x60" secondAttribute="centerY" id="Bgc-R4-YXA"/>
-                                        <constraint firstAttribute="trailing" secondItem="5Ym-3G-hSF" secondAttribute="trailing" id="Hc7-FD-0jH"/>
                                         <constraint firstItem="5Ym-3G-hSF" firstAttribute="leading" secondItem="Gsa-j1-x60" secondAttribute="leading" id="IqP-Db-teD"/>
+                                        <constraint firstAttribute="trailing" secondItem="Y2H-O6-3Ld" secondAttribute="trailing" id="S7e-df-97L"/>
                                         <constraint firstItem="5Ym-3G-hSF" firstAttribute="top" secondItem="Gsa-j1-x60" secondAttribute="top" id="W1G-nI-7jy"/>
-                                        <constraint firstAttribute="bottom" secondItem="5Ym-3G-hSF" secondAttribute="bottom" id="m0m-tq-9wv"/>
+                                        <constraint firstAttribute="bottom" secondItem="Y2H-O6-3Ld" secondAttribute="bottom" id="gN7-KO-9EZ"/>
+                                        <constraint firstItem="Y2H-O6-3Ld" firstAttribute="top" secondItem="5Ym-3G-hSF" secondAttribute="bottom" id="mHD-BC-PP4"/>
                                         <constraint firstItem="5Ym-3G-hSF" firstAttribute="centerX" secondItem="Gsa-j1-x60" secondAttribute="centerX" id="wMr-BD-ewa"/>
+                                        <constraint firstItem="Y2H-O6-3Ld" firstAttribute="leading" secondItem="Gsa-j1-x60" secondAttribute="leading" id="y6g-Yv-cd8"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <connections>
+                                    <outlet property="likeControl" destination="Y2H-O6-3Ld" id="e2T-ok-Zge"/>
                                     <outlet property="photo" destination="5Ym-3G-hSF" id="jig-P1-q0g"/>
                                 </connections>
                             </collectionViewCell>
@@ -441,7 +451,6 @@
     </scenes>
     <resources>
         <image name="VK_Logo" width="512" height="512"/>
-        <image name="hea" width="128" height="128"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
