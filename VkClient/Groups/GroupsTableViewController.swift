@@ -9,16 +9,7 @@ import UIKit
 
 class GroupsTableViewController: UITableViewController {
 
-    var userGroups = [Group]()
-    
-    func fillData() {
-       userGroups.append(Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4")))
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fillData() 
-    }
+    var userGroups = [Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"))]
     
     override func viewDidLoad() {
         super.viewDidLoad()

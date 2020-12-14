@@ -15,7 +15,29 @@ struct User {
     //let is_closed: Bool = false
     //let can_access_closed: Bool = true
     //let photo_50: String
-    let album: [Photo]?
+    var album: [Photo]?
+    
+    init(first_name: String, last_name: String) {
+        self.first_name = first_name
+        self.last_name = last_name
+        self.album = []
+        
+        var photo = Photo(img: UIImage(), like: Like(userLikes: false, count: 0))
+        for _ in 1...Int.random(in: 1..<2){
+            let url = URL(string: "https://picsum.photos/150")
+            let data = try? Data(contentsOf: url!)
+            let img = UIImage(data: data!)
+            photo.img = img!
+            photo.like.count = Int.random(in: 0..<50)
+            self.album!.append(photo)
+        }
+    }
+    
+    init(first_name: String, last_name: String, album: [Photo]?) {
+        self.first_name = first_name
+        self.last_name = last_name
+        self.album = album
+    }
 }
 
 struct Group {

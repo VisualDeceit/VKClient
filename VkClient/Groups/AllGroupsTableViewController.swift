@@ -9,18 +9,10 @@ import UIKit
 
 class AllGroupsTableViewController: UITableViewController {
 
-    var allGroups = [Group]()
-    
-    func fillData() {
-        allGroups.append(Group(name: "Пикабу", screen_name: "pikabu", logo: #imageLiteral(resourceName: "rZi7F9_vu-8") ))
-        allGroups.append(Group(name: "ТОПОР — Хранилище", screen_name: "toportg", logo: #imageLiteral(resourceName: "-LGOrMnatj4")))
-        allGroups.append(Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4")))
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fillData()
-    }
+    var allGroups = [Group(name: "Пикабу", screen_name: "pikabu", logo: #imageLiteral(resourceName: "rZi7F9_vu-8") ),
+                     Group(name: "ТОПОР — Хранилище", screen_name: "toportg", logo: #imageLiteral(resourceName: "-LGOrMnatj4")),
+                     Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4")),
+                                      ]
     
     override func viewDidLoad() {
         super.viewDidLoad()

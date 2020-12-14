@@ -10,43 +10,21 @@ import UIKit
 
 class FriendsTableViewController: UITableViewController {
       
-    var friends = [User]()
+    var friends = [
+        User(first_name: "Александр", last_name: "Фомин"),
+        User(first_name: "Хасан", last_name: "Сатийаджиев"),
+        User(first_name: "NIKOLAI", last_name: "BORISOV"),
+        User(first_name: "Виталий", last_name: "Степушин"),
+        User(first_name: "Василий", last_name: "Князев"),
+        User(first_name: "Mikhail", last_name: "Gereev"),
+        User(first_name: "Айрат", last_name: "Бариев"),
+        User(first_name: "Юрий", last_name: "Фёдоров"),
+        User(first_name: "Анна", last_name: "Панфилова"),
+        User(first_name: "Виктор", last_name: "Гарицкий"),
+        User(first_name: "Юрий", last_name: "Егоров"),
+        User(first_name: "Сергей", last_name: "Нелюбин"),
+    ]
     
-    func fillData(){
-        
-        func randomAlbum() -> [Photo] {
-            var photo = Photo(img: UIImage(), like: Like(userLikes: false, count: 0))
-            var album = [Photo]()
-            for _ in 1...Int.random(in: 1..<2){
-                let url = URL(string: "https://picsum.photos/150")
-                let data = try? Data(contentsOf: url!)
-                let img = UIImage(data: data!)
-                photo.img = img!
-                photo.like.count = Int.random(in: 0..<50)
-                album.append(photo)
-            }
-            return album
-        }
-        
-        friends.append(User(first_name: "Александр", last_name: "Фомин", album: randomAlbum()))
-        friends.append(User(first_name: "Хасан", last_name: "Сатийаджиев", album: randomAlbum()))
-        friends.append(User(first_name: "NIKOLAI", last_name: "BORISOV", album: randomAlbum()))
-        friends.append(User(first_name: "Виталий", last_name: "Степушин", album: randomAlbum()))
-        friends.append(User(first_name: "Василий", last_name: "Князев", album: randomAlbum()))
-        friends.append(User(first_name: "Mikhail", last_name: "Gereev", album: randomAlbum()))
-        friends.append(User(first_name: "Айрат", last_name: "Бариев", album: randomAlbum()))
-        friends.append(User(first_name: "Юрий", last_name: "Фёдоров", album: randomAlbum()))
-        friends.append(User(first_name: "Анна", last_name: "Панфилова", album: randomAlbum()))
-        friends.append(User(first_name: "Виктор", last_name: "Гарицкий", album: randomAlbum()))
-        friends.append(User(first_name: "Юрий", last_name: "Егоров", album: randomAlbum()))
-        friends.append(User(first_name: "Сергей", last_name: "Нелюбин", album: randomAlbum()))
-         
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fillData()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +61,4 @@ class FriendsTableViewController: UITableViewController {
 
     }
     
-  
-
 }
