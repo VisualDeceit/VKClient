@@ -9,6 +9,8 @@ import UIKit
 
 class GroupsTableViewController: UITableViewController {
 
+    var userGroups = [Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"))]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -30,7 +32,7 @@ class GroupsTableViewController: UITableViewController {
         else { return UITableViewCell() }
         
         cell.groupName.text = userGroups[indexPath.row].name
-        cell.groupImage.image = userGroups[indexPath.row].photo_50!
+        cell.groupImage.image = userGroups[indexPath.row].logo ?? UIImage()
         
         return cell
     }
@@ -58,7 +60,7 @@ class GroupsTableViewController: UITableViewController {
             { return }
             
             if let indexPath = allGroupsController.tableView.indexPathForSelectedRow {
-                let group = allGroups[indexPath.row]
+                let group = allGroupsController.allGroups[indexPath.row]
                 if !userGroups.contains(group) {
                     userGroups.append(group)
                     tableView.reloadData()

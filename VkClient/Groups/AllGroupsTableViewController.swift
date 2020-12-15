@@ -9,6 +9,11 @@ import UIKit
 
 class AllGroupsTableViewController: UITableViewController {
 
+    var allGroups = [Group(name: "Пикабу", screen_name: "pikabu", logo: #imageLiteral(resourceName: "rZi7F9_vu-8") ),
+                     Group(name: "ТОПОР — Хранилище", screen_name: "toportg", logo: #imageLiteral(resourceName: "-LGOrMnatj4")),
+                     Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4")),
+                                      ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -32,7 +37,7 @@ class AllGroupsTableViewController: UITableViewController {
         else { return UITableViewCell()}
         
         cell.groupName.text = allGroups[indexPath.row].name
-        cell.groupImage.image = allGroups[indexPath.row].photo_50!
+        cell.groupImage.image = allGroups[indexPath.row].logo!
         
         return cell
     }

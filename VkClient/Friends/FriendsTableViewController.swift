@@ -9,6 +9,22 @@ import UIKit
 
 
 class FriendsTableViewController: UITableViewController {
+      
+    var friends = [
+        User(first_name: "Александр", last_name: "Фомин"),
+        User(first_name: "Хасан", last_name: "Сатийаджиев"),
+        User(first_name: "NIKOLAI", last_name: "BORISOV"),
+        User(first_name: "Виталий", last_name: "Степушин"),
+        User(first_name: "Василий", last_name: "Князев"),
+        User(first_name: "Mikhail", last_name: "Gereev"),
+        User(first_name: "Айрат", last_name: "Бариев"),
+        User(first_name: "Юрий", last_name: "Фёдоров"),
+        User(first_name: "Анна", last_name: "Панфилова"),
+        User(first_name: "Виктор", last_name: "Гарицкий"),
+        User(first_name: "Юрий", last_name: "Егоров"),
+        User(first_name: "Сергей", last_name: "Нелюбин"),
+    ]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,11 +46,19 @@ class FriendsTableViewController: UITableViewController {
             return UITableViewCell()
         }
         cell.friendName.text = "\(friends[indexPath.row].first_name) \(friends[indexPath.row].last_name)"
-        cell.friendAvatar.image = friends[indexPath.row].photo_50
+        
+        cell.friendAvatar.logoView.image = #imageLiteral(resourceName: "camera_50")
         
         return cell
     }
     
-  
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == "showUserPhotos",
+              let controller = segue.destination as? PhotoCollectionViewController else { return }
+        
+        let selectedUser = tableView.indexPathForSelectedRow
+        controller.user = friends[selectedUser!.row]
 
+    }
+    
 }

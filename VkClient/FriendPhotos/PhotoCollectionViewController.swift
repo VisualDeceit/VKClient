@@ -10,7 +10,10 @@ import UIKit
 //private let reuseIdentifier = "Cell"
 
 class PhotoCollectionViewController: UICollectionViewController {
-
+    
+    //var userId: Int = 0
+    var user = User(first_name: "", last_name: "", album: nil)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -23,7 +26,7 @@ class PhotoCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        return  user.album?.count ?? 0
     }
 
     
@@ -32,8 +35,23 @@ class PhotoCollectionViewController: UICollectionViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCollectionViewCell
         else { return PhotoCollectionViewCell() }
         
-        cell.photo.image = photos[indexPath.row]
-    
+        cell.photo.image = user.album![indexPath.row].img
+        cell.likeControl.likesCount = user.album![indexPath.row].like.count
+        cell.likeControl.isLiked = user.album![indexPath.row].like.userLikes
+        cell.likeControl.addTarget(self, action: #selector(pushLike(_:)), for: .valueChanged)
+        
         return cell
+    }
+    
+    @objc func pushLike(_ sender: Any){
+        //определяю какой контрол нажат
+        guard let like = sender as? LikeControl
+             else {
+            return
+        }
+        // по конролу определяю ячейку к которой он принадлежит и нахожу индекс
+        let index  = collectionView.indexPath(for: like.superview?.superview as! PhotoCollectionViewCell )
+        //дальше нужно только передать в модель обратно
+        print("like is set to \(like.isLiked), total \(like.likesCount) \(index?.row ?? 99)")
     }
 }
