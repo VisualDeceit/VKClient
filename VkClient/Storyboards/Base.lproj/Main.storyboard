@@ -308,7 +308,7 @@
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <connections>
-                                    <outlet property="likeControl" destination="Y2H-O6-3Ld" id="e2T-ok-Zge"/>
+                                    <outlet property="likeControl" destination="Y2H-O6-3Ld" id="9Ua-Bo-BUr"/>
                                     <outlet property="photo" destination="5Ym-3G-hSF" id="jig-P1-q0g"/>
                                 </connections>
                             </collectionViewCell>

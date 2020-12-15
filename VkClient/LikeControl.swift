@@ -17,15 +17,15 @@ class LikeControl: UIControl {
     
     var isLiked: Bool = false {
         didSet {
-//            let newImage = self.isLiked ? self.likedImage : self.unlikedImage
-//            button.setImage(newImage, for: .normal)
-//            button.isSelected = isLiked
+            likesCount = isLiked ? (likesCount + 1) : (likesCount - 1)
+            animate()
+            self.sendActions(for: .valueChanged)
         }
     }
     
     private var button = UIButton(type: .custom)
-    private let unlikedImage = UIImage(named: "heart")?.withRenderingMode(.alwaysOriginal)
-    private let likedImage = UIImage(named: "heart-fill")?.withRenderingMode(.alwaysTemplate)
+    private let unlikedImage = UIImage(systemName: "heart")?.withRenderingMode(.alwaysOriginal)
+    private let likedImage = UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate)
     private let unlikedScale: CGFloat = 0.8
     private let likedScale: CGFloat = 1.2
     
@@ -60,9 +60,6 @@ class LikeControl: UIControl {
     
     @objc private func pushLikeButton(_ sender: UIButton) {
         isLiked.toggle()
-        likesCount = isLiked ? (likesCount + 1) : (likesCount - 1)
-        button.setTitle("\(likesCount)", for: .normal)
-        animate()
     }
     
     

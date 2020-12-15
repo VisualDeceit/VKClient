@@ -23,7 +23,7 @@ struct User {
         self.album = []
         
         var photo = Photo(img: UIImage(), like: Like(userLikes: false, count: 0))
-        for _ in 1...Int.random(in: 1..<2){
+        for _ in 1...Int.random(in: 1..<4){
             let url = URL(string: "https://picsum.photos/150")
             let data = try? Data(contentsOf: url!)
             let img = UIImage(data: data!)

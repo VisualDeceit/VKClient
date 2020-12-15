@@ -38,7 +38,20 @@ class PhotoCollectionViewController: UICollectionViewController {
         cell.photo.image = user.album![indexPath.row].img
         cell.likeControl.likesCount = user.album![indexPath.row].like.count
         cell.likeControl.isLiked = user.album![indexPath.row].like.userLikes
+        cell.likeControl.addTarget(self, action: #selector(pushLike(_:)), for: .valueChanged)
         
         return cell
+    }
+    
+    @objc func pushLike(_ sender: Any){
+        //определяю какой контрол нажат
+        guard let like = sender as? LikeControl
+             else {
+            return
+        }
+        // по конролу определяю ячейку к которой он принадлежит и нахожу индекс
+        let index  = collectionView.indexPath(for: like.superview?.superview as! PhotoCollectionViewCell )
+        //дальше нужно только передать в модель обратно
+        print("like is set to \(like.isLiked), total \(like.likesCount) \(index?.row ?? 99)")
     }
 }
