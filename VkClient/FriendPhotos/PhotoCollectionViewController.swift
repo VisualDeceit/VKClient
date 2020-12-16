@@ -18,6 +18,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "\(user.first_name) \(user.last_name)"
     }
     
     // MARK: UICollectionViewDataSource
