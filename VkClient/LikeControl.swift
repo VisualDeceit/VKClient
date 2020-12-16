@@ -11,13 +11,14 @@ class LikeControl: UIControl {
     
     var likesCount: Int = 0 {
         didSet {
+            //обновляем кол-во лайком
             button.setTitle("\(likesCount)", for: .normal)
         }
     }
     
     var isLiked: Bool = false {
         didSet {
-            //let defaultImage =  oldValue ? self.likedImage : self.unlikedImage
+            //обнволяем картинку сердца
             button.setImage(isLiked ? self.likedImage : self.unlikedImage, for: .normal)
         }
     }
@@ -40,34 +41,36 @@ class LikeControl: UIControl {
     }
     
     func setupView(){
-        
-        //let defaultImage = self.isLiked ? self.likedImage : self.unlikedImage
-        //button.setImage(defaultImage, for: .normal)
-        //button.setImage(unlikedImage, for: .normal)
+        //настройки
         button.imageView?.contentMode = .scaleAspectFit
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .red
+        //добавляем таргет при нажатии на контрол
         button.addTarget(self, action: #selector(pushLikeButton(_:)), for: .touchUpInside)
         button.titleLabel?.font = .systemFont(ofSize: 12)
         
         self.addSubview(button)
-        self.contentHorizontalAlignment = .left
+        self.contentHorizontalAlignment = .left //?? пока не работает
         
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        //расстягиваем кнопку на весь вью
         button.frame = bounds
     }
     
+    //обработчик нажатия на контрол
     @objc private func pushLikeButton(_ sender: UIButton) {
         isLiked.toggle()
         likesCount = isLiked ? (likesCount + 1) : (likesCount - 1)
         animate()
+        //отправлеем экшн "наружу"
         self.sendActions(for: .valueChanged)
     }
     
     
+    //MARK: - анимация
     private func animate() {
         UIView.animate(withDuration: 0.1, animations: {
             let newImage = self.isLiked ? self.likedImage : self.unlikedImage
