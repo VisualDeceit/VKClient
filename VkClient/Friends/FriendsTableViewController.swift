@@ -28,22 +28,44 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         User(first_name: "Сергей", last_name: "Нелюбин"),
     ]
     
+    var friendsLastNameTitles = [String]()
+    var friendsDictionary = [String: [User]]()
+    
+    
     func update(indexPhoto: Int, like: Like) {
         friends[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for user in friends {
+            let lastNameKey = String(user.last_name.prefix(1))
+            if var userValues = friendsDictionary[lastNameKey] {
+                userValues.append(user)
+                friendsDictionary[lastNameKey] = userValues
+            } else {
+                friendsDictionary[lastNameKey] = [user]
+            }
+        }
+        
+        friendsLastNameTitles = [String](friendsDictionary.keys)
+        friendsLastNameTitles = friendsLastNameTitles.sorted(by: <)
     }
     
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return friendsLastNameTitles.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count
+        
+        let lastNameKey = friendsLastNameTitles[section]
+        if let userValues = friendsDictionary[lastNameKey] {
+            return userValues.count
+        }
+        return 0
     }
 
     
@@ -51,19 +73,35 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as? FriendTableViewCell else {
             return UITableViewCell()
         }
-        cell.friendName.text = "\(friends[indexPath.row].first_name) \(friends[indexPath.row].last_name)"
         
-        cell.friendAvatar.logoView.image = #imageLiteral(resourceName: "camera_50")
+        let lastNameKey = friendsLastNameTitles[indexPath.section]
+        if let userValues = friendsDictionary[lastNameKey] {
+            cell.friendName.text = "\(userValues[indexPath.row].first_name) \(userValues[indexPath.row].last_name)"
+            cell.friendAvatar.logoView.image = #imageLiteral(resourceName: "camera_50")
+            
+        }
         
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return friendsLastNameTitles[section]
+    }
+    
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+       return friendsLastNameTitles
+   }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "showUserPhotos",
               let controller = segue.destination as? PhotoCollectionViewController else { return }
         
         let selectedUser = tableView.indexPathForSelectedRow
-        controller.user = friends[selectedUser!.row]
+        let lastNameKey = friendsLastNameTitles[selectedUser!.section]
+        if let userValues = friendsDictionary[lastNameKey] {
+            controller.user = userValues[selectedUser!.row]
+        }
+        //controller.user = friends[selectedUser!.row]
         controller.delegate = self // подписали на делегат
 
     }
