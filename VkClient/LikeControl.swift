@@ -17,9 +17,8 @@ class LikeControl: UIControl {
     
     var isLiked: Bool = false {
         didSet {
-            likesCount = isLiked ? (likesCount + 1) : (likesCount - 1)
-            animate()
-            self.sendActions(for: .valueChanged)
+            //let defaultImage =  oldValue ? self.likedImage : self.unlikedImage
+            button.setImage(isLiked ? self.likedImage : self.unlikedImage, for: .normal)
         }
     }
     
@@ -42,11 +41,14 @@ class LikeControl: UIControl {
     
     func setupView(){
         
-        button.setImage(unlikedImage, for: .normal)
+        //let defaultImage = self.isLiked ? self.likedImage : self.unlikedImage
+        //button.setImage(defaultImage, for: .normal)
+        //button.setImage(unlikedImage, for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .red
         button.addTarget(self, action: #selector(pushLikeButton(_:)), for: .touchUpInside)
+        button.titleLabel?.font = .systemFont(ofSize: 12)
         
         self.addSubview(button)
         self.contentHorizontalAlignment = .left
@@ -60,6 +62,9 @@ class LikeControl: UIControl {
     
     @objc private func pushLikeButton(_ sender: UIButton) {
         isLiked.toggle()
+        likesCount = isLiked ? (likesCount + 1) : (likesCount - 1)
+        animate()
+        self.sendActions(for: .valueChanged)
     }
     
     

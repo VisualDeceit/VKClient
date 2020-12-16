@@ -7,9 +7,12 @@
 
 import UIKit
 
+protocol FriendsTableViewControllerDelegate: class {
+    func update(indexPhoto: Int, like: Like)
+}
 
-class FriendsTableViewController: UITableViewController {
-      
+class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
+    
     var friends = [
         User(first_name: "Александр", last_name: "Фомин"),
         User(first_name: "Хасан", last_name: "Сатийаджиев"),
@@ -25,6 +28,9 @@ class FriendsTableViewController: UITableViewController {
         User(first_name: "Сергей", last_name: "Нелюбин"),
     ]
     
+    func update(indexPhoto: Int, like: Like) {
+        friends[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +64,7 @@ class FriendsTableViewController: UITableViewController {
         
         let selectedUser = tableView.indexPathForSelectedRow
         controller.user = friends[selectedUser!.row]
+        controller.delegate = self // подписали на делегат
 
     }
     

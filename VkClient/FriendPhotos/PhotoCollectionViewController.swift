@@ -14,6 +14,8 @@ class PhotoCollectionViewController: UICollectionViewController {
     //var userId: Int = 0
     var user = User(first_name: "", last_name: "", album: nil)
     
+    weak var delegate: FriendsTableViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -51,7 +53,7 @@ class PhotoCollectionViewController: UICollectionViewController {
         }
         // по конролу определяю ячейку к которой он принадлежит и нахожу индекс
         let index  = collectionView.indexPath(for: like.superview?.superview as! PhotoCollectionViewCell )
-        //дальше нужно только передать в модель обратно
-        print("like is set to \(like.isLiked), total \(like.likesCount) \(index?.row ?? 99)")
+        //передаем обратно данные с помощью делегатов
+        delegate?.update(indexPhoto: index!.row, like: Like(userLikes: like.isLiked, count: like.likesCount))
     }
 }
