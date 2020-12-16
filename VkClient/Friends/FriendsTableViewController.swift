@@ -33,7 +33,12 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     
     
     func update(indexPhoto: Int, like: Like) {
-        friends[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
+        //friends[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
+        let lastNameKey = friendsLastNameTitles[tableView.indexPathForSelectedRow!.section]
+        if var userValues = friendsDictionary[lastNameKey] {
+            userValues[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
+            friendsDictionary[lastNameKey] = userValues
+        }
     }
     
     override func viewDidLoad() {
@@ -101,7 +106,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         if let userValues = friendsDictionary[lastNameKey] {
             controller.user = userValues[selectedUser!.row]
         }
-        //controller.user = friends[selectedUser!.row]
         controller.delegate = self // подписали на делегат
 
     }
