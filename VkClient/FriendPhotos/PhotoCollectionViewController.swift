@@ -11,11 +11,14 @@ import UIKit
 
 class PhotoCollectionViewController: UICollectionViewController {
     
-    //var userId: Int = 0
     var user = User(first_name: "", last_name: "", album: nil)
+    
+    //объявляем слабую ссылку на делегат для передачи данных
+    weak var delegate: FriendsTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "\(user.first_name) \(user.last_name)"
     }
     
     // MARK: UICollectionViewDataSource
@@ -34,15 +37,19 @@ class PhotoCollectionViewController: UICollectionViewController {
         guard
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCollectionViewCell
         else { return PhotoCollectionViewCell() }
-        
+        //передаем данные в ячейку
+        //фото для каждой ячейки
         cell.photo.image = user.album![indexPath.row].img
+        //состояние  для likeControl
         cell.likeControl.likesCount = user.album![indexPath.row].like.count
         cell.likeControl.isLiked = user.album![indexPath.row].like.userLikes
+        //добавляем таргет
         cell.likeControl.addTarget(self, action: #selector(pushLike(_:)), for: .valueChanged)
         
         return cell
     }
     
+    //срабатывает при нажатии на сердце в likeControl
     @objc func pushLike(_ sender: Any){
         //определяю какой контрол нажат
         guard let like = sender as? LikeControl
@@ -50,8 +57,9 @@ class PhotoCollectionViewController: UICollectionViewController {
             return
         }
         // по конролу определяю ячейку к которой он принадлежит и нахожу индекс
+        // по большому счету это индекс фото под которым нажали на серддце
         let index  = collectionView.indexPath(for: like.superview?.superview as! PhotoCollectionViewCell )
-        //дальше нужно только передать в модель обратно
-        print("like is set to \(like.isLiked), total \(like.likesCount) \(index?.row ?? 99)")
+        //передаем обратно данные с помощью делегатов
+        delegate?.update(indexPhoto: index!.row, like: Like(userLikes: like.isLiked, count: like.likesCount))
     }
 }

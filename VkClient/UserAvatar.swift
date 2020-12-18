@@ -10,7 +10,7 @@ import UIKit
 @IBDesignable class UserAvatar: UIView {
     
     var logoView = UIImageView()
-    let shadowView = UIView() //!!!!
+    let shadowView = UIView()
     
     @IBInspectable var shadowRadius: CGFloat = 25.0 {
         didSet {
@@ -46,13 +46,13 @@ import UIKit
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        
+        //настраивем картинку
         logoView.frame = rect
         logoView.layer.cornerRadius =  shadowRadius
         logoView.clipsToBounds = true
         logoView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         
-        //let  shadowView = UIView(frame: rect) тут неправльно!!!
+        //настраиваем тени
         shadowView.frame = rect
         shadowView.clipsToBounds = false
         shadowView.layer.shadowColor = shadowColor.cgColor
@@ -61,6 +61,7 @@ import UIKit
         shadowView.layer.shadowRadius = shadowBlur
         shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: shadowRadius).cgPath
         
+        //накладываем слои
         shadowView.addSubview(logoView)
         self.addSubview(shadowView)
     }

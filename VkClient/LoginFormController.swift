@@ -39,7 +39,7 @@ class LoginFormController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    
+    //переход по кнопке log in
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         guard userCheck() else {
             showAlert()
