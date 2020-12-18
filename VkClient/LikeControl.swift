@@ -41,27 +41,32 @@ class LikeControl: UIControl {
     }
     
     func setupView(){
+        
+        self.addSubview(button)
+        
         //настройки
         button.imageView?.contentMode = .scaleAspectFit
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .red
         //добавляем таргет при нажатии на контрол
-        button.addTarget(self, action: #selector(pushLikeButton(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tapControl(_:)), for: .touchUpInside)
         button.titleLabel?.font = .systemFont(ofSize: 12)
         
-        self.addSubview(button)
-        self.contentHorizontalAlignment = .left //?? пока не работает
-        
+        //слева
+        button.frame = self.bounds
+        button.contentHorizontalAlignment = .leading
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
+        button.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        button.contentEdgeInsets.left = 10
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        //расстягиваем кнопку на весь вью
-        button.frame = bounds
     }
     
     //обработчик нажатия на контрол
-    @objc private func pushLikeButton(_ sender: UIButton) {
+    @objc private func tapControl(_ sender: UIButton) {
         isLiked.toggle()
         likesCount = isLiked ? (likesCount + 1) : (likesCount - 1)
         animate()
