@@ -33,7 +33,7 @@ class MyCustomSectionHeaderView: UITableViewHeaderFooterView {
     
     func configureContents() {
        
-        gradient.colors = [UIColor(red: 0.153, green: 0.529, blue: 0.961, alpha: 0.9).cgColor, UIColor.init(white: 1, alpha: 0).cgColor]
+        gradient.colors = [UIColor.lightGray.cgColor, UIColor.init(white: 1, alpha: 0).cgColor]
         gradient.locations = [0.0, 1.0]
         gradient.startPoint = .zero
         gradient.endPoint = CGPoint(x: 1, y: 0)

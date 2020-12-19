@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "VK_Logo.png",
+      "filename" : "VK_Full_Logo.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -19,6 +19,6 @@
     "version" : 1
   },
   "properties" : {
-    "template-rendering-intent" : "template"
+    "template-rendering-intent" : "original"
   }
 }
