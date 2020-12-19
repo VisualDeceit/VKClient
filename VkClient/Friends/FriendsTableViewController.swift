@@ -86,6 +86,9 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
         //сортируем по алфавиту
         friendsLastNameTitles = [String](friendsDictionary.keys).sorted(by: <)
+        
+        //регистрируем кастомный хедер
+        tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
     }
     
     // MARK: - Table view data source
@@ -119,11 +122,11 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        //заголовки секций
-        return friendsLastNameTitles[section]
-    }
-    
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        //заголовки секций
+//        return friendsLastNameTitles[section]
+//    }
+//
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
        //отображение сеций справа
         return friendsLastNameTitles
@@ -141,6 +144,14 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         }
         controller.delegate = self // подписали на делегат
 
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
+                                                                "sectionHeader") as! MyCustomSectionHeaderView
+        view.title.text = friendsLastNameTitles[section]
+        
+        return view
     }
     
 }

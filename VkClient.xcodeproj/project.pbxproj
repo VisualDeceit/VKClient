@@ -24,6 +24,7 @@
 		153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21B82577F6FF0018A18D /* LoginFormController.swift */; };
 		15B17600258621F500042450 /* UserAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* UserAvatar.swift */; };
 		15B176092586793D00042450 /* LikeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B176082586793D00042450 /* LikeControl.swift */; };
+		15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		153F21B82577F6FF0018A18D /* LoginFormController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormController.swift; sourceTree = "<group>"; };
 		15B175FF258621F500042450 /* UserAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatar.swift; sourceTree = "<group>"; };
 		15B176082586793D00042450 /* LikeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeControl.swift; sourceTree = "<group>"; };
+		15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomSectionHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			children = (
 				1504D92C2583AD7C00B4EBEE /* FriendsTableViewController.swift */,
 				1504D9302583ADA400B4EBEE /* FriendTableViewCell.swift */,
+				15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */,
 			);
 			path = Friends;
 			sourceTree = "<group>";
@@ -218,6 +221,7 @@
 				15B17600258621F500042450 /* UserAvatar.swift in Sources */,
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
+				15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
 				1504D9312583ADA400B4EBEE /* FriendTableViewCell.swift in Sources */,
 				1504D92D2583AD7C00B4EBEE /* FriendsTableViewController.swift in Sources */,
