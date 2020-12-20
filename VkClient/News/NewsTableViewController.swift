@@ -92,6 +92,7 @@ class NewsTableViewController: UITableViewController {
     
         cell.likeControl.isLiked = myNews[indexPath.row].like.userLikes
         cell.likeControl.likesCount = myNews[indexPath.row].like.count
+        cell.viewsNumber.text = "\(Int.random(in: 1..<999))" //temp data
         
         return cell
     }
