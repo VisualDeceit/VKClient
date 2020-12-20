@@ -17,12 +17,12 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     var friends = [
         User(first_name: "Александр", last_name: "Фомин"),
         User(first_name: "Юрий", last_name: "Султанов"),
-//        User(first_name: "Никита", last_name: "Сергеев"),
-//        User(first_name: "Артем", last_name: "Зарудный"),
+        User(first_name: "Никита", last_name: "Сергеев"),
+        User(first_name: "Артем", last_name: "Зарудный"),
 //        User(first_name: "Виталий", last_name: "Степушин"),
-//        User(first_name: "Юрий", last_name: "Фёдоров"),
+        User(first_name: "Юрий", last_name: "Фёдоров"),
 //        User(first_name: "Татьяна", last_name: "Сундукова"),
-//        User(first_name: "Даниил", last_name: "Книсс"),
+        User(first_name: "Даниил", last_name: "Книсс"),
 //        User(first_name: "Хасан", last_name: "Сатийаджиев"),
 //        User(first_name: "Никита", last_name: "Максимов"),
 //        User(first_name: "Игорь", last_name: "Гомзяков"),
@@ -55,10 +55,12 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
 //        User(first_name: "Николай", last_name: "Перепел"),
     ]
     
-    //массив начальных букв фамилий
-    var friendsLastNameTitles = [String]()
-    //словарь
-    var friendsDictionary = [String: [User]]()
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    var friendsLastNameTitles = [String]() //массив начальных букв sections
+    var friendsDictionary = [String: [User]]()  //словарь
+    var displayFriendsDictionary = [String: [User]]() //for display
     
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
@@ -70,38 +72,56 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    //
+    private func splitOnSections(for inputArray: [User]) -> ([String], [String: [User]]) {
         
+        var sectionsTitle = [String]()
+        var sectionData = [String: [User]]()
+       
         //разбираем исходный массив в словарь для индексации таблицы
-        for user in friends {
+        for user in inputArray {
             let lastNameKey = String(user.last_name.prefix(1))
-            if var userValues = friendsDictionary[lastNameKey] {
+            if var userValues = sectionData[lastNameKey] {
                 userValues.append(user)
-                friendsDictionary[lastNameKey] = userValues
+                sectionData[lastNameKey] = userValues
             } else {
-                friendsDictionary[lastNameKey] = [user]
+                sectionData[lastNameKey] = [user]
             }
         }
         
         //сортируем по алфавиту
-        friendsLastNameTitles = [String](friendsDictionary.keys).sorted(by: <)
+        sectionsTitle = [String](sectionData.keys).sorted(by: <)
+        
+        return (sectionsTitle, sectionData)
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // разбор исходных данных
+        (friendsLastNameTitles, friendsDictionary) = splitOnSections(for: friends)
+        //copy dictionary for display
+        displayFriendsDictionary = friendsDictionary
         
         //регистрируем кастомный хедер
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
+     
+        searchBar.delegate = self
+        
     }
     
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         //кол-во секций
-        return friendsLastNameTitles.count
+        return displayFriendsDictionary.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //указываем количество строк в секции
         let lastNameKey = friendsLastNameTitles[section]
-        if let userValues = friendsDictionary[lastNameKey] {
+        if let userValues = displayFriendsDictionary[lastNameKey] {
             return userValues.count
         }
         return 0
@@ -114,7 +134,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         }
         //передаем данные в ячейку
         let lastNameKey = friendsLastNameTitles[indexPath.section]
-        if let userValues = friendsDictionary[lastNameKey] {
+        if let userValues = displayFriendsDictionary[lastNameKey] {
             cell.friendName.text = "\(userValues[indexPath.row].first_name) \(userValues[indexPath.row].last_name)"
             cell.friendAvatar.logoView.image = #imageLiteral(resourceName: "camera_50")
         }
@@ -139,7 +159,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         //передача данных в PhotoCollectionViewController
         let selectedUser = tableView.indexPathForSelectedRow
         let lastNameKey = friendsLastNameTitles[selectedUser!.section]
-        if let userValues = friendsDictionary[lastNameKey] {
+        if let userValues = displayFriendsDictionary[lastNameKey] {
             controller.user = userValues[selectedUser!.row]
         }
         controller.delegate = self // подписали на делегат
@@ -154,4 +174,28 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         return view
     }
     
+}
+
+extension FriendsTableViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard searchText != "" else {
+            displayFriendsDictionary = friendsDictionary
+            friendsLastNameTitles = [String](displayFriendsDictionary.keys).sorted(by: <)
+            tableView.reloadData()
+            return
+        }
+        
+        displayFriendsDictionary = friendsDictionary.mapValues{
+            $0.filter {
+                $0.first_name.contains(searchText) || $0.last_name.contains(searchText)
+            }
+        }.filter {!$0.value.isEmpty}
+        friendsLastNameTitles = [String](displayFriendsDictionary.keys).sorted(by: <)
+        tableView.reloadData()
+    }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchBar.endEditing(true)
+    }
 }
