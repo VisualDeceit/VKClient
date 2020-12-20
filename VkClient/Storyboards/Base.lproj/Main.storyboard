@@ -216,9 +216,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="9EF-bX-l2R">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GroupCell" id="v3F-Kq-H3V" customClass="GroupTableViewCell" customModule="VkClient" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="70.5"/>
+                                <rect key="frame" x="0.0" y="72" width="375" height="70.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="v3F-Kq-H3V" id="LYX-mz-F8X">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
@@ -270,6 +275,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="9EF-bX-l2R" id="tBa-eh-wQP"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dnw-9P-EMr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="dZc-5F-aF8" userLabel="Exit" sceneMemberID="exit"/>
@@ -363,9 +371,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="zQz-sQ-Wh7">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AllGroupCell" id="kc4-Dj-E1m" customClass="AllGroupsTableViewCell" customModule="VkClient" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="70.5"/>
+                                <rect key="frame" x="0.0" y="72" width="375" height="70.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kc4-Dj-E1m" id="rSy-Ph-Cf1">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
@@ -407,6 +420,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="All Groups" id="dvJ-Z0-Uaz"/>
+                    <connections>
+                        <outlet property="searchBar" destination="zQz-sQ-Wh7" id="qic-N1-0hG"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Zk-eu-eWG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="uoV-XK-apM" userLabel="Exit" sceneMemberID="exit"/>
