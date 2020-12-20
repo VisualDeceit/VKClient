@@ -191,11 +191,16 @@ extension FriendsTableViewController: UISearchBarDelegate {
                 $0.first_name.contains(searchText) || $0.last_name.contains(searchText)
             }
         }.filter {!$0.value.isEmpty}
+        
         friendsLastNameTitles = [String](displayFriendsDictionary.keys).sorted(by: <)
         tableView.reloadData()
     }
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchBar.endEditing(true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
 }
