@@ -69,6 +69,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         if var userValues = friendsDictionary[lastNameKey] {
             userValues[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
             friendsDictionary[lastNameKey] = userValues
+            filtredFriendsDictionary[lastNameKey] = userValues
         }
     }
     

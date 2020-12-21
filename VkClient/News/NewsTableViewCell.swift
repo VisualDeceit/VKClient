@@ -16,6 +16,7 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var contentImage: UIImageView!
     @IBOutlet weak var likeControl: LikeControl!
     @IBOutlet weak var viewsNumber: UILabel!
+    @IBOutlet weak var imageViewHeight: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()

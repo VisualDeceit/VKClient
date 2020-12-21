@@ -20,13 +20,14 @@ class NewsTableViewController: UITableViewController {
 
                     #партнерскийпост
                     """
-                    , image: #imageLiteral(resourceName: "h4c7CTTavIo"), like: Like(userLikes: false, count: 31)),
+                       , image: #imageLiteral(resourceName: "h4c7CTTavIo"),
+                       like: Like(userLikes: false, count: 31)),
                   
                   News(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
                        caption: "ТОПОР — Хранилище",
                        date: "сегодня в 9:23",
                        text: nil,
-                       image: #imageLiteral(resourceName: "fgggPGl0zJI"),
+                       image: #imageLiteral(resourceName: "cyberpunk"),
                        like: Like(userLikes: true, count: 1916)),
                   
                   News(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
@@ -36,12 +37,45 @@ class NewsTableViewController: UITableViewController {
                     Анонимно
                     """,
                        image: nil,
+                       like: Like(userLikes: false, count: 38)),
+                 
+                  News(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
+                       caption: "Пикабу",
+                       date: "2 часа назад",
+                       text:
+                        """
+                                  Когда люди слышат слово «пират», то им практически тут же в голову приходит знаменитый образ Джонни Деппа, что сыграл Джека Воробья. Но вот реальность куда более прозаична и сурова и пираты водились не только в Карибском бассейне, в Средиземноморье тоже умудрились достаточно знатно покуролесить, Картавых не даст соврать...
+
+                                  Длиннопост от Дмитрия Мельничука из команды Cat.Cat: pikabu.ru/link/b7907232
+                                  """
+                       , image: #imageLiteral(resourceName: "1556962064181431984"),
+                       like: Like(userLikes: false, count: 31)),
+                  
+                  News(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
+                       caption: "ТОПОР — Хранилище",
+                       date: "сегодня в 9:23",
+                       text: """
+Шнуров ответил на критику своего хуевого вопроса Путину
+""",
+                       image: #imageLiteral(resourceName: "0MzQi1AE9DA"),
+                       like: Like(userLikes: true, count: 1916)),
+                  
+                  News(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
+                       caption: "Подслушано Коломна",
+                       date: "сегодня в 13:08",
+                       text: """
+                                  Чтoбы не рубить и не пoкупать кaждый гoд елку, растет отличнo дома, продaeтся сейчac многo гдe комнатнaя ёлкa 😉
+                                  """,
+                       image: #imageLiteral(resourceName: "rXTwsPh_bAs"),
                        like: Like(userLikes: false, count: 38))
-    
+                  
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tableView.estimatedRowHeight = 44
+        self.tableView.rowHeight = UITableView.automaticDimension
     
     }
 
@@ -64,30 +98,24 @@ class NewsTableViewController: UITableViewController {
         cell.logoImage.image = myNews[indexPath.row].logo
         cell.captionLabel.text = myNews[indexPath.row].caption
         cell.dateLabel.text = myNews[indexPath.row].date
-        
+     
         //если есть текст в новости
         if let text = myNews[indexPath.row].text {
-            //выводим
             cell.contentText.text = text
             //здесь констрейн по высоте не нужен, просто задаем в настройках лейбла lines = 0
-        } else{
-            //прячем ячейку с помощю constrain width = 0
-            NSLayoutConstraint.activate([cell.contentText.heightAnchor.constraint(equalToConstant: 0) ])
         }
         
         //если есть в новости картинка
         if let image = myNews[indexPath.row].image {
             //выводим
             cell.contentImage.image = image
-            //вычисляем коэффициент
-            let imageCrop = image.getCropRatio()
             //высоту картинки чтобы было в полную ширину
-            let cropHeight = tableView.frame.width / imageCrop
+            let ratio = image.getCropRatio()
+            let cropHeight = tableView.frame.width / ratio
             // задаем высоту
-            NSLayoutConstraint.activate([cell.contentImage.heightAnchor.constraint(equalToConstant: cropHeight) ])
+            cell.imageViewHeight.constant = cropHeight
         } else {
-            //прячем ячейку с помощю constrain width = 0
-            NSLayoutConstraint.activate([cell.contentImage.heightAnchor.constraint(equalToConstant: 0) ])
+            cell.imageViewHeight.constant = 0
         }
     
         cell.likeControl.isLiked = myNews[indexPath.row].like.userLikes
@@ -97,9 +125,9 @@ class NewsTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return UITableView.automaticDimension
+//    }
     
 }
 
