@@ -482,7 +482,7 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="20.5" id="cfg-7L-3rn"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>

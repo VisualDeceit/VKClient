@@ -130,6 +130,14 @@ class NewsTableViewController: UITableViewController {
 //        return UITableView.automaticDimension
 //    }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        //так как высота картинки вычисляется только в cellForRowAt,
+        //то необходимо принудительно дернуть reloadData() при смене ориентации, иначе останется прежний разме
+        //картинки
+        tableView.reloadData()
+    }
+    
 }
 
 extension UIImage {
