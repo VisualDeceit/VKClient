@@ -120,7 +120,8 @@ class NewsTableViewController: UITableViewController {
     
         cell.likeControl.isLiked = myNews[indexPath.row].like.userLikes
         cell.likeControl.likesCount = myNews[indexPath.row].like.count
-        cell.viewsNumber.text = "\(Int.random(in: 1..<999))" //temp data
+        let viewCount = "\(Int.random(in: 1..<10000))"//temp data
+        cell.viewsNumber.text =  viewCount.count < 4 ? viewCount : String(format: "%.1fk", Float(viewCount)!/1000.0)
         
         return cell
     }
