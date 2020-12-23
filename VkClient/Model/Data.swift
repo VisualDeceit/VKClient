@@ -62,8 +62,17 @@ struct Photo {
 }
 
 struct Like {
-    var userLikes: Bool
-    var count: Int
+    var userLikes: Bool = false
+    var count: Int = 0
+}
+
+struct News {
+    var logo: UIImage?
+    var caption: String = ""
+    var date: String = ""
+    var text: String?
+    var image: UIImage?
+    var like: Like
 }
 
 

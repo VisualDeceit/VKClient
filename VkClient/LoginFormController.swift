@@ -25,7 +25,7 @@ class LoginFormController: UIViewController {
             return false
         }
         
-        return login == "0" && password == "0"
+        return login == "" && password == ""
     }
     
     // предупреждение
