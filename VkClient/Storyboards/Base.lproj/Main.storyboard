@@ -79,6 +79,11 @@
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="pPy-Vv-k6Y"/>
                                         </constraints>
                                     </imageView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QL6-EP-GhL" customClass="LoadingIndicator" customModule="VkClient" customModuleProvider="target">
+                                        <rect key="frame" x="129" y="479" width="122" height="41"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="Bmy-fy-HRx" firstAttribute="centerY" secondItem="IKG-De-y4n" secondAttribute="centerY" id="5Cp-xG-164"/>
@@ -105,6 +110,7 @@
                     <tabBarItem key="tabBarItem" title="Log Out" image="square.and.arrow.up" catalog="system" id="W9P-8f-1IT"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="loadingIndicator" destination="QL6-EP-GhL" id="pxE-Gn-iRL"/>
                         <outlet property="loginInput" destination="Yb6-La-JL6" id="S0K-lA-1eX"/>
                         <outlet property="passwordInput" destination="dYp-Lo-FIX" id="NhA-ip-0OQ"/>
                         <outlet property="scrollView" destination="IKG-De-y4n" id="arg-xW-i0K"/>
@@ -112,7 +118,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="65" y="5"/>
+            <point key="canvasLocation" x="64.799999999999997" y="4.9475262368815596"/>
         </scene>
         <!--Friends-->
         <scene sceneID="O2x-Zc-5bM">
