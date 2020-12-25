@@ -7,7 +7,7 @@
 
 import UIKit
 
-@IBDesignable class UserAvatar: UIView {
+class UserAvatar: UIView {
     
     var logoView = UIImageView()
     let shadowView = UIView()
@@ -20,35 +20,34 @@ import UIKit
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         addGestureRecognizer(tapGestureRecognizer)
-        //fatalError("init(coder:) has not been implemented")
     }
     
-    @IBInspectable var shadowRadius: CGFloat = 25.0 {
+var shadowRadius: CGFloat = 25.0 {
         didSet {
             setNeedsDisplay()
         }
     }
     
-    @IBInspectable var shadowBlur: CGFloat = 6.0 {
+var shadowBlur: CGFloat = 6.0 {
         didSet {
             setNeedsDisplay()
         }
     }
 
 
-    @IBInspectable var shadowOpacity: Float = 0.3 {
+var shadowOpacity: Float = 0.3 {
         didSet {
             setNeedsDisplay()
         }
     }
 
-    @IBInspectable var shadowOffset: CGSize = CGSize(width: 0, height: 5) {
+var shadowOffset: CGSize = CGSize(width: 0, height: 5) {
         didSet {
             setNeedsDisplay()
         }
     }
 
-    @IBInspectable var shadowColor: UIColor = UIColor.black {
+var shadowColor: UIColor = UIColor.black {
         didSet {
             setNeedsDisplay()
         }

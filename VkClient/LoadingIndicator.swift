@@ -7,32 +7,15 @@
 
 import UIKit
 
-class Сircle: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .clear
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.setFillColor(UIColor.lightGray.cgColor)
-        context.fillEllipse(in: CGRect(x: 0, y: 0, width: 13, height: 13))
-    }
-
-}
 
 class LoadingIndicator: UIView {
-   
     private var circles = [Сircle]()
     private var stackView: UIStackView!
     private var circlesCount = 4
     private var timerTest : Timer?
     private let timing = 0.2
+    
+    var circleSize: CGFloat = 15
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,16 +26,33 @@ class LoadingIndicator: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupIndicatior()
-        //backgroundColor = .red
     }
     
     private func setupIndicatior() {
+        backgroundColor = .clear
         
-        for i in 0..<circlesCount {
-            let circle = Сircle(frame: CGRect(x: 20*i, y: Int(self.frame.height/2)-10, width: 20, height: 20))
+        for _ in 0..<circlesCount {
+            let circle = Сircle()
             circles.append(circle)
-            self.addSubview(circle)
+           // stackView.addArrangedSubview(circle)
+            //self.addSubview(circle)
         }
+        
+        stackView = UIStackView(arrangedSubviews: circles)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.backgroundColor = .clear
+        stackView.spacing = 10
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        self.addSubview(stackView)
+        
+        let topConstraint = stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5)
+        let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
+        let leadingConstraint = stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5)
+        let trailingConstraint = stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5)
+            self.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
+        
     }
     
     func startAnimation() {
@@ -87,30 +87,26 @@ class LoadingIndicator: UIView {
 
 }
 
+class Сircle: UIView {
+    
+   
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear
+   }
+    
 
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
 
-//
-//for _ in 0..<circlesCount {
-//    //let circle = Сircle(frame: CGRect(x: 20*i, y: Int(self.frame.height)/2-10, width: 20, height: 20))
-//    let circle = Сircle(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-//    circle.translatesAutoresizingMaskIntoConstraints = true
-//    circles.append(circle)
-//   // self.addSubview(circle)
-//}
-//
-//
-//stackView = UIStackView(arrangedSubviews: self.circles)
-//stackView.spacing = 10
-//stackView.axis = .horizontal
-//stackView.alignment = .fill
-//stackView.distribution = .fill
-//
-//self.addSubview(stackView)
-//
-//stackView.translatesAutoresizingMaskIntoConstraints = false
-//let topConstraint = stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0)
-//let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0)
-//let leadingConstraint = stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0)
-//let trailingConstraint = stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0)
-//    self.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
-//
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        context.setFillColor(UIColor(red: 0.153, green: 0.529, blue: 0.961, alpha: 1) .cgColor)
+        let circleSize = min(self.frame.width, self.frame.height)
+        context.fillEllipse(in: CGRect(x: self.frame.width/2 - circleSize/2, y: self.frame.height/2 - circleSize/2, width: circleSize, height: circleSize))
+    }
+
+}
