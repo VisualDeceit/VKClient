@@ -85,18 +85,18 @@ var shadowColor: UIColor = UIColor.black {
         }()
         
         @objc func onTap() {
-            let scaleAnimation = CASpringAnimation(keyPath: "transform.scale")
-            scaleAnimation.fromValue = transform.self
-            scaleAnimation.toValue = 0.8
-            scaleAnimation.stiffness = 100
-            scaleAnimation.mass = 1
-            scaleAnimation.duration = 0.3
-            scaleAnimation.damping = 20
-//            let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+//            let scaleAnimation = CASpringAnimation(keyPath: "transform.scale")
 //            scaleAnimation.fromValue = transform.self
-//            scaleAnimation.toValue = 0.9
-//            scaleAnimation.duration = 0.1
-//            scaleAnimation.autoreverses = true
+//            scaleAnimation.toValue = 0.8
+//            scaleAnimation.stiffness = 100
+//            scaleAnimation.mass = 1
+//            scaleAnimation.duration = 0.3
+//            scaleAnimation.damping = 20
+            let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+            scaleAnimation.fromValue = transform.self
+            scaleAnimation.toValue = 0.9
+            scaleAnimation.duration = 0.1
+            scaleAnimation.autoreverses = true
             layer.add(scaleAnimation, forKey: nil)
 
         }

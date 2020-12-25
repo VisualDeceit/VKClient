@@ -34,8 +34,6 @@ class LoadingIndicator: UIView {
         for _ in 0..<circlesCount {
             let circle = Сircle()
             circles.append(circle)
-           // stackView.addArrangedSubview(circle)
-            //self.addSubview(circle)
         }
         
         stackView = UIStackView(arrangedSubviews: circles)
