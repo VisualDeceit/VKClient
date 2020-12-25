@@ -21,6 +21,25 @@ class PhotoCollectionViewController: UICollectionViewController {
         self.navigationItem.title = "\(user.first_name) \(user.last_name)"
     }
     
+    //заготовка для ДЗ
+    //пока хз  как передавать фото целиком или грузить по ссылке???
+    func downloadAlbum() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            for index in 0..<self.user.album!.count {
+                if let url = URL(string: self.user.album![index].imageURL) {
+                    let data = try? Data(contentsOf: url)
+                    if let imageData = data {
+                        self.user.album![index].imageData = UIImage(data: imageData)!
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+        
+    }
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -39,8 +58,8 @@ class PhotoCollectionViewController: UICollectionViewController {
         else { return PhotoCollectionViewCell() }
         //передаем данные в ячейку
         //фото для каждой ячейки
-        //cell.photo.image = user.album![indexPath.row].image
         cell.imageURL = URL(string: user.album![indexPath.row].imageURL)
+        //cell.photo.image =  user.album![indexPath.row].imageData
         //состояние  для likeControl
         cell.likeControl.totalCount = user.album![indexPath.row].like.totalCount
         cell.likeControl.isLiked = user.album![indexPath.row].like.isLiked

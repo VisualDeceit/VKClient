@@ -49,6 +49,7 @@ extension Group: Equatable {}
 
 struct Photo {
     var imageURL:  String = "https://picsum.photos/300"
+    var imageData: UIImage?
     var like: Like
 }
 
