@@ -18,7 +18,7 @@ struct User {
         self.last_name = last_name
         self.album = []
         
-        for _ in 1..<Int.random(in: 5...20) {
+        for _ in 1..<Int.random(in: 10...20) {
             self.album?.append(Photo(like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))))
         }
 

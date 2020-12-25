@@ -68,10 +68,12 @@ class LoadingIndicator: UIView {
     @objc private func animation(){
         for i in 0..<self.circlesCount {
             UIView.animate(withDuration: timing, delay: Double(i) * timing, options: [.curveLinear], animations: {
-                self.circles[i].transform = self.transform.scaledBy(x: 1.4, y: 1.4)
+                self.circles[i].transform = self.transform.scaledBy(x: 1.2, y: 1.2)
+                self.circles[i].alpha = 1
             }, completion: { _ in
                 UIView.animate(withDuration: self.timing, animations: {
                     self.circles[i].transform = CGAffineTransform.identity
+                    self.circles[i].alpha = 0.0
                 })
             })
         }
@@ -92,6 +94,7 @@ class Сircle: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        alpha = 0
    }
     
 
