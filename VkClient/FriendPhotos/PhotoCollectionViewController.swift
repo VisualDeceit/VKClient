@@ -31,18 +31,19 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return  user.album?.count ?? 0
     }
-
     
+
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCollectionViewCell
         else { return PhotoCollectionViewCell() }
         //передаем данные в ячейку
         //фото для каждой ячейки
-        cell.photo.image = user.album![indexPath.row].img
+        //cell.photo.image = user.album![indexPath.row].image
+        cell.imageURL = URL(string: user.album![indexPath.row].imageURL)
         //состояние  для likeControl
-        cell.likeControl.likesCount = user.album![indexPath.row].like.count
-        cell.likeControl.isLiked = user.album![indexPath.row].like.userLikes
+        cell.likeControl.totalCount = user.album![indexPath.row].like.totalCount
+        cell.likeControl.isLiked = user.album![indexPath.row].like.isLiked
         //добавляем таргет
         cell.likeControl.addTarget(self, action: #selector(pushLike(_:)), for: .valueChanged)
         
@@ -60,6 +61,16 @@ class PhotoCollectionViewController: UICollectionViewController {
         // по большому счету это индекс фото под которым нажали на серддце
         let index  = collectionView.indexPath(for: like.superview?.superview as! PhotoCollectionViewCell )
         //передаем обратно данные с помощью делегатов
-        delegate?.update(indexPhoto: index!.row, like: Like(userLikes: like.isLiked, count: like.likesCount))
+        delegate?.update(indexPhoto: index!.row, like: Like(isLiked: like.isLiked, totalCount: like.totalCount))
+    }
+    
+}
+
+extension PhotoCollectionViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (collectionView.frame.width-20) / 2
+        let size = CGSize(width: width, height: width + 30)
+        return size
     }
 }

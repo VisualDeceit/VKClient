@@ -11,28 +11,19 @@ struct User {
     let id: Int = 0
     let first_name: String
     let last_name: String
-    //let deactivated: String = ""
-    //let is_closed: Bool = false
-    //let can_access_closed: Bool = true
-    //let photo_50: String
     var album: [Photo]?
-    
+
     init(first_name: String, last_name: String) {
         self.first_name = first_name
         self.last_name = last_name
         self.album = []
         
-        var photo = Photo(img: UIImage(), like: Like(userLikes: false, count: 0))
-        for _ in 1...Int.random(in: 1..<4){
-            let url = URL(string: "https://picsum.photos/150")
-            let data = try? Data(contentsOf: url!)
-            let img = UIImage(data: data!)
-            photo.img = img!
-            photo.like.count = Int.random(in: 0..<50)
-            self.album!.append(photo)
+        for _ in 1..<Int.random(in: 5...20) {
+            self.album?.append(Photo(like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))))
         }
+
     }
-    
+
     init(first_name: String, last_name: String, album: [Photo]?) {
         self.first_name = first_name
         self.last_name = last_name
@@ -57,13 +48,13 @@ extension Group: Equatable {}
 
 
 struct Photo {
-    var img: UIImage
+    var imageURL:  String = "https://picsum.photos/300"
     var like: Like
 }
 
 struct Like {
-    var userLikes: Bool = false
-    var count: Int = 0
+    var isLiked: Bool = false
+    var totalCount: Int = 0
 }
 
 struct News {

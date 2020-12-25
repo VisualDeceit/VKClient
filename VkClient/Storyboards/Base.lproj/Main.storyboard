@@ -298,8 +298,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="R87-4f-iOr">
-                            <size key="itemSize" width="150" height="150"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="R87-4f-iOr">
+                            <size key="itemSize" width="200" height="200"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -308,7 +308,7 @@
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="fXq-wT-1eN" customClass="PhotoCollectionViewCell" customModule="VkClient" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Gsa-j1-x60">
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="5dm-nY-9Bj">
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -324,15 +324,17 @@
                                         </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="5Ym-3G-hSF" firstAttribute="leading" secondItem="Gsa-j1-x60" secondAttribute="leading" id="IqP-Db-teD"/>
+                                        <constraint firstItem="5Ym-3G-hSF" firstAttribute="leading" secondItem="5dm-nY-9Bj" secondAttribute="leading" id="IqP-Db-teD"/>
                                         <constraint firstAttribute="trailing" secondItem="Y2H-O6-3Ld" secondAttribute="trailing" id="S7e-df-97L"/>
-                                        <constraint firstItem="5Ym-3G-hSF" firstAttribute="top" secondItem="Gsa-j1-x60" secondAttribute="top" id="W1G-nI-7jy"/>
+                                        <constraint firstItem="5Ym-3G-hSF" firstAttribute="top" secondItem="5dm-nY-9Bj" secondAttribute="top" id="W1G-nI-7jy"/>
                                         <constraint firstAttribute="bottom" secondItem="Y2H-O6-3Ld" secondAttribute="bottom" id="gN7-KO-9EZ"/>
                                         <constraint firstItem="Y2H-O6-3Ld" firstAttribute="top" secondItem="5Ym-3G-hSF" secondAttribute="bottom" id="mHD-BC-PP4"/>
-                                        <constraint firstItem="5Ym-3G-hSF" firstAttribute="centerX" secondItem="Gsa-j1-x60" secondAttribute="centerX" id="wMr-BD-ewa"/>
-                                        <constraint firstItem="Y2H-O6-3Ld" firstAttribute="leading" secondItem="Gsa-j1-x60" secondAttribute="leading" id="y6g-Yv-cd8"/>
+                                        <constraint firstItem="5Ym-3G-hSF" firstAttribute="centerX" secondItem="5dm-nY-9Bj" secondAttribute="centerX" id="wMr-BD-ewa"/>
+                                        <constraint firstItem="Y2H-O6-3Ld" firstAttribute="leading" secondItem="5dm-nY-9Bj" secondAttribute="leading" id="y6g-Yv-cd8"/>
                                     </constraints>
                                 </collectionViewCellContentView>
+                                <color key="backgroundColor" red="0.1529411765" green="0.52941176469999995" blue="0.96099999999999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <size key="customSize" width="150" height="150"/>
                                 <connections>
                                     <outlet property="likeControl" destination="Y2H-O6-3Ld" id="9Ua-Bo-BUr"/>
                                     <outlet property="photo" destination="5Ym-3G-hSF" id="jig-P1-q0g"/>

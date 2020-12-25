@@ -9,7 +9,28 @@ import UIKit
 
 class PhotoCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet var photo: UIImageView!
-    @IBOutlet var likeControl: LikeControl!
+    @IBOutlet weak var photo: UIImageView!
+    @IBOutlet weak var likeControl: LikeControl!
+    
+    var imageURL: URL? {
+    didSet {
+        photo?.image = nil
+        updateUI()
+        }
+    }
+    
+    private func updateUI(){
+        if let url = imageURL {
+            DispatchQueue.global(qos: .userInitiated).async {
+                let data = try? Data(contentsOf: url)
+                DispatchQueue.main.async {
+                    if let imageData = data {
+                        self.photo.image = UIImage(data: imageData)
+                    }
+                }
+            }
+        }
+        
+    }
     
 }
