@@ -361,6 +361,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bip-aZ-yR2">
+                                <rect key="frame" x="169" y="20" width="133" height="584"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lah-Ju-rnl">
                                 <rect key="frame" x="16" y="20" width="343" height="584"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -372,9 +376,12 @@
                     <navigationItem key="navigationItem" id="akd-TK-ZmZ"/>
                     <connections>
                         <outlet property="imageView1" destination="Lah-Ju-rnl" id="wfv-hV-CCd"/>
+                        <outlet property="imageView2" destination="bip-aZ-yR2" id="Xh5-kD-hGo"/>
+                        <segue destination="APu-YI-BYc" kind="unwind" identifier="unwindToFriendsPhotos" unwindAction="closeGallery:" id="XAS-zh-IAf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gtT-xT-kWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="APu-YI-BYc" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3975.1999999999998" y="-1208.5457271364319"/>
         </scene>

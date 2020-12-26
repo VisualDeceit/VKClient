@@ -107,7 +107,12 @@ class PhotoCollectionViewController: UICollectionViewController {
         controller.index = indexPaths!.row
     }
     
+    @IBAction func closeGallery(_ unwindSegue: UIStoryboardSegue) {}
+   
+
 }
+    
+
 
 extension PhotoCollectionViewController: UICollectionViewDelegateFlowLayout {
     
