@@ -44,17 +44,18 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         priorFrame = CGRect(x: -UIScreen.main.bounds.width, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
         imageView1.image = datasource[index].imageData
-        imageView1.backgroundColor = .red
+        //imageView1.backgroundColor = .red
         imageView1.frame = currentFrame
         
         imageView2.frame = nextFrame
-        imageView2.backgroundColor = .blue
+       // imageView2.backgroundColor = .blue
        
         currentImageView = imageView1
         nextImageView = imageView2
+       // nextImageView.alpha = 0.3
+        nextImageView.layer.transform =  CATransform3DMakeScale(1, 1, 1)
         
         if index + 1 < datasource.count {
-            //подгружаем след фото
             index += 1
             imageView2.image = datasource[index].imageData
         }
@@ -73,20 +74,20 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     
     func changeImageViewPosition() {
         let tempImageView = currentImageView
-        
+        currentImageView.transform = .identity
         currentImageView = nextImageView
         currentImageView.frame = currentFrame
         
         nextImageView = tempImageView
         nextImageView.frame = nextFrame
+        nextImageView.layer.transform =  CATransform3DMakeScale(1, 1, 1)
         if index + 1 < datasource.count {
             index += 1
         } else {
             index = 0
         }
         nextImageView.image = datasource[index].imageData
-        
-       // self.loadViewIfNeeded()
+
     }
     
     @objc func didPan( _ panGesture: UIPanGestureRecognizer) {
@@ -95,13 +96,40 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     
         switch panGesture.state {
         case .began:
-            animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut, animations: {
-                self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+            
+            animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: {
+                
+                UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
+                    
+                    //отъезжает назад
+                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2) {
+                        self.currentImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+                    }
+                    //уходит влево
+                    UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 1) {
+                        self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+                        self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+                    }
+                }
+
             })
-            animator.addAnimations {
-                self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-            }
+//            animator.addAnimations {
+//                UIView.animateKeyframes(withDuration: dur, delay: <#T##TimeInterval#>, options: <#T##UIView.KeyframeAnimationOptions#>, animations: <#T##() -> Void#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
+//            }
+//
+//            }, animations: {
+//                self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+//                self.currentImageView.layer.transform =  CATransform3DMakeScale(0.5, 0.5, 0.5)
+//            })
+//            animator.addAnimations {
+//                self.nextImageView.layer.transform =  CATransform3DMakeScale(1, 1, 1)
+//                self.nextImageView.alpha = 1
+//                self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+//
+//
+//            }
             animator.addCompletion { _ in
+                
                 self.changeImageViewPosition()
             }
             animator.pauseAnimation()
