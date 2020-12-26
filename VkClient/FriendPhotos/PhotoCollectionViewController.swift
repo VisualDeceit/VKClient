@@ -108,7 +108,6 @@ class PhotoCollectionViewController: UICollectionViewController {
     }
     
     @IBAction func closeGallery(_ unwindSegue: UIStoryboardSegue) {}
-   
 
 }
     
