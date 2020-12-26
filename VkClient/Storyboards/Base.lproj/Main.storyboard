@@ -142,7 +142,7 @@
                                 <rect key="frame" x="0.0" y="84" width="375" height="70.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bUw-4E-NXr" id="aK1-t1-VTe">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RT-nZ-k3T">
@@ -338,6 +338,7 @@
                                 <connections>
                                     <outlet property="likeControl" destination="Y2H-O6-3Ld" id="9Ua-Bo-BUr"/>
                                     <outlet property="photo" destination="5Ym-3G-hSF" id="jig-P1-q0g"/>
+                                    <segue destination="x22-fL-NUt" kind="modal" identifier="ShowGallery" id="jcF-j6-Cvu"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -351,6 +352,31 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4q6-Ib-M60" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3975.1999999999998" y="-420.53973013493254"/>
+        </scene>
+        <!--Swipe Photo Gallery View Controller-->
+        <scene sceneID="rrM-en-cRS">
+            <objects>
+                <viewController id="x22-fL-NUt" customClass="SwipePhotoGalleryViewController" customModule="VkClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eFo-KV-kCY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lah-Ju-rnl">
+                                <rect key="frame" x="16" y="20" width="343" height="584"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="iHL-wa-8Xz"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="akd-TK-ZmZ"/>
+                    <connections>
+                        <outlet property="imageView1" destination="Lah-Ju-rnl" id="wfv-hV-CCd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gtT-xT-kWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3975.1999999999998" y="-1208.5457271364319"/>
         </scene>
         <!--Friends-->
         <scene sceneID="Tgs-GR-lBx">

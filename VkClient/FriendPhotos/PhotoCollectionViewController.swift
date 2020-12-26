@@ -19,6 +19,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "\(user.first_name) \(user.last_name)"
+        downloadAlbum()
     }
     
     //заготовка для ДЗ
@@ -58,8 +59,8 @@ class PhotoCollectionViewController: UICollectionViewController {
         else { return PhotoCollectionViewCell() }
         //передаем данные в ячейку
         //фото для каждой ячейки
-        cell.imageURL = URL(string: user.album![indexPath.row].imageURL)
-        //cell.photo.image =  user.album![indexPath.row].imageData
+        //cell.imageURL = URL(string: user.album![indexPath.row].imageURL)
+        cell.photo.image =  user.album![indexPath.row].imageData
         //состояние  для likeControl
         cell.likeControl.totalCount = user.album![indexPath.row].like.totalCount
         cell.likeControl.isLiked = user.album![indexPath.row].like.isLiked
@@ -92,6 +93,20 @@ class PhotoCollectionViewController: UICollectionViewController {
         }
     }
     
+    //to SwipePhotoGalleryViewController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard
+            segue.identifier == "ShowGallery",
+            let controller = segue.destination as? SwipePhotoGalleryViewController,
+            let cell = sender as? PhotoCollectionViewCell
+        else { return }
+        
+        let indexPaths = self.collectionView.indexPath(for: cell)
+        
+        controller.datasource = user.album!
+        controller.index = indexPaths!.row
+    }
+    
 }
 
 extension PhotoCollectionViewController: UICollectionViewDelegateFlowLayout {
@@ -101,4 +116,5 @@ extension PhotoCollectionViewController: UICollectionViewDelegateFlowLayout {
         let size = CGSize(width: width, height: width + 30)
         return size
     }
+    
 }

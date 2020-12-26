@@ -28,6 +28,7 @@
 		15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */; };
 		15B3E5BB258F670C001C025E /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5BA258F670C001C025E /* NewsTableViewCell.swift */; };
 		15B3E5BF258F777B001C025E /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5BE258F777B001C025E /* NewsTableViewController.swift */; };
+		15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomSectionHeaderView.swift; sourceTree = "<group>"; };
 		15B3E5BA258F670C001C025E /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		15B3E5BE258F777B001C025E /* NewsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
+		15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipePhotoGalleryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				1504D9372583BEBF00B4EBEE /* PhotoCollectionViewController.swift */,
+				15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */,
 				1504D93B2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift */,
 			);
 			path = FriendPhotos;
@@ -239,6 +242,7 @@
 				1504D9342583AE9500B4EBEE /* Data.swift in Sources */,
 				15B17600258621F500042450 /* UserAvatar.swift in Sources */,
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
+				15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
 				15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
