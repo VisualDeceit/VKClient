@@ -30,13 +30,16 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     }
     
     func initGallery() {
+        let defaultFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
         imageView1.image = datasource[index].imageData
         imageView1.backgroundColor = .red
-        currentImageView = imageView1
+        imageView1.frame = defaultFrame
         
-        imageView2.frame = CGRect(x: imageView1.frame.width + 5, y: imageView1.frame.origin.y, width: imageView1.frame.width, height: imageView1.frame.height)
+        imageView2.frame = defaultFrame
         imageView2.backgroundColor = .blue
+       
+        currentImageView = imageView1
         nextImageView = imageView2
         
         if index + 1 < datasource.count {
@@ -62,7 +65,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     
         switch panGesture.state {
         case .began:
-            animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeOut, animations: {
+            animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut, animations: {
                 self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -final, dy: 0.0)
             })
             animator.pauseAnimation()
@@ -77,7 +80,8 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     }
     
     /* для возварта на прошлый экран + нужно еще подписать на UIGestureRecognizerDelegate
-     * и реализовать  shouldBeRequiredToFailBy чтобы не забивалась swipe от pan
+      и реализовать  shouldBeRequiredToFailBy чтобы не забивалась swipe от pan
+      https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/coordinating_multiple_gesture_recognizers/preferring_one_gesture_over_another
      */
     
     @objc func didSwipe(_ swipeGesture: UISwipeGestureRecognizer) {
