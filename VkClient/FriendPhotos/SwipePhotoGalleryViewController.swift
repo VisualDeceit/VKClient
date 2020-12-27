@@ -35,7 +35,9 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         initGallery()
     }
     
-    func initGallery() {
+    
+    
+    private func initGallery() {
         
         currentFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
       
@@ -52,8 +54,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
        
         currentImageView = imageView1
         nextImageView = imageView2
-       // nextImageView.alpha = 0.3
-        nextImageView.layer.transform =  CATransform3DMakeScale(1, 1, 1)
+        nextImageView.transform =  CGAffineTransform(scaleX: 0.8, y: 0.8)
         
         if index + 1 < datasource.count {
             index += 1
@@ -80,7 +81,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         
         nextImageView = tempImageView
         nextImageView.frame = nextFrame
-        nextImageView.layer.transform =  CATransform3DMakeScale(1, 1, 1)
+        nextImageView.transform =  CGAffineTransform(scaleX: 0.8, y: 0.8)
         if index + 1 < datasource.count {
             index += 1
         } else {
@@ -95,57 +96,46 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         let finalPosition = UIScreen.main.bounds.width
     
         switch panGesture.state {
+       
         case .began:
             
             animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: {
                 
                 UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
-                    
-                    //отъезжает назад
-                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2) {
-                        self.currentImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+    
+                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.15) {
+                        self.currentImageView.transform =  CGAffineTransform(scaleX: 0.8, y: 0.8)
                     }
-                    //уходит влево
-                    UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 1) {
+
+                    UIView.addKeyframe(withRelativeStartTime: 0.15, relativeDuration: 0.85) {
                         self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
                         self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
                     }
+                    
+                    UIView.addKeyframe(withRelativeStartTime: 0.85, relativeDuration: 0.15) {
+                        self.nextImageView.transform =  CGAffineTransform(scaleX: 1, y: 1)
+                    }
                 }
-
             })
-//            animator.addAnimations {
-//                UIView.animateKeyframes(withDuration: dur, delay: <#T##TimeInterval#>, options: <#T##UIView.KeyframeAnimationOptions#>, animations: <#T##() -> Void#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
-//            }
-//
-//            }, animations: {
-//                self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-//                self.currentImageView.layer.transform =  CATransform3DMakeScale(0.5, 0.5, 0.5)
-//            })
-//            animator.addAnimations {
-//                self.nextImageView.layer.transform =  CATransform3DMakeScale(1, 1, 1)
-//                self.nextImageView.alpha = 1
-//                self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-//
-//
-//            }
-            animator.addCompletion { _ in
-                
-                self.changeImageViewPosition()
-            }
+
+            animator.addCompletion { _ in self.changeImageViewPosition() }
             animator.pauseAnimation()
-        case .changed:
-            let translation = panGesture.translation(in: self.view)
             
+        case .changed:
+            
+            let translation = panGesture.translation(in: self.view)
             animator.fractionComplete = -translation.x / finalPosition
+            
         case .ended:
+            
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
+            
         default: return
         }
     }
     
     /* для возварта на прошлый экран + нужно еще подписать на UIGestureRecognizerDelegate
       и реализовать  shouldBeRequiredToFailBy чтобы не забивалась swipe от pan
-      https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/coordinating_multiple_gesture_recognizers/preferring_one_gesture_over_another
      */
     
     @objc func didSwipe(_ swipeGesture: UISwipeGestureRecognizer) {
@@ -155,7 +145,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
              shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-       // Do not begin the pan until the swipe fails.
+
        if gestureRecognizer == self.swipeGesture &&
               otherGestureRecognizer == self.panGesture {
           return true
