@@ -11,57 +11,82 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
 
     @IBOutlet weak var imageView1: UIImageView!
     @IBOutlet weak var imageView2: UIImageView!
+    @IBOutlet weak var imageView3: UIImageView!
     
     var panGesture: UIPanGestureRecognizer!
-    var toLeftAnimator: UIViewPropertyAnimator!
-    var toRightAnimator: UIViewPropertyAnimator!
+    var animator: UIViewPropertyAnimator!
     var swipeGesture: UISwipeGestureRecognizer!
     
-    var currentImageView: UIImageView!
-    var nextImageView: UIImageView!
+    var centerImageView: UIImageView!
+    var rightImageView: UIImageView!
+    var leftImageView: UIImageView!
     
-    var currentFrame: CGRect!
-    var nextFrame: CGRect!
-    var priorFrame: CGRect!
+    var centerFramePosition: CGRect!
+    var rightFramePosition: CGRect!
+    var leftFramePosition: CGRect!
     
     var datasource =  [Photo]()
     var index: Int = 0
     
-    
+    enum Direction {
+        case Left, Right
+        
+        var title: String {
+            switch self {
+            case .Left:
+                return "to left"
+            case .Right:
+                return "to right"
+
+            }
+        }
+    }
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        initGallery()
+        setupGallery()
     }
     
-    
-    
-    private func initGallery() {
+
+    private func setupGallery() {
         
-        currentFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        centerFramePosition = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
       
-        nextFrame = CGRect(x: UIScreen.main.bounds.width, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        rightFramePosition = CGRect(x: UIScreen.main.bounds.width, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
-        priorFrame = CGRect(x: -UIScreen.main.bounds.width, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        leftFramePosition = CGRect(x: -UIScreen.main.bounds.width, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
-        imageView1.image = datasource[index].imageData
-        //imageView1.backgroundColor = .red
-        imageView1.frame = currentFrame
+
+        imageView1.backgroundColor = .red
+        imageView1.frame = centerFramePosition
         
         
-        imageView2.frame = nextFrame
-       // imageView2.backgroundColor = .blue
+        imageView2.frame = rightFramePosition
+        imageView2.backgroundColor = .blue
+        
+        imageView3.frame = leftFramePosition
+        imageView3.backgroundColor = .green
        
-        currentImageView = imageView1
-        nextImageView = imageView2
-       // nextImageView.transform = CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
+        centerImageView = imageView1
+        rightImageView = imageView2
+        leftImageView = imageView3
+        
+        
+        centerImageView.image = datasource[index].imageData
         
         if index + 1 < datasource.count {
-            index += 1
-            imageView2.image = datasource[index].imageData
+            rightImageView.image = datasource[index + 1].imageData
+        } else {
+            rightImageView.image = datasource[0].imageData
         }
+        
+        if index - 1 >= 0 {
+            leftImageView.image = datasource[index - 1].imageData
+        } else {
+            leftImageView.image = datasource[datasource.count - 1].imageData
+        }
+        
         
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
         view.addGestureRecognizer(panGesture)
@@ -72,84 +97,96 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         view.addGestureRecognizer(swipeGesture)
         swipeGesture.delegate = self
         
-    
     }
-    
-    func changeImageViewPosition() {
-        let tempImageView = currentImageView
-        currentImageView.transform = .identity
-        currentImageView = nextImageView
-        currentImageView.frame = currentFrame
-        
-        nextImageView = tempImageView
-        nextImageView.frame = nextFrame
-        nextImageView.alpha  = 1
-        //nextImageView.transform =  CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
-        if index + 1 < datasource.count {
-            index += 1
-        } else {
-            index = 0
-        }
-        nextImageView.image = datasource[index].imageData
 
+    private func reconfigureImageViews(to dir: Direction) {
+       //листаем влево
+        if dir == .Left {
+            
+            let tempImageView = centerImageView
+            centerImageView = rightImageView
+            rightImageView = tempImageView
+            
+            rightImageView.frame = rightFramePosition
+            rightImageView.alpha  = 1
+            rightImageView.transform = .identity
+            
+            index = index + 1 < datasource.count ? index + 1 : 0
+            
+            if index == datasource.count-1 {
+            rightImageView.image = datasource[0].imageData
+            } else {
+                rightImageView.image = datasource[index + 1].imageData
+            }
+           
+            if index == 0 {
+            leftImageView.image = datasource[datasource.count-1].imageData
+            } else {
+                leftImageView.image = datasource[index - 1].imageData
+            }
+            
+        }
+
+        
     }
     
     @objc func didPan( _ panGesture: UIPanGestureRecognizer) {
-        
-        enum Direction {
-            case Left, Right
-            
-            var title: String {
-                switch self {
-                case .Left:
-                    return "to left"
-                case .Right:
-                    return "to right"
-                }
-            }
-        }
-        
+
         let finalPosition = UIScreen.main.bounds.width
+        // направление
         let direction: Direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
     
         switch panGesture.state {
        
         case .began:
             print(direction.title)
-            toLeftAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: {
-                
-                UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
-    
-                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                        self.currentImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
-                    }
+            animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut)
+ 
+            switch direction {
+            
+            case .Left:
+                animator.addAnimations {
+                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
 
-                    UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
-                        self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-                        self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-                    }
-                    
-                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-                        self.currentImageView.alpha  = 0.0
+                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+                            }
 
-                    }
+                            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
+                                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+                                self.rightImageView.frame  =  self.rightImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+                            }
+                            
+                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+                                self.centerImageView.alpha  = 0.0
+
+                            }
+                        }
                 }
-            })
+            case .Right:
+                animator.addAnimations {
+                    
+                }
+            }
 
-            toLeftAnimator.addCompletion { _ in self.changeImageViewPosition() }
-            toLeftAnimator.pauseAnimation()
+            animator.addCompletion { _ in
+                self.reconfigureImageViews(to: direction)
+            }
+            animator.pauseAnimation()
             
         case .changed:
             
             let translation = panGesture.translation(in: self.view)
-            toLeftAnimator.fractionComplete = -translation.x / finalPosition
+            animator.fractionComplete = -translation.x / finalPosition
             
         case .ended:
             
-            toLeftAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
+            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
 
         default: return
         }
+        
+
     }
     
     /* для возварта на прошлый экран + нужно еще подписать на UIGestureRecognizerDelegate
