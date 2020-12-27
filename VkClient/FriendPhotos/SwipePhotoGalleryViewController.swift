@@ -17,6 +17,8 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     var animator: UIViewPropertyAnimator!
     var swipeGesture: UISwipeGestureRecognizer!
     
+    var direction: Direction = .Left
+    
     var centerImageView: UIImageView!
     var rightImageView: UIImageView!
     var leftImageView: UIImageView!
@@ -153,13 +155,15 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     @objc func didPan( _ panGesture: UIPanGestureRecognizer) {
 
         let finalPosition = UIScreen.main.bounds.width
-        let direction: Direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
+        
+        ///direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
     
         switch panGesture.state {
        
         case .began:
 
             animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeIn)
+            direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
  
             switch direction {
             case .Left:
@@ -203,7 +207,9 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
 
             animator.addCompletion { _ in
                 //по завершению переммещаем imageview
-                self.reconfigureImageViews(to: direction)
+                if !self.animator.isReversed {
+                    self.reconfigureImageViews(to: self.direction)
+                }
             }
             
             animator.pauseAnimation()
@@ -215,6 +221,11 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
             animator.fractionComplete = CGFloat(multiplayer) * translation.x / finalPosition
             
         case .ended:
+           
+            //отмена анимации
+            let velocity = panGesture.velocity(in: self.view)
+            let shouldCancel = direction == .Left && velocity.x > 0 || direction == .Right && velocity.x < 0
+            if shouldCancel && !animator.isReversed { animator.isReversed.toggle() }
             
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
 
