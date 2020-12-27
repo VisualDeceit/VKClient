@@ -45,11 +45,18 @@ class LoadingIndicator: UIView {
         stackView.distribution = .fillEqually
         self.addSubview(stackView)
         
-        let topConstraint = stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5)
-        let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
-        let leadingConstraint = stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5)
-        let trailingConstraint = stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5)
-            self.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
+//        let topConstraint = stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5)
+//        let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
+//        let leadingConstraint = stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5)
+//        let trailingConstraint = stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5)
+//            self.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
+        
+        NSLayoutConstraint.activate([
+        stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
+        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
+        stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+        stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
+        ])
         
     }
     

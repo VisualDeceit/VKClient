@@ -95,7 +95,7 @@ class NewsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsTableViewCell
         else {return UITableViewCell()}
         
-        cell.logoImage.image = myNews[indexPath.row].logo
+        cell.logoImage.logoView.image = myNews[indexPath.row].logo
         cell.captionLabel.text = myNews[indexPath.row].caption
         cell.dateLabel.text = myNews[indexPath.row].date
      

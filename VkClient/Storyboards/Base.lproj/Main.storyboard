@@ -151,7 +151,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oHQ-2u-zWy" customClass="UserAvatar" customModule="VkClient" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oHQ-2u-zWy" customClass="CellLogo" customModule="VkClient" customModuleProvider="target">
                                             <rect key="frame" x="10" y="10" width="50" height="50.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="QLv-AK-Ygp"/>
@@ -186,7 +186,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="friendAvatar" destination="oHQ-2u-zWy" id="pKf-Es-CBN"/>
+                                    <outlet property="friendAvatar" destination="oHQ-2u-zWy" id="8Qt-NO-hS1"/>
                                     <outlet property="friendName" destination="0RT-nZ-k3T" id="WmC-mU-qel"/>
                                     <segue destination="E2E-tI-6dW" kind="show" identifier="showUserPhotos" id="akZ-cI-laP"/>
                                 </connections>
@@ -235,31 +235,32 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oMu-XO-Er6">
-                                            <rect key="frame" x="10" y="10" width="50" height="50.5"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="50" id="KB4-NL-oqq"/>
-                                                <constraint firstAttribute="width" constant="50" id="r8g-vL-yEz"/>
-                                            </constraints>
-                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fiD-us-D7g">
                                             <rect key="frame" x="70" y="25" width="295" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dvO-TO-MTy" customClass="CellLogo" customModule="VkClient" customModuleProvider="target">
+                                            <rect key="frame" x="10" y="10" width="50" height="50.5"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="HHa-SO-v2c"/>
+                                                <constraint firstAttribute="height" constant="50" id="snu-hR-99y"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="fiD-us-D7g" firstAttribute="centerY" secondItem="LYX-mz-F8X" secondAttribute="centerY" id="538-Nj-qVu"/>
-                                        <constraint firstItem="oMu-XO-Er6" firstAttribute="top" secondItem="LYX-mz-F8X" secondAttribute="top" constant="10" id="EtY-fA-THd"/>
-                                        <constraint firstItem="fiD-us-D7g" firstAttribute="leading" secondItem="oMu-XO-Er6" secondAttribute="trailing" constant="10" id="dcX-XH-nZg"/>
+                                        <constraint firstItem="dvO-TO-MTy" firstAttribute="top" secondItem="LYX-mz-F8X" secondAttribute="top" constant="10" id="5wS-l1-6JK"/>
+                                        <constraint firstItem="dvO-TO-MTy" firstAttribute="leading" secondItem="LYX-mz-F8X" secondAttribute="leading" constant="10" id="gP8-p8-2Pw"/>
+                                        <constraint firstItem="fiD-us-D7g" firstAttribute="leading" secondItem="dvO-TO-MTy" secondAttribute="trailing" constant="10" id="hrQ-rB-faT"/>
+                                        <constraint firstAttribute="bottom" secondItem="dvO-TO-MTy" secondAttribute="bottom" constant="10" id="lGk-Jv-6ZQ"/>
                                         <constraint firstAttribute="trailing" secondItem="fiD-us-D7g" secondAttribute="trailing" constant="10" id="moe-oB-TdB"/>
-                                        <constraint firstItem="oMu-XO-Er6" firstAttribute="leading" secondItem="LYX-mz-F8X" secondAttribute="leading" constant="10" id="x7N-jT-Hox"/>
-                                        <constraint firstItem="oMu-XO-Er6" firstAttribute="centerY" secondItem="LYX-mz-F8X" secondAttribute="centerY" id="zoO-qg-xse"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="groupImage" destination="oMu-XO-Er6" id="LAv-kh-7cQ"/>
+                                    <outlet property="groupLogo" destination="dvO-TO-MTy" id="d82-cF-Qjg"/>
                                     <outlet property="groupName" destination="fiD-us-D7g" id="b2z-QZ-mjZ"/>
                                 </connections>
                             </tableViewCell>
@@ -430,31 +431,32 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P5l-t8-tH2">
-                                            <rect key="frame" x="10" y="10" width="50" height="50.5"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="50" id="2jV-Yh-9sf"/>
-                                                <constraint firstAttribute="height" constant="50" id="tDB-dJ-mLI"/>
-                                            </constraints>
-                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dgy-Pp-an6">
                                             <rect key="frame" x="70" y="25" width="295" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bj1-4i-rtI" customClass="CellLogo" customModule="VkClient" customModuleProvider="target">
+                                            <rect key="frame" x="10" y="10" width="50" height="50.5"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="J3i-8P-mHg"/>
+                                                <constraint firstAttribute="height" constant="50" id="KD7-99-7kh"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="dgy-Pp-an6" firstAttribute="leading" secondItem="P5l-t8-tH2" secondAttribute="trailing" constant="10" id="75a-4I-2Ya"/>
+                                        <constraint firstItem="Bj1-4i-rtI" firstAttribute="leading" secondItem="rSy-Ph-Cf1" secondAttribute="leading" constant="10" id="IAE-zX-ekc"/>
+                                        <constraint firstAttribute="bottom" secondItem="Bj1-4i-rtI" secondAttribute="bottom" constant="10" id="QZw-cn-nOK"/>
                                         <constraint firstAttribute="trailing" secondItem="dgy-Pp-an6" secondAttribute="trailing" constant="10" id="WKY-Gq-eBc"/>
-                                        <constraint firstItem="P5l-t8-tH2" firstAttribute="top" secondItem="rSy-Ph-Cf1" secondAttribute="top" constant="10" id="b8l-Zr-7pq"/>
-                                        <constraint firstItem="P5l-t8-tH2" firstAttribute="centerY" secondItem="rSy-Ph-Cf1" secondAttribute="centerY" id="dRI-RB-ELV"/>
-                                        <constraint firstItem="P5l-t8-tH2" firstAttribute="leading" secondItem="rSy-Ph-Cf1" secondAttribute="leading" constant="10" id="dmd-0E-P0E"/>
+                                        <constraint firstItem="Bj1-4i-rtI" firstAttribute="top" secondItem="rSy-Ph-Cf1" secondAttribute="top" constant="10" id="f59-TF-Gcg"/>
+                                        <constraint firstItem="dgy-Pp-an6" firstAttribute="leading" secondItem="Bj1-4i-rtI" secondAttribute="trailing" constant="10" id="oo9-44-BFB"/>
                                         <constraint firstItem="dgy-Pp-an6" firstAttribute="centerY" secondItem="rSy-Ph-Cf1" secondAttribute="centerY" id="sLC-6f-5pF"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="groupImage" destination="P5l-t8-tH2" id="frR-V1-jRl"/>
+                                    <outlet property="groupImage" destination="Bj1-4i-rtI" id="5JZ-Yp-dLb"/>
                                     <outlet property="groupName" destination="dgy-Pp-an6" id="PK0-Ud-BSB"/>
                                     <segue destination="uoV-XK-apM" kind="unwind" identifier="AddGroup" unwindAction="addGroupWithSegue:" id="hN3-W2-LYL"/>
                                 </connections>
@@ -513,13 +515,6 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3oa-zO-b4g">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gNe-2c-4fL">
-                                                    <rect key="frame" x="5" y="5" width="50" height="50"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="50" id="88t-KV-GHD"/>
-                                                        <constraint firstAttribute="width" constant="50" id="fpx-M5-eh7"/>
-                                                    </constraints>
-                                                </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="WB9-Hl-iVp">
                                                     <rect key="frame" x="60" y="11.5" width="310" height="37.5"/>
                                                     <subviews>
@@ -540,16 +535,23 @@
                                                         </label>
                                                     </subviews>
                                                 </stackView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xB4-lH-clv" customClass="CellLogo" customModule="VkClient" customModuleProvider="target">
+                                                    <rect key="frame" x="5" y="5" width="50" height="50"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="50" id="71e-NM-LMB"/>
+                                                        <constraint firstAttribute="height" constant="50" id="7mQ-h3-dzt"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="WB9-Hl-iVp" secondAttribute="trailing" constant="5" id="661-ft-Pjm"/>
-                                                <constraint firstItem="gNe-2c-4fL" firstAttribute="top" secondItem="3oa-zO-b4g" secondAttribute="top" constant="5" id="A0N-9d-ojK"/>
+                                                <constraint firstItem="xB4-lH-clv" firstAttribute="top" secondItem="3oa-zO-b4g" secondAttribute="top" constant="5" id="6Ho-k8-Zqf"/>
+                                                <constraint firstItem="WB9-Hl-iVp" firstAttribute="leading" secondItem="xB4-lH-clv" secondAttribute="trailing" constant="5" id="Kao-dl-2o9"/>
                                                 <constraint firstItem="WB9-Hl-iVp" firstAttribute="centerY" secondItem="3oa-zO-b4g" secondAttribute="centerY" id="QFx-Ud-C7q"/>
-                                                <constraint firstAttribute="bottom" secondItem="gNe-2c-4fL" secondAttribute="bottom" constant="5" id="WDa-IP-VoG"/>
-                                                <constraint firstItem="gNe-2c-4fL" firstAttribute="leading" secondItem="3oa-zO-b4g" secondAttribute="leading" constant="5" id="cAZ-eB-CKg"/>
-                                                <constraint firstItem="gNe-2c-4fL" firstAttribute="centerY" secondItem="3oa-zO-b4g" secondAttribute="centerY" id="hU4-hV-pJe"/>
-                                                <constraint firstItem="WB9-Hl-iVp" firstAttribute="leading" secondItem="gNe-2c-4fL" secondAttribute="trailing" constant="5" id="s1c-zH-7C6"/>
+                                                <constraint firstItem="xB4-lH-clv" firstAttribute="leading" secondItem="3oa-zO-b4g" secondAttribute="leading" constant="5" id="bfO-1C-D1e"/>
+                                                <constraint firstAttribute="bottom" secondItem="xB4-lH-clv" secondAttribute="bottom" constant="5" id="keO-Ny-Peo"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zwh-bd-p8K">
@@ -661,7 +663,7 @@
                                     <outlet property="dateLabel" destination="TBz-eq-4Jj" id="ynG-jx-R5I"/>
                                     <outlet property="imageViewHeight" destination="gVd-ST-jRJ" id="7PT-Ga-80D"/>
                                     <outlet property="likeControl" destination="grB-sJ-h6F" id="61e-rH-0TU"/>
-                                    <outlet property="logoImage" destination="gNe-2c-4fL" id="Mrl-xS-Qbh"/>
+                                    <outlet property="logoImage" destination="xB4-lH-clv" id="x6N-78-f9q"/>
                                     <outlet property="viewsNumber" destination="IZh-ZN-HjX" id="MjV-LC-qwG"/>
                                 </connections>
                             </tableViewCell>

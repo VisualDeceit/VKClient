@@ -1,5 +1,5 @@
 //
-//  UserAvatar.swift
+//  CellLogo.swift
 //  VkClient
 //
 //  Created by Alexander Fomin on 13.12.2020.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserAvatar: UIView {
+class CellLogo: UIView {
     
     var logoView = UIImageView()
     let shadowView = UIView()
@@ -28,7 +28,7 @@ var shadowRadius: CGFloat = 25.0 {
         }
     }
     
-var shadowBlur: CGFloat = 6.0 {
+var shadowBlur: CGFloat = 3.0 {
         didSet {
             setNeedsDisplay()
         }
@@ -41,7 +41,7 @@ var shadowOpacity: Float = 0.3 {
         }
     }
 
-var shadowOffset: CGSize = CGSize(width: 0, height: 5) {
+var shadowOffset: CGSize = CGSize(width: 0, height: 3) {
         didSet {
             setNeedsDisplay()
         }
