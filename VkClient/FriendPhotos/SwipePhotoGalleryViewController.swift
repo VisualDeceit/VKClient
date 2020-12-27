@@ -158,9 +158,8 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         switch panGesture.state {
        
         case .began:
-            
-            print(direction.title)
-            animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut)
+
+            animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeIn)
  
             switch direction {
             case .Left:
@@ -212,7 +211,8 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         case .changed:
             
             let translation = panGesture.translation(in: self.view)
-            animator.fractionComplete = -translation.x / finalPosition
+            let multiplayer = direction == .Left ?  -1 : 1
+            animator.fractionComplete = CGFloat(multiplayer) * translation.x / finalPosition
             
         case .ended:
             
