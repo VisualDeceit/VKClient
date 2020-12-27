@@ -13,7 +13,8 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     @IBOutlet weak var imageView2: UIImageView!
     
     var panGesture: UIPanGestureRecognizer!
-    var animator: UIViewPropertyAnimator!
+    var toLeftAnimator: UIViewPropertyAnimator!
+    var toRightAnimator: UIViewPropertyAnimator!
     var swipeGesture: UISwipeGestureRecognizer!
     
     var currentImageView: UIImageView!
@@ -49,12 +50,13 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         //imageView1.backgroundColor = .red
         imageView1.frame = currentFrame
         
+        
         imageView2.frame = nextFrame
        // imageView2.backgroundColor = .blue
        
         currentImageView = imageView1
         nextImageView = imageView2
-        nextImageView.transform = CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
+       // nextImageView.transform = CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
         
         if index + 1 < datasource.count {
             index += 1
@@ -81,7 +83,8 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         
         nextImageView = tempImageView
         nextImageView.frame = nextFrame
-        nextImageView.transform =  CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
+        nextImageView.alpha  = 1
+        //nextImageView.transform =  CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
         if index + 1 < datasource.count {
             index += 1
         } else {
@@ -93,42 +96,57 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     
     @objc func didPan( _ panGesture: UIPanGestureRecognizer) {
         
+        enum Direction {
+            case Left, Right
+            
+            var title: String {
+                switch self {
+                case .Left:
+                    return "to left"
+                case .Right:
+                    return "to right"
+                }
+            }
+        }
+        
         let finalPosition = UIScreen.main.bounds.width
+        let direction: Direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
     
         switch panGesture.state {
        
         case .began:
-            
-            animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: {
+            print(direction.title)
+            toLeftAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: {
                 
                 UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
     
-                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.15) {
+                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                         self.currentImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
                     }
 
-                    UIView.addKeyframe(withRelativeStartTime: 0.15, relativeDuration: 0.7) {
+                    UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
                         self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
                         self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
                     }
                     
-                    UIView.addKeyframe(withRelativeStartTime: 0.85, relativeDuration: 0.15) {
-                        self.nextImageView.transform = .identity
+                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+                        self.currentImageView.alpha  = 0.0
+
                     }
                 }
             })
 
-            animator.addCompletion { _ in self.changeImageViewPosition() }
-            animator.pauseAnimation()
+            toLeftAnimator.addCompletion { _ in self.changeImageViewPosition() }
+            toLeftAnimator.pauseAnimation()
             
         case .changed:
             
             let translation = panGesture.translation(in: self.view)
-            animator.fractionComplete = -translation.x / finalPosition
+            toLeftAnimator.fractionComplete = -translation.x / finalPosition
             
         case .ended:
             
-            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
+            toLeftAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
 
         default: return
         }
