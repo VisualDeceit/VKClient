@@ -51,6 +51,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
 
     private func setupGallery() {
         
+        //позиции фремов
         centerFramePosition = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
       
         rightFramePosition = CGRect(x: UIScreen.main.bounds.width, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
@@ -58,21 +59,22 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         leftFramePosition = CGRect(x: -UIScreen.main.bounds.width, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
 
-        imageView1.backgroundColor = .red
+        //imageView1.backgroundColor = .red
         imageView1.frame = centerFramePosition
         
         
         imageView2.frame = rightFramePosition
-        imageView2.backgroundColor = .blue
+        //imageView2.backgroundColor = .blue
         
         imageView3.frame = leftFramePosition
-        imageView3.backgroundColor = .green
+        //imageView3.backgroundColor = .green
        
+        //ссылки на imageViews для удобвства анимации и перемещения
         centerImageView = imageView1
         rightImageView = imageView2
         leftImageView = imageView3
         
-        
+        // картинки по умолчанию
         centerImageView.image = datasource[index].imageData
         
         if index + 1 < datasource.count {
@@ -88,6 +90,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         }
         
         
+        //активируем жесты
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
         view.addGestureRecognizer(panGesture)
         panGesture.delegate = self
@@ -99,53 +102,70 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         
     }
 
+    //Перемещение ImageView поссле анимации
     private func reconfigureImageViews(to dir: Direction) {
-       //листаем влево
+        //пролистали влево
         if dir == .Left {
             
+            //меняем местами ссылки на imageView
             let tempImageView = centerImageView
             centerImageView = rightImageView
             rightImageView = tempImageView
             
+            //возвращаем на место
             rightImageView.frame = rightFramePosition
             rightImageView.alpha  = 1
             rightImageView.transform = .identity
             
             index = index + 1 < datasource.count ? index + 1 : 0
             
-            if index == datasource.count-1 {
-            rightImageView.image = datasource[0].imageData
-            } else {
-                rightImageView.image = datasource[index + 1].imageData
-            }
-           
-            if index == 0 {
-            leftImageView.image = datasource[datasource.count-1].imageData
-            } else {
-                leftImageView.image = datasource[index - 1].imageData
-            }
             
+        } else if dir == .Right {
+            
+            //меняем местами ссылки на imageView
+            let tempImageView = centerImageView
+            centerImageView = leftImageView
+            leftImageView = tempImageView
+            
+            //возвращаем на место
+            leftImageView.frame = leftFramePosition
+            leftImageView.alpha  = 1
+            leftImageView.transform = .identity
+            
+            index = index - 1 >= 0 ? index - 1 : datasource.count - 1
         }
-
+        
+        if index == datasource.count-1 {
+        rightImageView.image = datasource[0].imageData
+        } else {
+            rightImageView.image = datasource[index + 1].imageData
+        }
+       
+        if index == 0 {
+        leftImageView.image = datasource[datasource.count-1].imageData
+        } else {
+            leftImageView.image = datasource[index - 1].imageData
+        }
         
     }
     
+    //разбор анимации и жеста
     @objc func didPan( _ panGesture: UIPanGestureRecognizer) {
 
         let finalPosition = UIScreen.main.bounds.width
-        // направление
         let direction: Direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
     
         switch panGesture.state {
        
         case .began:
+            
             print(direction.title)
             animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut)
  
             switch direction {
-            
             case .Left:
                 animator.addAnimations {
+                    //в самой анимации используем ссылки на ImageView чтобы не плодить ветви с вариантами
                     UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
 
                             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
@@ -159,19 +179,34 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
                             
                             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
                                 self.centerImageView.alpha  = 0.0
-
                             }
                         }
                 }
             case .Right:
                 animator.addAnimations {
-                    
+                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
+
+                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+                            }
+
+                            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
+                                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
+                                self.leftImageView.frame  =  self.leftImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
+                            }
+                            
+                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+                                self.centerImageView.alpha  = 0.0
+                            }
+                        }
                 }
             }
 
             animator.addCompletion { _ in
+                //по завершению переммещаем imageview
                 self.reconfigureImageViews(to: direction)
             }
+            
             animator.pauseAnimation()
             
         case .changed:
