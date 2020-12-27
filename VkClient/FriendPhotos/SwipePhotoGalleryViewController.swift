@@ -54,7 +54,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
        
         currentImageView = imageView1
         nextImageView = imageView2
-        nextImageView.transform =  CGAffineTransform(scaleX: 0.8, y: 0.8)
+        nextImageView.transform = CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
         
         if index + 1 < datasource.count {
             index += 1
@@ -81,7 +81,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         
         nextImageView = tempImageView
         nextImageView.frame = nextFrame
-        nextImageView.transform =  CGAffineTransform(scaleX: 0.8, y: 0.8)
+        nextImageView.transform =  CATransform3DGetAffineTransform(CATransform3DMakeScale(0.8, 0.8, 0.8))
         if index + 1 < datasource.count {
             index += 1
         } else {
@@ -104,16 +104,16 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
                 UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
     
                     UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.15) {
-                        self.currentImageView.transform =  CGAffineTransform(scaleX: 0.8, y: 0.8)
+                        self.currentImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
                     }
 
-                    UIView.addKeyframe(withRelativeStartTime: 0.15, relativeDuration: 0.85) {
+                    UIView.addKeyframe(withRelativeStartTime: 0.15, relativeDuration: 0.7) {
                         self.currentImageView.frame  =  self.currentImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
                         self.nextImageView.frame  =  self.nextImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
                     }
                     
                     UIView.addKeyframe(withRelativeStartTime: 0.85, relativeDuration: 0.15) {
-                        self.nextImageView.transform =  CGAffineTransform(scaleX: 1, y: 1)
+                        self.nextImageView.transform = .identity
                     }
                 }
             })
@@ -129,7 +129,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         case .ended:
             
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
-            
+
         default: return
         }
     }
