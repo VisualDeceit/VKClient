@@ -224,7 +224,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
            
             //отмена анимации
             let velocity = panGesture.velocity(in: self.view)
-            let shouldCancel = direction == .Left && velocity.x > 0 || direction == .Right && velocity.x < 0
+            let shouldCancel = direction == .Left && velocity.x > 0 || direction == .Right && velocity.x < 0 || animator.fractionComplete < 0.25
             if shouldCancel && !animator.isReversed { animator.isReversed.toggle() }
             
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
