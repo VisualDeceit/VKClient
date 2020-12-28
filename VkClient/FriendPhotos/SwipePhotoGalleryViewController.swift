@@ -44,10 +44,14 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         }
     }
     
+    var toLeftAnimation = {}
+    var toRigtAnimation = {}
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         setupGallery()
+        setupAnimations()
     }
     
 
@@ -103,6 +107,41 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         swipeGesture.delegate = self
         
     }
+    
+    private func setupAnimations() {
+        
+        let finalPosition = UIScreen.main.bounds.width
+        
+        toLeftAnimation = {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
+                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+                self.rightImageView.frame  =  self.rightImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 1) {
+                self.centerImageView.alpha  = 0.0
+            }
+        }
+        
+        toRigtAnimation = {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
+                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
+                self.leftImageView.frame  =  self.leftImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 1) {
+                self.centerImageView.alpha  = 0.0
+            }
+        }
+    }
 
     //Перемещение ImageView поссле анимации
     private func reconfigureImageViews(to dir: Direction) {
@@ -155,9 +194,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     @objc func didPan( _ panGesture: UIPanGestureRecognizer) {
 
         let finalPosition = UIScreen.main.bounds.width
-        
-        ///direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
-    
+
         switch panGesture.state {
        
         case .began:
@@ -169,39 +206,11 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
             case .Left:
                 animator.addAnimations {
                     //в самой анимации используем ссылки на ImageView чтобы не плодить ветви с вариантами
-                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
-
-                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
-                            }
-
-                            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
-                                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-                                self.rightImageView.frame  =  self.rightImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-                            }
-                            
-                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-                                self.centerImageView.alpha  = 0.0
-                            }
-                        }
+                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: self.toLeftAnimation)
                 }
             case .Right:
                 animator.addAnimations {
-                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: []) {
-
-                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
-                            }
-
-                            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
-                                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
-                                self.leftImageView.frame  =  self.leftImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
-                            }
-                            
-                            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-                                self.centerImageView.alpha  = 0.0
-                            }
-                        }
+                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: self.toRigtAnimation)
                 }
             }
 
