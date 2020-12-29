@@ -113,33 +113,41 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         let finalPosition = UIScreen.main.bounds.width
         
         toLeftAnimation = {
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
-            }
-
-            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
-                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-                self.rightImageView.frame  =  self.rightImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
-            }
             
-            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 1) {
-                self.centerImageView.alpha  = 0.0
-            }
+            UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: {
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                    self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+                }
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
+                    self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+                    self.rightImageView.frame  =  self.rightImageView.frame.offsetBy(dx:  -finalPosition, dy: 0.0)
+                }
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 1) {
+                    self.centerImageView.alpha  = 0.0
+                }
+            })
         }
         
         toRigtAnimation = {
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
-            }
-
-            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
-                self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
-                self.leftImageView.frame  =  self.leftImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
-            }
             
-            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 1) {
-                self.centerImageView.alpha  = 0.0
-            }
+            UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: {
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                    self.centerImageView.layer.transform =  CATransform3DMakeScale(0.8, 0.8, 0.8)
+                }
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.75) {
+                    self.centerImageView.frame  =  self.centerImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
+                    self.leftImageView.frame  =  self.leftImageView.frame.offsetBy(dx:  finalPosition, dy: 0.0)
+                }
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 1) {
+                    self.centerImageView.alpha  = 0.0
+                }
+            })
         }
     }
 
@@ -202,16 +210,12 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
             animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeIn)
             direction = panGesture.velocity(in: self.view).x > 0 ? .Right : .Left
  
+            //выбор анимации
             switch direction {
             case .Left:
-                animator.addAnimations {
-                    //в самой анимации используем ссылки на ImageView чтобы не плодить ветви с вариантами
-                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: self.toLeftAnimation)
-                }
+                animator.addAnimations(self.toLeftAnimation)
             case .Right:
-                animator.addAnimations {
-                    UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: self.toRigtAnimation)
-                }
+                animator.addAnimations(self.toRigtAnimation)
             }
 
             animator.addCompletion { _ in
