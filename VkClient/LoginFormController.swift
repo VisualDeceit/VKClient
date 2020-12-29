@@ -13,6 +13,8 @@ class LoginFormController: UIViewController {
     @IBOutlet var passwordInput: UITextField!
     @IBOutlet var scrollView: UIScrollView!
     
+    @IBOutlet var loadingIndicator: LoadingIndicator!
+    
     @IBAction func unwind( _ seg: UIStoryboardSegue) {
         loginInput.text = ""
         passwordInput.text = ""
@@ -54,6 +56,8 @@ class LoginFormController: UIViewController {
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         // Присваиваем его UIScrollVIew
         scrollView?.addGestureRecognizer(hideKeyboardGesture)
+        
+        loadingIndicator.startAnimation()
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -9,10 +9,10 @@ import UIKit
 
 @IBDesignable class LikeControl: UIControl {
     
-    var likesCount: Int = 0 {
+    var totalCount: Int = 0 {
         didSet {
             //обновляем кол-во лайком
-            button.setTitle("\(likesCount)", for: .normal)
+            button.setTitle("\(totalCount)", for: .normal)
         }
     }
     
@@ -68,7 +68,7 @@ import UIKit
     //обработчик нажатия на контрол
     @objc private func tapControl(_ sender: UIButton) {
         isLiked.toggle()
-        likesCount = isLiked ? (likesCount + 1) : (likesCount - 1)
+        totalCount = isLiked ? (totalCount + 1) : (totalCount - 1)
         animate()
         //отправлеем экшн "наружу"
         self.sendActions(for: .valueChanged)

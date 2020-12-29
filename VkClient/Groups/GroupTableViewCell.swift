@@ -9,7 +9,7 @@ import UIKit
 
 class GroupTableViewCell: UITableViewCell {
 
-    @IBOutlet var groupImage: UIImageView!
+    @IBOutlet weak var groupLogo: CellLogo!
     @IBOutlet var groupName: UILabel!
     
     override func awakeFromNib() {
@@ -22,5 +22,7 @@ class GroupTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+  
 
 }

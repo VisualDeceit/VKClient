@@ -21,14 +21,14 @@ class NewsTableViewController: UITableViewController {
                     #партнерскийпост
                     """
                        , image: #imageLiteral(resourceName: "h4c7CTTavIo"),
-                       like: Like(userLikes: false, count: 31)),
+                       like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
                   
                   News(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
                        caption: "ТОПОР — Хранилище",
                        date: "сегодня в 9:23",
                        text: nil,
                        image: #imageLiteral(resourceName: "cyberpunk"),
-                       like: Like(userLikes: true, count: 1916)),
+                       like: Like(isLiked: true, totalCount: Int.random(in: 1...1000))),
                   
                   News(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
                        caption: "Подслушано Коломна",
@@ -37,7 +37,7 @@ class NewsTableViewController: UITableViewController {
                     Анонимно
                     """,
                        image: nil,
-                       like: Like(userLikes: false, count: 38)),
+                       like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
                  
                   News(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                        caption: "Пикабу",
@@ -49,7 +49,7 @@ class NewsTableViewController: UITableViewController {
                                   Длиннопост от Дмитрия Мельничука из команды Cat.Cat: pikabu.ru/link/b7907232
                                   """
                        , image: #imageLiteral(resourceName: "1556962064181431984"),
-                       like: Like(userLikes: false, count: 31)),
+                       like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
                   
                   News(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
                        caption: "ТОПОР — Хранилище",
@@ -58,7 +58,7 @@ class NewsTableViewController: UITableViewController {
 Шнуров ответил на критику своего хуевого вопроса Путину
 """,
                        image: #imageLiteral(resourceName: "0MzQi1AE9DA"),
-                       like: Like(userLikes: true, count: 1916)),
+                       like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
                   
                   News(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
                        caption: "Подслушано Коломна",
@@ -67,7 +67,7 @@ class NewsTableViewController: UITableViewController {
                                   Чтoбы не рубить и не пoкупать кaждый гoд елку, растет отличнo дома, продaeтся сейчac многo гдe комнатнaя ёлкa 😉
                                   """,
                        image: #imageLiteral(resourceName: "rXTwsPh_bAs"),
-                       like: Like(userLikes: false, count: 38))
+                       like: Like(isLiked: false, totalCount: Int.random(in: 1...1000)))
                   
     ]
     
@@ -95,7 +95,7 @@ class NewsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsTableViewCell
         else {return UITableViewCell()}
         
-        cell.logoImage.image = myNews[indexPath.row].logo
+        cell.logoImage.logoView.image = myNews[indexPath.row].logo
         cell.captionLabel.text = myNews[indexPath.row].caption
         cell.dateLabel.text = myNews[indexPath.row].date
      
@@ -118,8 +118,8 @@ class NewsTableViewController: UITableViewController {
             cell.imageViewHeight.constant = 0
         }
     
-        cell.likeControl.isLiked = myNews[indexPath.row].like.userLikes
-        cell.likeControl.likesCount = myNews[indexPath.row].like.count
+        cell.likeControl.isLiked = myNews[indexPath.row].like.isLiked
+        cell.likeControl.totalCount = myNews[indexPath.row].like.totalCount
         let viewCount = "\(Int.random(in: 1..<10000))"//temp data
         cell.viewsNumber.text =  viewCount.count < 4 ? viewCount : String(format: "%.1fk", Float(viewCount)!/1000.0)
         

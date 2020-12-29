@@ -47,7 +47,8 @@ class AllGroupsTableViewController: UITableViewController {
         else { return UITableViewCell()}
         
         cell.groupName.text = filtredAllGroups[indexPath.row].name
-        cell.groupImage.image = filtredAllGroups[indexPath.row].logo!
+        //cell.groupImage.image = filtredAllGroups[indexPath.row].logo!
+        cell.groupImage.logoView.image =  filtredAllGroups[indexPath.row].logo ?? UIImage()
         
         return cell
     }

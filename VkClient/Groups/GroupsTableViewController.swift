@@ -11,8 +11,7 @@ class GroupsTableViewController: UITableViewController {
 
     var userGroups = [Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"))]
     var filtredUserGroups = [Group]()
-
-    
+        
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
@@ -40,7 +39,7 @@ class GroupsTableViewController: UITableViewController {
         else { return UITableViewCell() }
         
         cell.groupName.text = filtredUserGroups[indexPath.row].name
-        cell.groupImage.image = filtredUserGroups[indexPath.row].logo ?? UIImage()
+        cell.groupLogo.logoView.image =  filtredUserGroups[indexPath.row].logo ?? UIImage()
         
         return cell
     }
