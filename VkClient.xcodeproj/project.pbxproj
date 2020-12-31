@@ -23,6 +23,8 @@
 		153F21AC2577F37B0018A18D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 153F21AB2577F37B0018A18D /* Assets.xcassets */; };
 		153F21AF2577F37B0018A18D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 153F21AD2577F37B0018A18D /* LaunchScreen.storyboard */; };
 		153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21B82577F6FF0018A18D /* LoginFormController.swift */; };
+		15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15462828259D9AD9008F9411 /* CustomNavigationController.swift */; };
+		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		15B17600258621F500042450 /* CellLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* CellLogo.swift */; };
 		15B176092586793D00042450 /* LikeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B176082586793D00042450 /* LikeControl.swift */; };
 		15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */; };
@@ -50,6 +52,8 @@
 		153F21AE2577F37B0018A18D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		153F21B02577F37B0018A18D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		153F21B82577F6FF0018A18D /* LoginFormController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormController.swift; sourceTree = "<group>"; };
+		15462828259D9AD9008F9411 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
+		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		15B175FF258621F500042450 /* CellLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLogo.swift; sourceTree = "<group>"; };
 		15B176082586793D00042450 /* LikeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeControl.swift; sourceTree = "<group>"; };
 		15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomSectionHeaderView.swift; sourceTree = "<group>"; };
@@ -137,12 +141,22 @@
 				153F21B82577F6FF0018A18D /* LoginFormController.swift */,
 				15B175FF258621F500042450 /* CellLogo.swift */,
 				15B176082586793D00042450 /* LikeControl.swift */,
+				1546282B259D9BB4008F9411 /* NavigationController */,
 				1533D93E2593A6BB008A44EB /* LoadingIndicator.swift */,
 				153F21A42577F3780018A18D /* SceneDelegate.swift */,
 				153F21AB2577F37B0018A18D /* Assets.xcassets */,
 				153F21B02577F37B0018A18D /* Info.plist */,
 			);
 			path = VkClient;
+			sourceTree = "<group>";
+		};
+		1546282B259D9BB4008F9411 /* NavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				15462828259D9AD9008F9411 /* CustomNavigationController.swift */,
+				1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */,
+			);
+			path = NavigationController;
 			sourceTree = "<group>";
 		};
 		15B176022586222500042450 /* Storyboards */ = {
@@ -244,11 +258,13 @@
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
 				15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
+				1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */,
 				15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
 				1504D9312583ADA400B4EBEE /* FriendTableViewCell.swift in Sources */,
 				1504D92D2583AD7C00B4EBEE /* FriendsTableViewController.swift in Sources */,
 				153F21A52577F3780018A18D /* SceneDelegate.swift in Sources */,
+				15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */,
 				15B3E5BB258F670C001C025E /* NewsTableViewCell.swift in Sources */,
 				1504D9442583D17700B4EBEE /* GroupTableViewCell.swift in Sources */,
 				1504D94B25848BB800B4EBEE /* AllGroupsTableViewCell.swift in Sources */,
