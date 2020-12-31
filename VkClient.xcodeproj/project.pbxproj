@@ -131,8 +131,9 @@
 		153F21A12577F3780018A18D /* VkClient */ = {
 			isa = PBXGroup;
 			children = (
-				15B3E5B5258F6696001C025E /* News */,
 				15B176022586222500042450 /* Storyboards */,
+				1546282B259D9BB4008F9411 /* NavigationController */,
+				15B3E5B5258F6696001C025E /* News */,
 				1504D9362583BE9A00B4EBEE /* FriendPhotos */,
 				1504D92B2583AD3E00B4EBEE /* Groups */,
 				1504D92A2583AD3000B4EBEE /* Friends */,
@@ -141,7 +142,6 @@
 				153F21B82577F6FF0018A18D /* LoginFormController.swift */,
 				15B175FF258621F500042450 /* CellLogo.swift */,
 				15B176082586793D00042450 /* LikeControl.swift */,
-				1546282B259D9BB4008F9411 /* NavigationController */,
 				1533D93E2593A6BB008A44EB /* LoadingIndicator.swift */,
 				153F21A42577F3780018A18D /* SceneDelegate.swift */,
 				153F21AB2577F37B0018A18D /* Assets.xcassets */,

@@ -11,7 +11,7 @@ import UIKit
 // Вперед
 class PushNavigationControllerTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
-    private let duration: TimeInterval = 1.0
+    private let duration: TimeInterval = 0.5
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         duration
@@ -29,24 +29,24 @@ class PushNavigationControllerTransition: NSObject, UIViewControllerAnimatedTran
         destination.view.layer.anchorPoint = CGPoint(x: 1.0, y: 0.0)
         destination.view.frame = transitionContext.containerView.frame
         //задаем начальное положение
-        destination.view.transform = CGAffineTransform(rotationAngle: .pi / 2).concatenating(CGAffineTransform(scaleX: 1.2, y: 1.2))
-        
+        destination.view.transform = CGAffineTransform(rotationAngle: -.pi / 2)
+       
+        destination.view.layer.shadowColor = UIColor.black.cgColor
+        destination.view.layer.shadowOpacity = 1
+        destination.view.layer.shadowOffset = .zero
+        destination.view.layer.shadowRadius = 10
+        destination.view.clipsToBounds = false
+   
         //анимация
-        UIView.animateKeyframes(withDuration: self.transitionDuration(using: transitionContext),
-                                delay: 0,
-                                options: []) {
-            
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) {
+        UIView.animate(withDuration: self.transitionDuration(using: transitionContext)) {
                 destination.view.transform = .identity
-            }
-            
-        } completion: {  finished in
+
+        } completion:  {  finished in
             if finished && !transitionContext.transitionWasCancelled {
                 source.view.transform = .identity
             }
             transitionContext.completeTransition(finished && !transitionContext.transitionWasCancelled)
         }
-
     }
     
     
@@ -55,7 +55,7 @@ class PushNavigationControllerTransition: NSObject, UIViewControllerAnimatedTran
 //назад
 class PopNavigationControllerTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
-    private let duration: TimeInterval = 1.0
+    private let duration: TimeInterval = 0.5
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -71,29 +71,28 @@ class PopNavigationControllerTransition: NSObject, UIViewControllerAnimatedTrans
         transitionContext.containerView.sendSubviewToBack(destination.view)
         
         //назначаем фреймы
-       /// source.view.frame = transitionContext.containerView.frame
         source.view.layer.anchorPoint = CGPoint(x: 1.0, y: 0.0)
         source.view.frame = transitionContext.containerView.frame
         destination.view.frame = source.view.frame
         
+        source.view.layer.shadowColor = UIColor.black.cgColor
+        source.view.layer.shadowOpacity = 1
+        source.view.layer.shadowOffset = .zero
+        source.view.layer.shadowRadius = 10
+        source.view.clipsToBounds = false
+
+        
         
         //анимация
-        UIView.animateKeyframes(withDuration: self.transitionDuration(using: transitionContext),
-                                delay: 0,
-                                options: []) {
+        UIView.animate(withDuration: self.transitionDuration(using: transitionContext)) {
+            source.view.transform = CGAffineTransform(rotationAngle: -.pi / 2)
             
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) {
-                source.view.transform = CGAffineTransform(rotationAngle: .pi / 2)
-            }
-            
-        } completion: {  finished in
+        } completion:  {  finished in
             if finished && !transitionContext.transitionWasCancelled {
                 source.removeFromParent()
             }
             transitionContext.completeTransition(finished && !transitionContext.transitionWasCancelled)
         }
-        
-        
     }
     
     

@@ -142,7 +142,7 @@
                                 <rect key="frame" x="0.0" y="84" width="375" height="70.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bUw-4E-NXr" id="aK1-t1-VTe">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RT-nZ-k3T">
@@ -289,7 +289,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dnw-9P-EMr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="dZc-5F-aF8" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4015.1999999999998" y="429.53523238380814"/>
+            <point key="canvasLocation" x="3076" y="324"/>
         </scene>
         <!--Friend's Photo-->
         <scene sceneID="Q8x-E8-X81">
@@ -389,12 +389,12 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gtT-xT-kWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="APu-YI-BYc" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3975.1999999999998" y="-1208.5457271364319"/>
+            <point key="canvasLocation" x="4882" y="-420"/>
         </scene>
         <!--Friends-->
         <scene sceneID="Tgs-GR-lBx">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="YQq-cI-q9w" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="YQq-cI-q9w" customClass="CustomNavigationController" customModule="VkClient" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Friends" image="person.fill" catalog="system" id="svR-TU-bQX"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="H72-MI-VBX">
@@ -475,12 +475,12 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Zk-eu-eWG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="uoV-XK-apM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4914.3999999999996" y="429.53523238380814"/>
+            <point key="canvasLocation" x="3975" y="324"/>
         </scene>
         <!--Groups-->
         <scene sceneID="F15-3r-fMg">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NB9-Mz-TjP" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NB9-Mz-TjP" customClass="CustomNavigationController" customModule="VkClient" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Groups" image="person.3.fill" catalog="system" id="ele-KS-pSp"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="QF3-dv-A0c">
@@ -494,7 +494,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0I3-ch-bpt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3076" y="429.53523238380814"/>
+            <point key="canvasLocation" x="2137" y="325"/>
         </scene>
         <!--News-->
         <scene sceneID="98v-Sy-LQG">
@@ -677,7 +677,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0hD-9G-DoT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2133.5999999999999" y="848.72563718140941"/>
+            <point key="canvasLocation" x="3076" y="1134"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="FqJ-3m-fxM">
@@ -724,7 +724,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7D7-V9-GnL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1194.4000000000001" y="848.72563718140941"/>
+            <point key="canvasLocation" x="2137" y="1134"/>
         </scene>
     </scenes>
     <resources>
