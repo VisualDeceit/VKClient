@@ -96,9 +96,11 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         cell.alpha = 0
         cell.layer.transform = CATransform3DMakeScale(0.5, 0.5, 0.5)
-        UIView.animate(withDuration: 0.4) {
-            cell.alpha = 1
-            cell.layer.transform = CATransform3DScale(CATransform3DIdentity, 1, 1, 1)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+            UIView.animate(withDuration: 0.4) {
+                cell.alpha = 1
+                cell.layer.transform = CATransform3DScale(CATransform3DIdentity, 1, 1, 1)
+            }
         }
     }
     
