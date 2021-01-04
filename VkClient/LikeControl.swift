@@ -7,7 +7,7 @@
 
 import UIKit
 
-@IBDesignable class LikeControl: UIControl {
+class LikeControl: UIControl {
     
     var totalCount: Int = 0 {
         didSet {
