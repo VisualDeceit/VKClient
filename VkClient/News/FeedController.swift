@@ -27,8 +27,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! FeedCell
         
         cell.profileImageView.image = myNews[indexPath.item].logo
-        cell.nameLabel.text = myNews[indexPath.item].caption
-        
+        cell.nameLabel.setAttributedText(text: myNews[indexPath.item].caption, subtext: myNews[indexPath.item].date)
+
         return cell
         
     }
@@ -52,8 +52,12 @@ class FeedCell: UICollectionViewCell {
     
     let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Simple name"
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.numberOfLines = 2
+       // label.setAttributedText(text: "Main text", subtext: "Sub text")
+//        label.text = "Simple name"
+//        let attributedText = NSMutableAttributedString(string: label.text!, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+//        attributedText.append(NSMutableAttributedString(string: "\nсегодня в 9:23", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12), NSAttributedString.Key.foregroundColor: UIColor(white: 0.6, alpha: 1)]))
+//        label.attributedText = attributedText
         return label
     }()
     
@@ -77,6 +81,30 @@ class FeedCell: UICollectionViewCell {
     }
 }
 
+extension UILabel {
+    func setAttributedText(text: String, subtext: String) {
+ 
+        let paragrathStyle = NSMutableParagraphStyle()
+        paragrathStyle.lineSpacing = 4
+        
+        let firstLineAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: 14.0),
+            .paragraphStyle: paragrathStyle
+        ]
+        let secontLineAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 12.0),
+            .foregroundColor: UIColor(white: 0.6, alpha: 1)
+        ]
+        
+        let firstLine = NSMutableAttributedString(string: text, attributes: firstLineAttributes)
+        let secodLine = NSMutableAttributedString(string: "\n"+subtext, attributes: secontLineAttributes)
+       
+        firstLine.append(secodLine)
+   
+        self.attributedText = firstLine
+        
+    }
+}
 
 extension UIView {
     func addConstrainsWithFormat(format: String, views: UIView...) {
