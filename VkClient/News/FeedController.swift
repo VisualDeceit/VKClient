@@ -34,7 +34,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        .init(width: view.frame.width, height: 60)
+        .init(width: view.frame.width, height: 200)
     }
 }
 
@@ -50,16 +50,7 @@ class FeedCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let nameLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-       // label.setAttributedText(text: "Main text", subtext: "Sub text")
-//        label.text = "Simple name"
-//        let attributedText = NSMutableAttributedString(string: label.text!, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
-//        attributedText.append(NSMutableAttributedString(string: "\nсегодня в 9:23", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12), NSAttributedString.Key.foregroundColor: UIColor(white: 0.6, alpha: 1)]))
-//        label.attributedText = attributedText
-        return label
-    }()
+    let nameLabel = UILabel()
     
     let profileImageView: UIImageView = {
        let imageView = UIImageView()
@@ -75,8 +66,8 @@ class FeedCell: UICollectionViewCell {
         addSubview(profileImageView)
         
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
-        addConstrainsWithFormat(format: "V:|[v0]|", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-8-|", views: profileImageView)
+        addConstrainsWithFormat(format: "V:|-8-[v0]", views: nameLabel)
+        addConstrainsWithFormat(format: "V:|-8-[v0(44)]", views: profileImageView)
 
     }
 }
@@ -101,6 +92,7 @@ extension UILabel {
        
         firstLine.append(secodLine)
    
+        self.numberOfLines = 2
         self.attributedText = firstLine
         
     }
