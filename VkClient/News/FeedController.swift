@@ -21,15 +21,15 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        myNews.count
+        newsFeed.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! FeedCell
         
-        cell.profileImageView.image = myNews[indexPath.item].logo
-        cell.nameLabel.setAttributedText(text: myNews[indexPath.item].caption, subtext: myNews[indexPath.item].date)
-        if let text = myNews[indexPath.row].text {
+        cell.profileImageView.image = newsFeed[indexPath.item].logo
+        cell.nameLabel.setAttributedText(text: newsFeed[indexPath.item].caption, subtext: newsFeed[indexPath.item].date)
+        if let text = newsFeed[indexPath.row].text {
             cell.contentText.text = text
         }
         

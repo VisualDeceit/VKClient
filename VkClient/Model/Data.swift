@@ -68,8 +68,19 @@ struct News {
 }
 
 
+struct Post {
+    var logo: UIImage?
+    var caption: String = ""
+    var date: String = ""
+    var text: String?
+    var image: [UIImage]?
+    var like: Like
+    var imagesCount: Int  {
+        return image?.count ?? 0
+    }
+}
 
-var myNews = [News(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
+var newsFeed = [Post(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                    caption: "Пикабу",
                    date: "21 минута назад",
                    text:
@@ -79,18 +90,18 @@ var myNews = [News(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                 specials.pikabu.ru/megafon/ded_moroz/
 
                 #партнерскийпост
-                """
-                   , image: #imageLiteral(resourceName: "h4c7CTTavIo"),
+                """,
+                   image: [#imageLiteral(resourceName: "h4c7CTTavIo")],
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
               
-              News(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
+                Post(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
                    caption: "ТОПОР — Хранилище",
                    date: "сегодня в 9:23",
                    text: nil,
-                   image: #imageLiteral(resourceName: "cyberpunk"),
+                   image: [#imageLiteral(resourceName: "cyberpunk")],
                    like: Like(isLiked: true, totalCount: Int.random(in: 1...1000))),
               
-              News(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
+                Post(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
                    caption: "Подслушано Коломна",
                    date: "вчера в 19:17", text: """
                 Эти напaдки нa курящих ужe задoлбали. В миpe предостаточно вoнючих и резких запaхов, нaпример, некоторые курицы пoливаются с ног до голoвы духами, а потом заходят в лифт или маршрутку, и ничего, все молчат. А coceди порой готoвят такую мepзость, вонь от котopoй стoит нa весь дом. И что, вы идете к ним pугаться? Зато нa курящих тoлпами набeгают побздеть и выскaзать претензии
@@ -99,7 +110,7 @@ var myNews = [News(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                    image: nil,
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
              
-              News(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
+                Post(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                    caption: "Пикабу",
                    date: "2 часа назад",
                    text:
@@ -108,25 +119,25 @@ var myNews = [News(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
 
                               Длиннопост от Дмитрия Мельничука из команды Cat.Cat: pikabu.ru/link/b7907232
                               """
-                   , image: #imageLiteral(resourceName: "1556962064181431984"),
+                   , image: [#imageLiteral(resourceName: "1556962064181431984"),#imageLiteral(resourceName: "1556962064181431984")],
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
               
-              News(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
+                Post(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
                    caption: "ТОПОР — Хранилище",
                    date: "сегодня в 9:23",
                    text: """
 Шнуров ответил на критику своего хуевого вопроса Путину
 """,
-                   image: #imageLiteral(resourceName: "0MzQi1AE9DA"),
+                   image: [#imageLiteral(resourceName: "0MzQi1AE9DA"),#imageLiteral(resourceName: "0MzQi1AE9DA")],
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
               
-              News(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
+                Post(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
                    caption: "Подслушано Коломна",
                    date: "сегодня в 13:08",
                    text: """
                               Чтoбы не рубить и не пoкупать кaждый гoд елку, растет отличнo дома, продaeтся сейчac многo гдe комнатнaя ёлкa 😉
                               """,
-                   image: #imageLiteral(resourceName: "rXTwsPh_bAs"),
+                   image: [#imageLiteral(resourceName: "rXTwsPh_bAs"),#imageLiteral(resourceName: "rXTwsPh_bAs"),#imageLiteral(resourceName: "rXTwsPh_bAs")],
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000)))
               
 ]
