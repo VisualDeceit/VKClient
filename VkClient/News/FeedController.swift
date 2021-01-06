@@ -7,7 +7,7 @@
 
 import UIKit
 
-let cellId = "cellId"
+let feedCellID = "FeedCell"
 
 class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
@@ -16,7 +16,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         
         collectionView.backgroundColor = .init(white: 0.9, alpha: 1)
-        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: feedCellID)
         collectionView.alwaysBounceVertical = true
     }
     
@@ -25,21 +25,29 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! FeedCell
+        let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: feedCellID, for: indexPath) as! FeedCell
         
-        cell.profileImageView.image = newsFeed[indexPath.item].logo
-        cell.nameLabel.setAttributedText(text: newsFeed[indexPath.item].caption, subtext: newsFeed[indexPath.item].date)
+        feedCell.profileImageView.image = newsFeed[indexPath.item].logo
+        feedCell.nameLabel.setAttributedText(text: newsFeed[indexPath.item].caption, subtext: newsFeed[indexPath.item].date)
         if let text = newsFeed[indexPath.row].text {
-            cell.contentText.text = text
+            feedCell.contentText.text = text
         }
-        
-        
-        return cell
-        
+        if let images = newsFeed[indexPath.row].image {
+            feedCell.imagesGrid = images
+        } else {
+            feedCell.imagesGrid.removeAll()
+        }
+        return feedCell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        .init(width: view.frame.width, height: 400)
+        
+        var textheight: CGFloat = 0
+        if let contentText =  newsFeed[indexPath.row].text {
+            let rect = NSString(string: contentText).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
+            textheight = rect.height
+        }
+       return .init(width: view.frame.width, height: 60 + textheight + view.frame.width + 1 )
     }
 }
 
@@ -49,9 +57,18 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        contentImagesGrid.delegate = self
-        contentImagesGrid.dataSource = self
-        contentImagesGrid.register(PhotoGridCell.self, forCellWithReuseIdentifier: photoGridCellID)
+        contentCollectionView.delegate = self
+        contentCollectionView.dataSource = self
+        contentCollectionView.register(PhotoCell.self, forCellWithReuseIdentifier: photoCellID)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        nameLabel.text = nil
+        profileImageView.image = nil
+        contentText.text = nil
+        contentCollectionView.reloadData()
+
     }
     
     required init?(coder: NSCoder) {
@@ -63,7 +80,7 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
     let profileImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .red
+       // imageView.backgroundColor = .red
         return imageView
     }()
     
@@ -71,27 +88,34 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
        let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 14)
+        label.lineBreakMode = .byWordWrapping
         return label
     }()
     
-    let contentImagesGrid: UICollectionView = {
-      //  layout.scrollDirection = .horizontal; //set scroll direction to horizontal
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: PhotoGridViewLayout())
+    let contentCollectionView: UICollectionView = {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.backgroundColor = .blue
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv;
     }()
     
+    var imagesGrid =  [UIImage]()
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        1
+        imagesGrid.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: photoGridCellID, for: indexPath) as! PhotoGridCell
+        let photoCell =  collectionView.dequeueReusableCell(withReuseIdentifier: photoCellID, for: indexPath) as! PhotoCell
+        photoCell.imageView.image = imagesGrid[indexPath.row]
+       return photoCell
+ 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        .init(width: self.bounds.width, height: 200)
+        let imagesCount = imagesGrid.count == 0  ? 1 : imagesGrid.count
+        return .init(width: self.bounds.width / CGFloat(imagesCount), height: self.bounds.width / CGFloat(imagesCount) )
+     //   return .init(width: 100 , height: 100)
     }
     
     
@@ -101,20 +125,20 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
         addSubview(nameLabel)
         addSubview(profileImageView)
         addSubview(contentText)
-        addSubview(contentImagesGrid)
+        addSubview(contentCollectionView)
         
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
-        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentImagesGrid)
+        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentCollectionView)
         addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2]|", views: profileImageView, contentText, contentImagesGrid)
+        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2(\(self.bounds.width))]|", views: profileImageView, contentText, contentCollectionView)
 
     }
 }
 
-let photoGridCellID = "photoGridCellID"
+let photoCellID = "PhotoCellID"
 
-class PhotoGridCell: UICollectionViewCell {
+class PhotoCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -128,7 +152,8 @@ class PhotoGridCell: UICollectionViewCell {
     let imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.image = UIImage(named: "cyberpunk")
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .red
         return imageView
     }()
     
@@ -138,6 +163,11 @@ class PhotoGridCell: UICollectionViewCell {
         addConstrainsWithFormat(format: "H:|[v0]|", views: imageView)
         addConstrainsWithFormat(format: "V:|[v0]|", views: imageView)
         
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
     }
     
 }

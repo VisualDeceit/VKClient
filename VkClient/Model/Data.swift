@@ -98,7 +98,7 @@ var newsFeed = [Post(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                    caption: "ТОПОР — Хранилище",
                    date: "сегодня в 9:23",
                    text: nil,
-                   image: [#imageLiteral(resourceName: "cyberpunk")],
+                   image: [#imageLiteral(resourceName: "cyberpunk"),#imageLiteral(resourceName: "cyberpunk"),#imageLiteral(resourceName: "cyberpunk")],
                    like: Like(isLiked: true, totalCount: Int.random(in: 1...1000))),
               
                 Post(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
