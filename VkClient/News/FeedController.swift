@@ -26,28 +26,19 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: feedCellID, for: indexPath) as! FeedCell
-        
-        feedCell.profileImageView.image = newsFeed[indexPath.item].logo
-        feedCell.nameLabel.setAttributedText(text: newsFeed[indexPath.item].caption, subtext: newsFeed[indexPath.item].date)
-        if let text = newsFeed[indexPath.row].text {
-            feedCell.contentText.text = text
-        }
-        if let images = newsFeed[indexPath.row].image {
-            feedCell.imagesGrid = images
-        } else {
-            feedCell.imagesGrid.removeAll()
-        }
+        feedCell.post = newsFeed[indexPath.item]
         return feedCell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        var textheight: CGFloat = 0
         if let contentText =  newsFeed[indexPath.row].text {
+            //MARK: - Calculate text height
             let rect = NSString(string: contentText).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
-            textheight = rect.height
+            
+            return .init(width: view.frame.width, height: 60 + rect.height + view.frame.width + 1 )
         }
-       return .init(width: view.frame.width, height: 60 + textheight + view.frame.width + 1 )
+       return .init(width: view.frame.width, height: 60 + view.frame.width)
     }
 }
 
@@ -80,7 +71,6 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
     let profileImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-       // imageView.backgroundColor = .red
         return imageView
     }()
     
@@ -98,24 +88,36 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv;
     }()
-    
-    var imagesGrid =  [UIImage]()
+   
+    var post: Post! {
+        didSet {
+            profileImageView.image = post.logo
+            nameLabel.setAttributedText(text: post.caption, subtext: post.date)
+            if let text = post.text {
+                contentText.text = text
+            }
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imagesGrid.count
+        post.image?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let photoCell =  collectionView.dequeueReusableCell(withReuseIdentifier: photoCellID, for: indexPath) as! PhotoCell
-        photoCell.imageView.image = imagesGrid[indexPath.row]
+        if let image = post.image?[indexPath.row] {
+            photoCell.image = image
+        }
+        
        return photoCell
  
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let imagesCount = imagesGrid.count == 0  ? 1 : imagesGrid.count
-        return .init(width: self.bounds.width / CGFloat(imagesCount), height: self.bounds.width / CGFloat(imagesCount) )
-     //   return .init(width: 100 , height: 100)
+        if let imagesCount = post.image?.count {
+            return .init(width: self.bounds.width / CGFloat(imagesCount) - 10, height: self.bounds.width / CGFloat(imagesCount) - 10 )
+        }
+        return .init(width: self.bounds.width  - 10, height: self.bounds.width  - 10 )
     }
     
     
@@ -149,9 +151,14 @@ class PhotoCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let imageView: UIImageView = {
+    var image: UIImage? {
+        didSet {
+            imageView.image = image
+        }
+    }
+    
+    private let imageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.image = UIImage(named: "cyberpunk")
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .red
         return imageView
