@@ -31,12 +31,26 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+   
         if let contentText =  newsFeed[indexPath.row].text {
             //MARK: - Calculate text height
             let rect = NSString(string: contentText).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
+           
+            //MARK: - Calculate image height
             
-            return .init(width: view.frame.width, height: 60 + rect.height + view.frame.width + 1 )
+            var contentImageHeight: CGFloat {
+                switch newsFeed[indexPath.item].imagesCount {
+                case 0:
+                    return 0
+                case 1:
+                    let ratio =  newsFeed[indexPath.item].image?.first?.getCropRatio()
+                    return view.frame.width / ratio!
+                default:
+                    return view.frame.width
+                }
+            }
+            
+            return .init(width: view.frame.width, height: 60 + rect.height + contentImageHeight + 1 )
         }
        return .init(width: view.frame.width, height: 60 + view.frame.width)
     }
@@ -83,12 +97,36 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
     }()
     
     let contentCollectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
+        cv.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+      //  cv.backgroundColor = .systemBackground
         cv.backgroundColor = .blue
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv;
     }()
-   
+    
+    static func generateLayout() -> UICollectionViewLayout {
+      let itemSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1/3))
+      let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
+
+      let groupSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalWidth(1.0))
+
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [fullPhotoItem])
+
+        
+      let section = NSCollectionLayoutSection(group: group)
+
+      let layout = UICollectionViewCompositionalLayout(section: section)
+      return layout
+    }
+  
+    
     var post: Post! {
         didSet {
             profileImageView.image = post.logo
@@ -133,10 +171,12 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentCollectionView)
         addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2(\(self.bounds.width))]|", views: profileImageView, contentText, contentCollectionView)
+        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2]|", views: profileImageView, contentText, contentCollectionView)
 
     }
 }
+
+
 
 let photoCellID = "PhotoCellID"
 
@@ -159,8 +199,10 @@ class PhotoCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        //imageView.contentMode = .scaleAspectFill
+       // imageView.layer.masksToBounds = true
         imageView.backgroundColor = .red
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
