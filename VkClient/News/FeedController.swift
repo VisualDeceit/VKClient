@@ -30,29 +30,33 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return feedCell
     }
     
+    
+    //Feed cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-   
+        
+        var textHeight: CGFloat = 0
+        
+        //MARK: - Calculate text height
         if let contentText =  newsFeed[indexPath.row].text {
-            //MARK: - Calculate text height
             let rect = NSString(string: contentText).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
-           
-            //MARK: - Calculate image height
             
-            var contentImageHeight: CGFloat {
-                switch newsFeed[indexPath.item].imagesCount {
-                case 0:
-                    return 0
-                case 1:
-                    let ratio =  newsFeed[indexPath.item].image?.first?.getCropRatio()
-                    return view.frame.width / ratio!
-                default:
-                    return view.frame.width
-                }
-            }
-            
-            return .init(width: view.frame.width, height: 60 + rect.height + contentImageHeight + 1 )
+            textHeight = rect.height
         }
-       return .init(width: view.frame.width, height: 60 + view.frame.width)
+        
+        //MARK: - Calculate image height
+        var imagesHeight: CGFloat {
+            switch newsFeed[indexPath.item].imagesCount {
+            case 0:
+                return 0
+            case 1:
+                let ratio =  newsFeed[indexPath.item].image?.first?.getCropRatio()
+                return view.frame.width / ratio!
+            default:
+                return view.frame.width
+            }
+        }
+        
+        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 24 )
     }
 }
 
@@ -100,7 +104,7 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
         
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
-        cv.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+      //  cv.autoresizingMask = [.flexibleHeight, .flexibleWidth]
       //  cv.backgroundColor = .systemBackground
         cv.backgroundColor = .blue
         cv.translatesAutoresizingMaskIntoConstraints = false
@@ -108,24 +112,26 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
     }()
     
     static func generateLayout() -> UICollectionViewLayout {
-      let itemSize = NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1/3))
-      let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
-
-      let groupSize = NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalWidth(1.0))
-
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [fullPhotoItem])
-
         
-      let section = NSCollectionLayoutSection(group: group)
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(50))
+        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        
 
-      let layout = UICollectionViewCompositionalLayout(section: section)
-      return layout
+        let groupSize =  NSCollectionLayoutSize (
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0))
+        
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: fullPhotoItem, count: 1)
+        
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
-  
+    
     
     var post: Post! {
         didSet {
@@ -151,13 +157,13 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
  
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if let imagesCount = post.image?.count {
-            return .init(width: self.bounds.width / CGFloat(imagesCount) - 10, height: self.bounds.width / CGFloat(imagesCount) - 10 )
-        }
-        return .init(width: self.bounds.width  - 10, height: self.bounds.width  - 10 )
-    }
-    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        if let imagesCount = post.image?.count {
+//            return .init(width: self.bounds.width / CGFloat(imagesCount) - 10, height: self.bounds.width / CGFloat(imagesCount) - 10 )
+//        }
+//        return .init(width: self.bounds.width  - 10, height: self.bounds.width  - 10 )
+//    }
+//
     
     func setupViews() {
         backgroundColor = .white
@@ -199,10 +205,10 @@ class PhotoCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
        let imageView = UIImageView()
-        //imageView.contentMode = .scaleAspectFill
+       // imageView.contentMode = .scaleAspectFit
        // imageView.layer.masksToBounds = true
         imageView.backgroundColor = .red
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+      //  imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -218,79 +224,6 @@ class PhotoCell: UICollectionViewCell {
         super.prepareForReuse()
         imageView.image = nil
     }
-    
-}
-
-class PhotoGridViewLayout: UICollectionViewLayout {
-
-    var cacheAttributes = [IndexPath: UICollectionViewLayoutAttributes]()
-    // Хранит атрибуты для заданных индексов
-    var columnsCount = 2                  // Количество столбцов
-    var cellHeight: CGFloat = 128         // Высота ячейки
-    private var totalCellsHeight: CGFloat = 0 // Хранит суммарную высоту всех ячеек
-    
-    override func prepare() {
-       
-        self.cacheAttributes = [:] // Инициализируем атрибуты
-        
-        // Проверяем наличие collectionView
-        guard let collectionView = self.collectionView else { return }
-        
-        let itemsCount = collectionView.numberOfItems(inSection: 0)
-        // Проверяем, что в секции есть хотя бы одна ячейка
-        guard itemsCount > 0 else { return }
-        
-        let bigCellWidth = collectionView.frame.width
-        let smallCellWidth = collectionView.frame.width / CGFloat(self.columnsCount)
-        
-        
-        var lastY: CGFloat = 0
-        var lastX: CGFloat = 0
-        
-        for index in 0..<itemsCount {
-            let indexPath = IndexPath(item: index, section: 0)
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            
-            let isBigCell = (index + 1) % (self.columnsCount + 1) == 0
-            
-            
-            if isBigCell {
-                attributes.frame = CGRect(x: 0, y: lastY, width: bigCellWidth, height: self.cellHeight)
-                lastY += self.cellHeight
-            } else {
-                attributes.frame = CGRect(x: lastX, y: lastY, width: smallCellWidth, height: self.cellHeight)
-                let isLastColumn = (index + 2) % (self.columnsCount + 1) == 0 || index == itemsCount - 1
-                if isLastColumn {
-                    lastX = 0
-                    lastY += self.cellHeight
-                } else {
-                    lastX += smallCellWidth
-                }
-            }
-            
-            cacheAttributes[indexPath] = attributes
-            self.totalCellsHeight = lastY
-            
-        }
-    }
-    
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        return cacheAttributes.values.filter { attributes in
-            return rect.intersects(attributes.frame)
-        }
-    }
-
-    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        return cacheAttributes[indexPath]
-    }
-    
-    
-    override var collectionViewContentSize: CGSize {
-        return CGSize(width: self.collectionView?.frame.width ?? 0,
-                      height: self.totalCellsHeight)
-    }
-
-
     
 }
 
