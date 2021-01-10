@@ -25,6 +25,7 @@
 		153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153F21B82577F6FF0018A18D /* LoginFormController.swift */; };
 		1542524D25A2EF240014F40A /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542524C25A2EF240014F40A /* FeedController.swift */; };
 		1542525025A2F4AD0014F40A /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542524F25A2F4AD0014F40A /* MainTabBarController.swift */; };
+		1542525725AB74AE0014F40A /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542525625AB74AD0014F40A /* FeedCell.swift */; };
 		15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15462828259D9AD9008F9411 /* CustomNavigationController.swift */; };
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		15B17600258621F500042450 /* CellLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* CellLogo.swift */; };
@@ -56,6 +57,7 @@
 		153F21B82577F6FF0018A18D /* LoginFormController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormController.swift; sourceTree = "<group>"; };
 		1542524C25A2EF240014F40A /* FeedController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
 		1542524F25A2F4AD0014F40A /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		1542525625AB74AD0014F40A /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		15462828259D9AD9008F9411 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		15B175FF258621F500042450 /* CellLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLogo.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				1542524C25A2EF240014F40A /* FeedController.swift */,
+				1542525625AB74AD0014F40A /* FeedCell.swift */,
 				15B3E5BE258F777B001C025E /* NewsTableViewController.swift */,
 				15B3E5BA258F670C001C025E /* NewsTableViewCell.swift */,
 			);
@@ -258,6 +261,7 @@
 				1504D93C2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift in Sources */,
 				1542524D25A2EF240014F40A /* FeedController.swift in Sources */,
 				15B176092586793D00042450 /* LikeControl.swift in Sources */,
+				1542525725AB74AE0014F40A /* FeedCell.swift in Sources */,
 				15B3E5BF258F777B001C025E /* NewsTableViewController.swift in Sources */,
 				1542525025A2F4AD0014F40A /* MainTabBarController.swift in Sources */,
 				1504D9402583D16100B4EBEE /* GroupsTableViewController.swift in Sources */,
