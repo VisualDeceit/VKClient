@@ -7,7 +7,7 @@
 
 import UIKit
 
-let feedCellID = "FeedCell"
+
 
 class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
@@ -16,7 +16,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         
         collectionView.backgroundColor = .init(white: 0.9, alpha: 1)
-        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: feedCellID)
+        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.identifier)
         collectionView.alwaysBounceVertical = true
     }
     
@@ -25,7 +25,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: feedCellID, for: indexPath) as! FeedCell
+        let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
         feedCell.post = newsFeed[indexPath.item]
         return feedCell
     }
@@ -52,36 +52,28 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
  //ячейка новостей
 class FeedCell: UICollectionViewCell {
     
+    static let identifier = "FeedCell"
+    
     var post: Post! {
         didSet {
             profileImageView.image = post.logo
             nameLabel.setAttributedText(text: post.caption, subtext: post.date)
+            
             if let text = post.text {
                 contentText.text = text
             }
-
+            
+            contentImageViews.forEach{ $0.isHidden = true }
+            
             contentImages = post.image
-            let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
-            imageViewStackHeight?.constant = imagesHeight
-            
-            imageViewsArray.forEach {
-                $0.isHidden = true
-                $0.image = nil
-            }
-            
-            if let images  = contentImages {
+            if let images = contentImages {
                 for i in 0..<images.count {
                     if i >= 4  { break }
-                    imageViewsArray[i].image = images[i]
-                    imageViewsArray[i].isHidden = false
-                }
-                
-                if images.count > 2 {
-                    imageViewsArray[0].addConstraint(imageViewsArray[0].widthAnchor.constraint(equalToConstant: self.frame.width * 2/3))
-                    imageViewsArray[0].translatesAutoresizingMaskIntoConstraints = false
+                    contentImageViews[i].image = images[i]
+                    contentImageViews[i].isHidden = false
                 }
             }
-         //  layoutIfNeeded()
+            setupContentImagesSize()
         }
     }
     
@@ -97,16 +89,11 @@ class FeedCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         nameLabel.text = nil
         profileImageView.image = nil
         contentText.text = nil
-
-        imageViewsArray.forEach {
-            $0.isHidden = true
-            $0.image = nil
-        }
-        
-        layoutIfNeeded()
+        contentImageViews.forEach { $0.image = nil }
     }
     
     let nameLabel = UILabel()
@@ -126,40 +113,14 @@ class FeedCell: UICollectionViewCell {
     }()
     
     var contentImages: [UIImage]?
-    
-    let imageView0: UIImageView = {
-       let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-      //  imageView.backgroundColor = .red
-        return imageView
-    }()
-    let imageView1: UIImageView = {
-       let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-      //  imageView.backgroundColor = .red
-        return imageView
-    }()
-    let imageView2: UIImageView = {
-       let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        //imageView.backgroundColor = .red
-        return imageView
-    }()
-    let imageView3: UIImageView = {
-       let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-       // imageView.backgroundColor = .red
-        return imageView
-    }()
+    var contentImageViews = [UIImageView]()
+    var contentImageViewsHeight: NSLayoutConstraint?
+    var contentImageViewsAspect1: NSLayoutConstraint?
+    var contentImageViewsAspect2: NSLayoutConstraint?
 
     let imagesStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
-       // stackView.backgroundColor = .blue
         stackView.spacing = 4
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -169,7 +130,7 @@ class FeedCell: UICollectionViewCell {
     
     let subImagesStackView: UIStackView = {
         let stackView = UIStackView()
-       // stackView.backgroundColor = .green
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = 4
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -178,11 +139,31 @@ class FeedCell: UICollectionViewCell {
         return stackView
     }()
     
-    var imageViewsArray = [UIImageView]()
     
-    var imageViewStackHeight: NSLayoutConstraint?
-
+    func setupContentImagesSize() {
+        
+        let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
+        contentImageViewsHeight?.constant = imagesHeight
+        
+        NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
+        if let images  = contentImages {
+            switch images.count {
+            case 1:
+                imagesStackView.spacing = 0
+            case 2:
+                NSLayoutConstraint.activate([contentImageViewsAspect1!])
+                imagesStackView.spacing = 4
+            case 3...:
+                NSLayoutConstraint.activate([contentImageViewsAspect2!])
+                imagesStackView.spacing = 4
+            default:
+                ()
+            }
+        }
+    }
+    
     func setupViews() {
+    
         backgroundColor = .white
         
         addSubview(nameLabel)
@@ -190,25 +171,32 @@ class FeedCell: UICollectionViewCell {
         addSubview(contentText)
         addSubview(imagesStackView)
         
-        imagesStackView.addArrangedSubview(imageView0)
-        imagesStackView.addArrangedSubview(subImagesStackView)
-        subImagesStackView.addArrangedSubview(imageView1)
-        subImagesStackView.addArrangedSubview(imageView2)
-        subImagesStackView.addArrangedSubview(imageView3)
         
-        imageViewsArray.append(imageView0)
-        imageViewsArray.append(imageView1)
-        imageViewsArray.append(imageView2)
-        imageViewsArray.append(imageView3)
-        
+        for _ in 0...3 {
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFill
+            imageView.layer.masksToBounds = true
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            contentImageViews.append(imageView)
+        }
 
+        imagesStackView.addArrangedSubview(contentImageViews[0])
+        imagesStackView.addArrangedSubview(subImagesStackView)
+        subImagesStackView.addArrangedSubview(contentImageViews[1])
+        subImagesStackView.addArrangedSubview(contentImageViews[2])
+        subImagesStackView.addArrangedSubview(contentImageViews[3])
+        
+     
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: imagesStackView)
         addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2]|", views: profileImageView, contentText, imagesStackView)
-        imageViewStackHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
-        imagesStackView.addConstraint(imageViewStackHeight!)
+        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2]-8-|", views: profileImageView, contentText, imagesStackView)
+        contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
+        imagesStackView.addConstraint(contentImageViewsHeight!)
+        
+        contentImageViewsAspect1 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 1)
+        contentImageViewsAspect2 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 3)
     }
 }
 
@@ -226,10 +214,6 @@ fileprivate func calculateImageHeight (images: [UIImage]?, width: CGFloat) -> CG
     default:
         return width
     }
-}
-
-fileprivate func setImages (images: [UIImage]?) {
-    
 }
 
 extension UILabel {

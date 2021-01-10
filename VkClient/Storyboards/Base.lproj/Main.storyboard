@@ -679,55 +679,6 @@
             </objects>
             <point key="canvasLocation" x="3076" y="1134"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="lFe-Hz-2sw">
-            <objects>
-                <viewController id="l8L-03-5sr" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="7Sf-N2-Nxe">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="w4v-IR-UaV">
-                                <rect key="frame" x="8" y="154" width="359" height="359"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cyberpunk" id="Fhm-8Z-WjR">
-                                        <rect key="frame" x="0.0" y="0.0" width="179" height="359"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="e9d-Ai-YT9">
-                                        <rect key="frame" x="183" y="0.0" width="176" height="359"/>
-                                        <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cyberpunk" translatesAutoresizingMaskIntoConstraints="NO" id="kgp-lr-MuW">
-                                                <rect key="frame" x="0.0" y="0.0" width="176" height="117"/>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cyberpunk" translatesAutoresizingMaskIntoConstraints="NO" id="ZTy-dD-27p">
-                                                <rect key="frame" x="0.0" y="121" width="176" height="117"/>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cyberpunk" id="rTb-y4-p4z">
-                                                <rect key="frame" x="0.0" y="242" width="176" height="117"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="w4v-IR-UaV" secondAttribute="height" multiplier="1:1" id="qZH-pg-M0M"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="fg4-81-x0u"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="w4v-IR-UaV" firstAttribute="leading" secondItem="fg4-81-x0u" secondAttribute="leading" constant="8" id="48J-N6-Boz"/>
-                            <constraint firstItem="w4v-IR-UaV" firstAttribute="top" secondItem="fg4-81-x0u" secondAttribute="top" constant="154" id="5bX-et-pbr"/>
-                            <constraint firstItem="fg4-81-x0u" firstAttribute="trailing" secondItem="w4v-IR-UaV" secondAttribute="trailing" constant="8" id="WjW-3F-FoG"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2xJ-Kb-li1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3820" y="1418.1409295352325"/>
-        </scene>
         <!--Main Tab Bar Controller-->
         <scene sceneID="FqJ-3m-fxM">
             <objects>
@@ -780,7 +731,6 @@
         <image name="VK_Full_Logo" width="5480" height="960"/>
         <image name="arrowshape.turn.up.forward" catalog="system" width="128" height="106"/>
         <image name="book" catalog="system" width="128" height="102"/>
-        <image name="cyberpunk" width="1280" height="720"/>
         <image name="eye" catalog="system" width="128" height="81"/>
         <image name="message" catalog="system" width="128" height="113"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
