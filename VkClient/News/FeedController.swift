@@ -43,45 +43,70 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             textHeight = rect.height
         }
         
-        //MARK: - Calculate image height
-        var imagesHeight: CGFloat {
-            switch newsFeed[indexPath.item].imagesCount {
-            case 0:
-                return 0
-            case 1:
-                let ratio =  newsFeed[indexPath.item].image?.first?.getCropRatio()
-                return view.frame.width / ratio!
-            default:
-                return view.frame.width
-            }
-        }
+        let imagesHeight = calculateImageHeight(images: newsFeed[indexPath.item].image, width: view.frame.width)
         
         return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 24 )
     }
 }
 
  //ячейка новостей
-class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class FeedCell: UICollectionViewCell {
+    
+    var post: Post! {
+        didSet {
+            profileImageView.image = post.logo
+            nameLabel.setAttributedText(text: post.caption, subtext: post.date)
+            if let text = post.text {
+                contentText.text = text
+            }
+
+            contentImages = post.image
+            let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
+            imageViewStackHeight?.constant = imagesHeight
+            
+            imageViewsArray.forEach {
+                $0.isHidden = true
+                $0.image = nil
+            }
+            
+            if let images  = contentImages {
+                for i in 0..<images.count {
+                    if i >= 4  { break }
+                    imageViewsArray[i].image = images[i]
+                    imageViewsArray[i].isHidden = false
+                }
+                
+                if images.count > 2 {
+                    imageViewsArray[0].addConstraint(imageViewsArray[0].widthAnchor.constraint(equalToConstant: self.frame.width * 2/3))
+                    imageViewsArray[0].translatesAutoresizingMaskIntoConstraints = false
+                }
+            }
+         //  layoutIfNeeded()
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        contentCollectionView.delegate = self
-        contentCollectionView.dataSource = self
-        contentCollectionView.register(PhotoCell.self, forCellWithReuseIdentifier: photoCellID)
     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     override func prepareForReuse() {
         super.prepareForReuse()
         nameLabel.text = nil
         profileImageView.image = nil
         contentText.text = nil
-        contentCollectionView.reloadData()
 
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        imageViewsArray.forEach {
+            $0.isHidden = true
+            $0.image = nil
+        }
+        
+        layoutIfNeeded()
     }
     
     let nameLabel = UILabel()
@@ -100,133 +125,112 @@ class FeedCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
         return label
     }()
     
-    let contentCollectionView: UICollectionView = {
-        
-        
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
-      //  cv.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-      //  cv.backgroundColor = .systemBackground
-        cv.backgroundColor = .blue
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        return cv;
+    var contentImages: [UIImage]?
+    
+    let imageView0: UIImageView = {
+       let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
+      //  imageView.backgroundColor = .red
+        return imageView
+    }()
+    let imageView1: UIImageView = {
+       let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
+      //  imageView.backgroundColor = .red
+        return imageView
+    }()
+    let imageView2: UIImageView = {
+       let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
+        //imageView.backgroundColor = .red
+        return imageView
+    }()
+    let imageView3: UIImageView = {
+       let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
+       // imageView.backgroundColor = .red
+        return imageView
+    }()
+
+    let imagesStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+       // stackView.backgroundColor = .blue
+        stackView.spacing = 4
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillProportionally
+        return stackView
     }()
     
-    static func generateLayout() -> UICollectionViewLayout {
+    let subImagesStackView: UIStackView = {
+        let stackView = UIStackView()
+       // stackView.backgroundColor = .green
+        stackView.spacing = 4
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
         
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(50))
-        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        
+        return stackView
+    }()
+    
+    var imageViewsArray = [UIImageView]()
+    
+    var imageViewStackHeight: NSLayoutConstraint?
 
-        let groupSize =  NSCollectionLayoutSize (
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
-        
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: fullPhotoItem, count: 1)
-        
-        
-        let section = NSCollectionLayoutSection(group: group)
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        return layout
-    }
-    
-    
-    var post: Post! {
-        didSet {
-            profileImageView.image = post.logo
-            nameLabel.setAttributedText(text: post.caption, subtext: post.date)
-            if let text = post.text {
-                contentText.text = text
-            }
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        post.image?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let photoCell =  collectionView.dequeueReusableCell(withReuseIdentifier: photoCellID, for: indexPath) as! PhotoCell
-        if let image = post.image?[indexPath.row] {
-            photoCell.image = image
-        }
-        
-       return photoCell
- 
-    }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        if let imagesCount = post.image?.count {
-//            return .init(width: self.bounds.width / CGFloat(imagesCount) - 10, height: self.bounds.width / CGFloat(imagesCount) - 10 )
-//        }
-//        return .init(width: self.bounds.width  - 10, height: self.bounds.width  - 10 )
-//    }
-//
-    
     func setupViews() {
         backgroundColor = .white
         
         addSubview(nameLabel)
         addSubview(profileImageView)
         addSubview(contentText)
-        addSubview(contentCollectionView)
+        addSubview(imagesStackView)
         
+        imagesStackView.addArrangedSubview(imageView0)
+        imagesStackView.addArrangedSubview(subImagesStackView)
+        subImagesStackView.addArrangedSubview(imageView1)
+        subImagesStackView.addArrangedSubview(imageView2)
+        subImagesStackView.addArrangedSubview(imageView3)
+        
+        imageViewsArray.append(imageView0)
+        imageViewsArray.append(imageView1)
+        imageViewsArray.append(imageView2)
+        imageViewsArray.append(imageView3)
+        
+
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
-        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentCollectionView)
+        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: imagesStackView)
         addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2]|", views: profileImageView, contentText, contentCollectionView)
-
+        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-4-[v1]-4-[v2]|", views: profileImageView, contentText, imagesStackView)
+        imageViewStackHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
+        imagesStackView.addConstraint(imageViewStackHeight!)
     }
 }
 
-
-
-let photoCellID = "PhotoCellID"
-
-class PhotoCell: UICollectionViewCell {
+//MARK: - Calculate image height
+fileprivate func calculateImageHeight (images: [UIImage]?, width: CGFloat) -> CGFloat {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
+    guard let unwrapImages = images else {
+        return 0
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    switch unwrapImages.count {
+    case 1:
+        let ratio =  unwrapImages.first!.getCropRatio()
+        return width / ratio
+    default:
+        return width
     }
-    
-    var image: UIImage? {
-        didSet {
-            imageView.image = image
-        }
-    }
-    
-    private let imageView: UIImageView = {
-       let imageView = UIImageView()
-       // imageView.contentMode = .scaleAspectFit
-       // imageView.layer.masksToBounds = true
-        imageView.backgroundColor = .red
-      //  imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
-    func setupViews() {
-        
-        addSubview(imageView)
-        addConstrainsWithFormat(format: "H:|[v0]|", views: imageView)
-        addConstrainsWithFormat(format: "V:|[v0]|", views: imageView)
-        
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        imageView.image = nil
-    }
-    
 }
 
+fileprivate func setImages (images: [UIImage]?) {
+    
+}
 
 extension UILabel {
     func setAttributedText(text: String, subtext: String) {
@@ -263,5 +267,6 @@ extension UIView {
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: [], metrics: nil, views: viewDictionary))
+    
     }
 }

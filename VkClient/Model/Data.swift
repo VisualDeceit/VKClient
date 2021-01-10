@@ -98,7 +98,7 @@ var newsFeed = [Post(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                    caption: "ТОПОР — Хранилище",
                    date: "сегодня в 9:23",
                    text: nil,
-                   image: [#imageLiteral(resourceName: "cyberpunk"),#imageLiteral(resourceName: "cyberpunk"),#imageLiteral(resourceName: "cyberpunk")],
+                   image: [#imageLiteral(resourceName: "cyberpunk")],
                    like: Like(isLiked: true, totalCount: Int.random(in: 1...1000))),
               
                 Post(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
@@ -119,7 +119,7 @@ var newsFeed = [Post(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
 
                               Длиннопост от Дмитрия Мельничука из команды Cat.Cat: pikabu.ru/link/b7907232
                               """
-                   , image: [#imageLiteral(resourceName: "1556962064181431984"),#imageLiteral(resourceName: "1556962064181431984")],
+                   , image:  [#imageLiteral(resourceName: "cyberpunk"),#imageLiteral(resourceName: "1556962064181431984")],
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
               
                 Post(logo: #imageLiteral(resourceName: "-LGOrMnatj4"),
@@ -128,7 +128,7 @@ var newsFeed = [Post(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                    text: """
 Шнуров ответил на критику своего хуевого вопроса Путину
 """,
-                   image: [#imageLiteral(resourceName: "0MzQi1AE9DA"),#imageLiteral(resourceName: "0MzQi1AE9DA")],
+                   image:  [#imageLiteral(resourceName: "rXTwsPh_bAs"),#imageLiteral(resourceName: "1556962064181431984"),#imageLiteral(resourceName: "cyberpunk")],
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))),
               
                 Post(logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"),
@@ -137,7 +137,7 @@ var newsFeed = [Post(logo: #imageLiteral(resourceName: "rZi7F9_vu-8"),
                    text: """
                               Чтoбы не рубить и не пoкупать кaждый гoд елку, растет отличнo дома, продaeтся сейчac многo гдe комнатнaя ёлкa 😉
                               """,
-                   image: [#imageLiteral(resourceName: "rXTwsPh_bAs"),#imageLiteral(resourceName: "rXTwsPh_bAs"),#imageLiteral(resourceName: "rXTwsPh_bAs")],
+                   image: [#imageLiteral(resourceName: "1556962064181431984"),#imageLiteral(resourceName: "1556962064181431984"),#imageLiteral(resourceName: "cyberpunk"),#imageLiteral(resourceName: "0MzQi1AE9DA")],
                    like: Like(isLiked: false, totalCount: Int.random(in: 1...1000)))
               
 ]
