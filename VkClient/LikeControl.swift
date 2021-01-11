@@ -59,6 +59,9 @@ class LikeControl: UIControl {
         button.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
         button.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         button.contentEdgeInsets.left = 10
+        
+        totalCount = 0
+        isLiked = false
     }
     
     override func layoutSubviews() {
