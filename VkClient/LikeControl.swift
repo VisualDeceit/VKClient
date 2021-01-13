@@ -7,7 +7,7 @@
 
 import UIKit
 
-@IBDesignable class LikeControl: UIControl {
+class LikeControl: UIControl {
     
     var totalCount: Int = 0 {
         didSet {
@@ -20,12 +20,13 @@ import UIKit
         didSet {
             //обнволяем картинку сердца
             button.setImage(isLiked ? self.likedImage : self.unlikedImage, for: .normal)
+            button.tintColor = isLiked ? .red : .label
         }
     }
     
     private var button = UIButton(type: .custom)
-    private let unlikedImage = UIImage(systemName: "heart")?.withRenderingMode(.alwaysOriginal)
-    private let likedImage = UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate)
+    private let unlikedImage = UIImage(systemName: "heart")?.withRenderingMode(.automatic)
+    private let likedImage = UIImage(systemName: "heart.fill")?.withRenderingMode(.automatic)
     private let unlikedScale: CGFloat = 0.8
     private let likedScale: CGFloat = 1.2
     
@@ -41,28 +42,24 @@ import UIKit
     }
     
     func setupView(){
-        
         self.addSubview(button)
-        
+
         //настройки
-        button.imageView?.contentMode = .scaleAspectFit
-        button.setTitleColor(.black, for: .normal)
-        button.tintColor = .red
+        button.setTitleColor(.label, for: .normal)
         //добавляем таргет при нажатии на контрол
         button.addTarget(self, action: #selector(tapControl(_:)), for: .touchUpInside)
         button.titleLabel?.font = .systemFont(ofSize: 12)
-        
-        //слева
-        button.frame = self.bounds
-        button.contentHorizontalAlignment = .leading
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
-        button.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        button.contentEdgeInsets.left = 10
+        self.button.transform = CGAffineTransform.identity
+        
+        totalCount = 0
+        isLiked = false
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.addConstrainsWithFormat(format: "H:|[v0]|", views: button)
+        self.addConstrainsWithFormat(format: "V:|[v0]|", views: button)
     }
     
     //обработчик нажатия на контрол

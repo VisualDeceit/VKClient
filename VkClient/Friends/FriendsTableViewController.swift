@@ -104,12 +104,10 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         (friendsLastNameTitles, friendsDictionary) = splitOnSections(for: friends)
         //copy dictionary for display
         filtredFriendsDictionary = friendsDictionary
-        
         //регистрируем кастомный хедер
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
      
-        searchBar.delegate = self
-        
+        searchBar.delegate = self        
     }
     
     // MARK: - Table view data source
