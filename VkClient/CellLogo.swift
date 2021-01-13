@@ -22,11 +22,7 @@ class CellLogo: UIView {
         addGestureRecognizer(tapGestureRecognizer)
     }
     
-var shadowRadius: CGFloat = 25.0 {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
+var shadowRadius: CGFloat!
     
 var shadowBlur: CGFloat = 3.0 {
         didSet {
@@ -58,6 +54,7 @@ var shadowColor: UIColor = UIColor.black {
         super.draw(rect)
         //настраивем картинку
         logoView.frame = rect
+        shadowRadius = rect.width / 2
         logoView.layer.cornerRadius =  shadowRadius
         logoView.clipsToBounds = true
         logoView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)

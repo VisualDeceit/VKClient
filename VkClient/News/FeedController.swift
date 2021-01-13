@@ -45,6 +45,6 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         let imagesHeight = calculateImageHeight(images: newsFeed[indexPath.item].image, width: view.frame.width)
         
-        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 13 + 30 )
+        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 21 + 30 )
     }
 }

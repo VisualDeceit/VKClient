@@ -13,7 +13,7 @@ class FeedCell: UICollectionViewCell {
     
     var post: Post! {
         didSet {
-            profileImageView.image = post.logo
+            profileImageView.logoView.image = post.logo
             nameLabel.setAttributedText(text: post.caption, subtext: post.date)
             
             if let text = post.text {
@@ -52,18 +52,20 @@ class FeedCell: UICollectionViewCell {
         super.prepareForReuse()
         
         nameLabel.text = nil
-        profileImageView.image = nil
+        profileImageView.logoView.image = nil
         contentText.text = nil
         contentImageViews.forEach { $0.image = nil }
     }
     
     let nameLabel = UILabel()
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
+//    let profileImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.contentMode = .scaleAspectFit
+//        return imageView
+//    }()
+//
+    let profileImageView = CellLogo()
     
     let contentText: UILabel = {
         let label = UILabel()
@@ -113,7 +115,7 @@ class FeedCell: UICollectionViewCell {
     
     let devider: UIView = {
         let view =  UIView()
-        view.backgroundColor = .init(white: 0.8, alpha: 1)
+        view.backgroundColor = .systemGray4
         return view
     }()
     
@@ -171,8 +173,9 @@ class FeedCell: UICollectionViewCell {
         addSubview(imagesStackView)
         addSubview(devider)
         addSubview(bottomStackView)
-  
         
+        //profileImageView.shadowRadius = 22
+ 
         // наполняем  array imageviews
         for _ in 0...3 {
             let imageView = UIImageView()
@@ -198,10 +201,10 @@ class FeedCell: UICollectionViewCell {
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: imagesStackView)
-        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: devider)
+        addConstrainsWithFormat(format: "H:|-12-[v0]-12-|", views: devider)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: bottomStackView)
         addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-8-[v1]-4-[v2]-4-[v3(1)]-4-[v4(30)]|", views: profileImageView, contentText, imagesStackView, devider, bottomStackView)
+        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-8-[v1]-4-[v2]-12-[v3(1)]-4-[v4(30)]|", views: profileImageView, contentText, imagesStackView, devider, bottomStackView)
         
         //высота поля с картинками
         contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
