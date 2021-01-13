@@ -173,7 +173,7 @@ class FeedCell: UICollectionViewCell {
         addSubview(bottomStackView)
   
         
-        
+        // наполняем  array imageviews
         for _ in 0...3 {
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFill
@@ -182,16 +182,19 @@ class FeedCell: UICollectionViewCell {
             contentImageViews.append(imageView)
         }
         
+        //область с картинками
         imagesStackView.addArrangedSubview(contentImageViews[0])
         imagesStackView.addArrangedSubview(subImagesStackView)
         subImagesStackView.addArrangedSubview(contentImageViews[1])
         subImagesStackView.addArrangedSubview(contentImageViews[2])
         subImagesStackView.addArrangedSubview(contentImageViews[3])
         
+        //нижняя область с кнопками
         bottomStackView.addArrangedSubview(likeButton)
         bottomStackView.addArrangedSubview(commentButton)
         bottomStackView.addArrangedSubview(shareButton)
         
+        //настройка ограничений
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: imagesStackView)
@@ -200,9 +203,11 @@ class FeedCell: UICollectionViewCell {
         addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
         addConstrainsWithFormat(format: "V:|-8-[v0(44)]-8-[v1]-4-[v2]-4-[v3(1)]-4-[v4(30)]|", views: profileImageView, contentText, imagesStackView, devider, bottomStackView)
         
+        //высота поля с картинками
         contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
         imagesStackView.addConstraint(contentImageViewsHeight!)
         
+        //соотношение сторон для области картинок в зависимоти от кол-ва
         contentImageViewsAspect1 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 1)
         contentImageViewsAspect2 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 3)
     }

@@ -139,9 +139,3 @@ class NewsTableViewController: UITableViewController {
     }
     
 }
-
-extension UIImage {
-    func getCropRatio() -> CGFloat {
-        return  CGFloat( self.size.width / self.size.height )
-    }
-}

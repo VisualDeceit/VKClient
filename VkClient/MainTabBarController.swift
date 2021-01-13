@@ -14,8 +14,8 @@ class MainTabBarController: UITabBarController {
         
         let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
         let navigationController = UINavigationController(rootViewController: feedController)
-        feedController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "heart"), selectedImage: UIImage(systemName: "heart.fill"))
-        feedController.navigationItem.title = "New Feed"
+        feedController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "book"), selectedImage: UIImage(systemName: "book"))
+        feedController.navigationItem.title = "News Feed"
         self.viewControllers! += [navigationController]
 
 
