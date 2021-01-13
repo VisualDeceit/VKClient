@@ -31,8 +31,8 @@ class FeedCell: UICollectionViewCell {
                 }
             }
             
-            likeControl.totalCount = post.like.totalCount
-            likeControl.isLiked = post.like.isLiked
+            likeButton.totalCount = post.like.totalCount
+            likeButton.isLiked = post.like.isLiked
             
             setupContentImagesSize()
         }
@@ -70,6 +70,7 @@ class FeedCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 14)
         label.lineBreakMode = .byWordWrapping
+        label.textColor = .label
         return label
     }()
     
@@ -100,13 +101,43 @@ class FeedCell: UICollectionViewCell {
         return stackView
     }()
     
+    let bottomStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = 0
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
     let devider: UIView = {
         let view =  UIView()
         view.backgroundColor = .init(white: 0.8, alpha: 1)
         return view
     }()
     
-    let likeControl = LikeControl()
+    let likeButton = LikeControl()
+    
+    let commentButton: UIButton = {
+        let button = UIButton(type: .system)
+        //для выравнивания символов по высоте
+        let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
+        let message = UIImage(systemName: "message", withConfiguration: imgConfig)
+        button.setImage(message, for: .normal)
+        button.tintColor = .label
+       return button
+    }()
+    
+    let shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        //для выравнивания символов по высоте
+        let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
+        let share = UIImage(systemName: "repeat", withConfiguration: imgConfig)
+        button.setImage(share, for: .normal)
+        button.tintColor = .label
+       return button
+    }()
     
     func setupContentImagesSize() {
         
@@ -132,14 +163,15 @@ class FeedCell: UICollectionViewCell {
     
     func setupViews() {
         
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         
         addSubview(nameLabel)
         addSubview(profileImageView)
         addSubview(contentText)
         addSubview(imagesStackView)
         addSubview(devider)
-        addSubview(likeControl)
+        addSubview(bottomStackView)
+  
         
         
         for _ in 0...3 {
@@ -156,14 +188,17 @@ class FeedCell: UICollectionViewCell {
         subImagesStackView.addArrangedSubview(contentImageViews[2])
         subImagesStackView.addArrangedSubview(contentImageViews[3])
         
+        bottomStackView.addArrangedSubview(likeButton)
+        bottomStackView.addArrangedSubview(commentButton)
+        bottomStackView.addArrangedSubview(shareButton)
         
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: imagesStackView)
         addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: devider)
-        addConstrainsWithFormat(format: "H:|[v0(100)]|", views: likeControl)
+        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: bottomStackView)
         addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-8-[v1]-4-[v2]-4-[v3(1)]-4-[v4(30)]|", views: profileImageView, contentText, imagesStackView, devider, likeControl)
+        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-8-[v1]-4-[v2]-4-[v3(1)]-4-[v4(30)]|", views: profileImageView, contentText, imagesStackView, devider, bottomStackView)
         
         contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
         imagesStackView.addConstraint(contentImageViewsHeight!)

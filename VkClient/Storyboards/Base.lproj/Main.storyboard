@@ -588,14 +588,14 @@
                                                         <constraint firstAttribute="width" constant="21" id="lMq-dm-Qit"/>
                                                     </constraints>
                                                     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <state key="normal" image="arrowshape.turn.up.forward" catalog="system"/>
+                                                    <state key="normal" image="repeat" catalog="system"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2eb-ul-eHS">
                                                     <rect key="frame" x="71" y="4" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="RwK-0v-1Hb"/>
                                                     </constraints>
-                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="tintColor" systemColor="labelColor"/>
                                                     <state key="normal" image="message" catalog="system"/>
                                                 </button>
                                             </subviews>
@@ -729,13 +729,16 @@
     </scenes>
     <resources>
         <image name="VK_Full_Logo" width="5480" height="960"/>
-        <image name="arrowshape.turn.up.forward" catalog="system" width="128" height="106"/>
         <image name="book" catalog="system" width="128" height="102"/>
         <image name="eye" catalog="system" width="128" height="81"/>
         <image name="message" catalog="system" width="128" height="113"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
+        <image name="repeat" catalog="system" width="128" height="99"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
