@@ -59,12 +59,6 @@ class FeedCell: UICollectionViewCell {
     
     let nameLabel = UILabel()
     
-//    let profileImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.contentMode = .scaleAspectFit
-//        return imageView
-//    }()
-//
     let profileImageView = CellLogo()
     
     let contentText: UILabel = {
@@ -141,6 +135,18 @@ class FeedCell: UICollectionViewCell {
        return button
     }()
     
+    let viewsButton: UIButton = {
+        let button = UIButton(type: .system)
+        //для выравнивания символов по высоте
+        let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
+        let views = UIImage(systemName: "eye", withConfiguration: imgConfig)
+        button.setImage(views, for: .normal)
+        button.setTitle("15k", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.isEnabled = false
+       return button
+    }()
+    
     func setupContentImagesSize() {
         
         let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
@@ -196,6 +202,7 @@ class FeedCell: UICollectionViewCell {
         bottomStackView.addArrangedSubview(likeButton)
         bottomStackView.addArrangedSubview(commentButton)
         bottomStackView.addArrangedSubview(shareButton)
+        bottomStackView.addArrangedSubview(viewsButton)
         
         //настройка ограничений
         addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
