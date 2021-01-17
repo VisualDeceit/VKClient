@@ -12,6 +12,8 @@ import WebKit
 class VKLoginViewController: UIViewController {
     @IBOutlet weak var webView: WKWebView!
     
+    @IBAction func unwindToLogin(_ unwindSegue: UIStoryboardSegue) {}
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,6 +33,18 @@ class VKLoginViewController: UIViewController {
         ]
         
         let request = URLRequest(url: urlComponents.url!)
+        
+        //очищаем cookie
+        let dataStore = WKWebsiteDataStore.default()
+            dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+                for record in records {
+                    if record.displayName.contains("vk") {
+                        dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: {
+                            print("Deleted: " + record.displayName);
+                        })
+                    }
+                }
+            }
         
         webView.load(request)
     }

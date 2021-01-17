@@ -227,7 +227,7 @@
                     <navigationItem key="navigationItem" title="Friends" id="jZJ-Ng-V20">
                         <barButtonItem key="leftBarButtonItem" title="Log Out" image="square.and.arrow.up" catalog="system" id="28h-15-mS3">
                             <connections>
-                                <segue destination="Wfc-X5-kIh" kind="unwind" identifier="unwindToLogin" unwindAction="unwind:" id="WXc-0k-1wc"/>
+                                <segue destination="Wfc-X5-kIh" kind="unwind" unwindAction="unwindToLogin:" id="g2R-Er-dsZ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -299,7 +299,7 @@
                     <navigationItem key="navigationItem" title="User's Groups" id="LCo-w2-izd">
                         <barButtonItem key="leftBarButtonItem" title="Log Out" image="square.and.arrow.up" catalog="system" id="6en-KT-jbX">
                             <connections>
-                                <segue destination="dZc-5F-aF8" kind="unwind" unwindAction="unwind:" id="JGO-60-ZyV"/>
+                                <segue destination="dZc-5F-aF8" kind="unwind" unwindAction="unwindToLogin:" id="gK0-OP-rqP"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="A0b-Uf-iwc">
