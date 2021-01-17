@@ -1,0 +1,124 @@
+//
+//  NetworkService.swift
+//  VkClient
+//
+//  Created by Alexander Fomin on 17.01.2021.
+//
+
+import Foundation
+import Alamofire
+
+/*
+ 
+ -Зарегистрировать приложение в ВК;
+- Заменить форму входа на WKWebView для авторизации в ВК;
+ -Сохранить токен в синглтоне Session;
+ -Использовать токен в запросах к VK API;
+ -Реализовать запросы к VK API;
+ -Получение списка друзей;
+ -Получение фотографий человека;
+ -Получение групп текущего пользователя;
+ Получение групп по поисковому запросу;
+ Вывести данные в консоль.
+
+ */
+
+class NetworkServices {
+    
+    let vAPI = "5.126"
+    
+    //получение списка друзей
+    func getUserFriends() {
+        //собираем url
+        let urlComponent: URLComponents = {
+            var url = URLComponents()
+            url.scheme = "https"
+            url.host = "api.vk.com"
+            url.path = "/method/friends.get"
+            url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
+                              URLQueryItem(name: "v", value: vAPI),
+                              URLQueryItem(name: "fields", value: "photo_50")]
+            return url
+        }()
+        
+        //создаем сессию
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        //проверяем url
+        if let url  = urlComponent.url {
+            //создаем задание
+            let task = session.dataTask(with: url) { (data, _, _) in
+                if let data = data {
+                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
+                        print(json)
+                    }
+                }
+            }
+            task.resume()
+        }
+        
+    }
+    
+    //получение всех фото
+    func getPhotos(for userID: String) {
+        let urlComponent: URLComponents = {
+            var url = URLComponents()
+            url.scheme = "https"
+            url.host = "api.vk.com"
+            url.path = "/method/photos.getAll"
+            url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
+                              URLQueryItem(name: "v", value: vAPI),
+                              URLQueryItem(name: "owner_id", value: userID),
+                              URLQueryItem(name: "extended", value: "1")]
+            return url
+        }()
+        
+        //создаем сессию
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        //проверяем url
+        if let url  = urlComponent.url {
+            //создаем запрос
+            let request = URLRequest(url: url)
+           //создаем задание
+            let task = session.dataTask(with: request) { (data, _, _) in
+                if let data = data {
+                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
+                        print(json)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    //получение списка групп пользователя через  Alamofire
+    func getUserGroups() {
+        let host = "https://api.vk.com"
+        let path = "/method/groups.get"
+        let parameters: Parameters = [
+            "access_token": Session.shared.token!,
+            "v": vAPI,
+            "extended": "1"
+        ]
+            AF.request(host+path,
+                       method: .get,
+                       parameters: parameters).responseJSON { (json) in
+                            print(json)
+                       }
+    }
+    
+    //поиск группы
+    func searchGroups(by caption: String) {
+        let host = "https://api.vk.com"
+        let path = "/method/groups.search"
+        let parameters: Parameters = [
+            "access_token": Session.shared.token!,
+            "v": vAPI,
+            "q": caption
+        ]
+            AF.request(host+path,
+                       method: .get,
+                       parameters: parameters).responseJSON { (json) in
+                            print(json)
+                       }
+    }
+}

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,6 +30,8 @@
 		1542525725AB74AE0014F40A /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542525625AB74AD0014F40A /* FeedCell.swift */; };
 		15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15462828259D9AD9008F9411 /* CustomNavigationController.swift */; };
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
+		15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C125B4166E006C5A25 /* VKLoginViewController.swift */; };
+		15A901C525B429A6006C5A25 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C425B429A6006C5A25 /* NetworkService.swift */; };
 		15B17600258621F500042450 /* CellLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* CellLogo.swift */; };
 		15B176092586793D00042450 /* LikeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B176082586793D00042450 /* LikeControl.swift */; };
 		15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */; };
@@ -66,6 +68,8 @@
 		1542525625AB74AD0014F40A /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		15462828259D9AD9008F9411 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
+		15A901C125B4166E006C5A25 /* VKLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginViewController.swift; sourceTree = "<group>"; };
+		15A901C425B429A6006C5A25 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		15B175FF258621F500042450 /* CellLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLogo.swift; sourceTree = "<group>"; };
 		15B176082586793D00042450 /* LikeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeControl.swift; sourceTree = "<group>"; };
 		15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomSectionHeaderView.swift; sourceTree = "<group>"; };
@@ -135,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				1535228F25AF0A6F006498A6 /* Session.swift */,
+				15A901C425B429A6006C5A25 /* NetworkService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 			children = (
 				153F21B82577F6FF0018A18D /* LoginFormController.swift */,
 				1542524F25A2F4AD0014F40A /* MainTabBarController.swift */,
+				15A901C125B4166E006C5A25 /* VKLoginViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -259,7 +265,6 @@
 				2EC931B1E2F207BD2EADB328 /* Pods-VkClient.debug.xcconfig */,
 				4F45EBF950D39026034F2000 /* Pods-VkClient.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -394,7 +399,9 @@
 				15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
 				15D31FE825AED4E8003D312E /* UILabel.swift in Sources */,
+				15A901C525B429A6006C5A25 /* NetworkService.swift in Sources */,
 				1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */,
+				15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */,
 				15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
 				1504D9312583ADA400B4EBEE /* FriendTableViewCell.swift in Sources */,
