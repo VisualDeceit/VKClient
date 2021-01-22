@@ -107,7 +107,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         //регистрируем кастомный хедер
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
      
-        searchBar.delegate = self        
+        searchBar.delegate = self
+        
     }
     
     // MARK: - Table view data source

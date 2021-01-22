@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fhs-gk-DpA">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -10,6 +10,41 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="xCf-9K-WZH">
+            <objects>
+                <viewController id="fhs-gk-DpA" customClass="VKLoginViewController" customModule="VkClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JX5-WX-tx0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vGZ-T3-1PH">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="fN0-fa-Ier"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="fN0-fa-Ier" firstAttribute="bottom" secondItem="vGZ-T3-1PH" secondAttribute="bottom" id="XI9-nH-c5j"/>
+                            <constraint firstItem="vGZ-T3-1PH" firstAttribute="leading" secondItem="fN0-fa-Ier" secondAttribute="leading" id="h5g-Nm-oZQ"/>
+                            <constraint firstItem="fN0-fa-Ier" firstAttribute="trailing" secondItem="vGZ-T3-1PH" secondAttribute="trailing" id="hhJ-y6-8L3"/>
+                            <constraint firstItem="vGZ-T3-1PH" firstAttribute="top" secondItem="fN0-fa-Ier" secondAttribute="top" id="wcZ-Le-ZFc"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="vGZ-T3-1PH" id="Rjf-lX-8r4"/>
+                        <segue destination="BbG-iy-b1c" kind="presentation" identifier="ToMainTabBar" modalPresentationStyle="fullScreen" id="ExB-it-v4Z"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pf8-wl-ScI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="65" y="797"/>
+        </scene>
         <!--Log Out-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -56,9 +91,6 @@
                                                 <state key="normal" title="Log In">
                                                     <color key="titleColor" systemColor="labelColor"/>
                                                 </state>
-                                                <connections>
-                                                    <segue destination="BbG-iy-b1c" kind="presentation" modalPresentationStyle="fullScreen" id="cbM-6K-1mN"/>
-                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -195,7 +227,7 @@
                     <navigationItem key="navigationItem" title="Friends" id="jZJ-Ng-V20">
                         <barButtonItem key="leftBarButtonItem" title="Log Out" image="square.and.arrow.up" catalog="system" id="28h-15-mS3">
                             <connections>
-                                <segue destination="Wfc-X5-kIh" kind="unwind" identifier="unwindToLogin" unwindAction="unwind:" id="WXc-0k-1wc"/>
+                                <segue destination="Wfc-X5-kIh" kind="unwind" unwindAction="unwindToLogin:" id="g2R-Er-dsZ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -267,7 +299,7 @@
                     <navigationItem key="navigationItem" title="User's Groups" id="LCo-w2-izd">
                         <barButtonItem key="leftBarButtonItem" title="Log Out" image="square.and.arrow.up" catalog="system" id="6en-KT-jbX">
                             <connections>
-                                <segue destination="dZc-5F-aF8" kind="unwind" unwindAction="unwind:" id="JGO-60-ZyV"/>
+                                <segue destination="dZc-5F-aF8" kind="unwind" unwindAction="unwindToLogin:" id="gK0-OP-rqP"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="A0b-Uf-iwc">
