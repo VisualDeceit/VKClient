@@ -12,16 +12,16 @@ class FriendTableViewCell: UITableViewCell {
     
     @IBOutlet var friendAvatar: CellLogo!
     @IBOutlet var friendName: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        friendAvatar.logoView.image = nil
+        friendName.text = nil
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    func populate(user: User0) {
+        friendName.text = "\(user.firstName) \(user.lastName)"
+        friendAvatar.logoView.download(from: user.avatarUrl)
     }
     
     

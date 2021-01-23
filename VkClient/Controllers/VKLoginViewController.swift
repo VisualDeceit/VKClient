@@ -35,16 +35,16 @@ class VKLoginViewController: UIViewController {
         let request = URLRequest(url: urlComponents.url!)
         
         //очищаем cookie
-        let dataStore = WKWebsiteDataStore.default()
-            dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-                for record in records {
-                    if record.displayName.contains("vk") {
-                        dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: {
-                            print("Deleted: " + record.displayName);
-                        })
-                    }
-                }
-            }
+//        let dataStore = WKWebsiteDataStore.default()
+//            dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+//                for record in records {
+//                    if record.displayName.contains("vk") {
+//                        dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: {
+//                            print("Deleted: " + record.displayName);
+//                        })
+//                    }
+//                }
+//            }
         
         webView.load(request)
     }

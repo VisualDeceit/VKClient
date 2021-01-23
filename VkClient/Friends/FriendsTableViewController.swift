@@ -66,15 +66,16 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         searchBar.delegate = self
         
         let networkService = NetworkServices()
-        
         networkService.getUserFriends {friends in
             self.friends = friends
+            // если не сделать, то выдапает ошибка
+            /// UITableView.reloadData() must be used from main thread only
             DispatchQueue.main.async {
                 // разбор исходных данных
                 (self.friendsLastNameTitles, self.friendsDictionary) = self.splitOnSections(for: friends)
                 //copy dictionary for display
                 self.filtredFriendsDictionary = self.friendsDictionary
-                self.tableView?.reloadData()
+                self.tableView.reloadData()
             }
         }
         
@@ -104,10 +105,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         //передаем данные в ячейку
         let lastNameKey = friendsLastNameTitles[indexPath.section]
         if let userValues = filtredFriendsDictionary[lastNameKey] {
-            cell.friendName.text = "\(userValues[indexPath.row].firstName) \(userValues[indexPath.row].lastName)"
-            cell.friendAvatar.logoView.image = #imageLiteral(resourceName: "camera_50")
+            cell.populate(user: userValues[indexPath.row])
         }
-        
         return cell
     }
     
@@ -139,7 +138,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
                                                                 "sectionHeader") as! MyCustomSectionHeaderView
         view.title.text = friendsLastNameTitles[section]
-        
         return view
     }
     
