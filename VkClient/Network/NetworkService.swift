@@ -70,10 +70,16 @@ class NetworkServices {
         if let url  = urlComponent.url {
             //создаем запрос
             let request = URLRequest(url: url)
-           //создаем задание
+            //создаем задание
             let task = session.dataTask(with: request) { (data, _, _) in
                 if let data = data {
-                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
+                    // if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
+                    do {
+                        let userPhoto = try JSONDecoder().decode(UserPhotoModel.self, from: data).response.items
+                        print(userPhoto)
+                    }
+                    catch {
+                        print(error)
                     }
                 }
             }
@@ -119,7 +125,7 @@ class NetworkServices {
         ]
             AF.request(host+path,
                        method: .get,
-                       parameters: parameters).responseJSON { (json) in
+                       parameters: parameters).resonseData { (json) in
                            // print(json)
                        }
     }
