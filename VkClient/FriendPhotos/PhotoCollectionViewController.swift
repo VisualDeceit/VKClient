@@ -11,37 +11,43 @@ import UIKit
 
 class PhotoCollectionViewController: UICollectionViewController {
     
-    var user = User(first_name: "", last_name: "", album: nil)
+   // var user = User(first_name: "", last_name: "", album: nil)
     
-    var userID: Int = 246569525
+    var userID: Int = -1
+    var userPhotos = [UserPhoto]()
     
     //объявляем слабую ссылку на делегат для передачи данных
     weak var delegate: FriendsTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // self.navigationItem.title = "\(user.first_name) \(user.last_name)"
+        // self.navigationItem.title = "\(user.first_name) \(user.last_name)"
         
         let networkService = NetworkServices()
-        networkService.getPhotos(for: userID)
-    }
-    
-    func downloadAlbum() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            for index in 0..<self.user.album!.count {
-                if let url = URL(string: self.user.album![index].imageURL) {
-                    let data = try? Data(contentsOf: url)
-                    if let imageData = data {
-                        self.user.album![index].imageData = UIImage(data: imageData)!
-                    }
-                }
-            }
+        networkService.getPhotos(for: userID) { [weak self] photos in
+            self?.userPhotos = photos
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+                self?.collectionView.reloadData()
             }
         }
-        
     }
+    
+//    func downloadAlbum() {
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            for index in 0..<self.user.album!.count {
+//                if let url = URL(string: self.user.album![index].imageURL) {
+//                    let data = try? Data(contentsOf: url)
+//                    if let imageData = data {
+//                        self.user.album![index].imageData = UIImage(data: imageData)!
+//                    }
+//                }
+//            }
+//            DispatchQueue.main.async {
+//                self.collectionView.reloadData()
+//            }
+//        }
+//
+//    }
     
     // MARK: UICollectionViewDataSource
 
@@ -51,7 +57,7 @@ class PhotoCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  user.album?.count ?? 0
+        return  userPhotos.count //user.album?.count ?? 0
     }
     
 
@@ -63,20 +69,21 @@ class PhotoCollectionViewController: UICollectionViewController {
         //фото для каждой ячейки
         //cell.imageURL = URL(string: user.album![indexPath.row].imageURL)
         //cell.photo.image =  user.album![indexPath.row].imageData
-        if let url = URL(string: user.album![indexPath.row].imageURL) {
-            DispatchQueue.global(qos: .userInitiated).async {
-                let data = try? Data(contentsOf: url)
-                DispatchQueue.main.async {
-                    if let imageData = data {
-                        self.user.album![indexPath.row].imageData = UIImage(data: imageData)
-                        cell.photo.image = UIImage(data: imageData)
-                    }
-                }
-            }
-        }
+       // if let url = URL(string: user.album![indexPath.row].imageURL) {
+//            DispatchQueue.global(qos: .userInitiated).async {
+//                let data = try? Data(contentsOf: userPhotos[indexPath.row])
+//                DispatchQueue.main.async {
+//                    if let imageData = data {
+//                        self.user.album![indexPath.row].imageData = UIImage(data: imageData)
+//                        cell.photo.image = UIImage(data: imageData)
+//                    }
+//                }
+//            }
+        cell.photo.download(from: userPhotos[indexPath.row].sizes[0].url)
+        //}
         //состояние  для likeControl
-        cell.likeControl.totalCount = user.album![indexPath.row].like.totalCount
-        cell.likeControl.isLiked = user.album![indexPath.row].like.isLiked
+       // cell.likeControl.totalCount = user.album![indexPath.row].like.totalCount
+       // cell.likeControl.isLiked = user.album![indexPath.row].like.isLiked
         //добавляем таргет
         cell.likeControl.addTarget(self, action: #selector(pushLike(_:)), for: .valueChanged)
         
@@ -118,7 +125,7 @@ class PhotoCollectionViewController: UICollectionViewController {
         
         let indexPaths = self.collectionView.indexPath(for: cell)
         
-        controller.datasource = user.album!
+       // controller.datasource = user.album!
         controller.index = indexPaths!.row
     }
     

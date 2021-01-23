@@ -51,7 +51,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for userID: Int) {
+    func getPhotos(for userID: Int, closure: @escaping ([UserPhoto]) -> () ) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -73,10 +73,9 @@ class NetworkServices {
             //создаем задание
             let task = session.dataTask(with: request) { (data, _, _) in
                 if let data = data {
-                    // if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
                     do {
                         let userPhoto = try JSONDecoder().decode(UserPhotoModel.self, from: data).response.items
-                        print(userPhoto)
+                        closure(userPhoto)
                     }
                     catch {
                         print(error)
