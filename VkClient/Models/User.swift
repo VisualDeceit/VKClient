@@ -5,7 +5,6 @@
 //  Created by Alexander Fomin on 22.01.2021.
 //
 
-import Foundation
 
 /*
  {
@@ -22,3 +21,36 @@ import Foundation
             }
  
  */
+
+
+import Foundation
+import SwiftyJSON
+
+//struct User1: Codable {
+//
+//    let id: Int
+//    let firstName: String
+//    let lastName: String
+//    let avatarUrl: String
+//
+//    enum CodingKeys: String, CodingKey {
+//        case firstName = "first_name"
+//        case lastName =  "last_name"
+//        case avatarUrl = "photo_50"
+//    }
+//}
+
+struct User0 {
+    
+    let id: Int
+    let firstName: String
+    let lastName: String
+    let avatarUrl: String
+    
+    init(json: JSON) {
+        self.id = json["id"].intValue
+        self.firstName = json["first_name"].stringValue
+        self.lastName = json["last_name"].stringValue
+        self.avatarUrl = json["photo_50"].stringValue
+    }
+}
