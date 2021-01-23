@@ -125,8 +125,8 @@ class NetworkServices {
         ]
             AF.request(host+path,
                        method: .get,
-                       parameters: parameters).resonseData { (json) in
-                           // print(json)
+                       parameters: parameters).responseJSON { (json) in
+                        
                        }
     }
 }
