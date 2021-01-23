@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 class NetworkServices {
     
@@ -33,9 +34,13 @@ class NetworkServices {
             //создаем задание
             let task = session.dataTask(with: url) { (data, _, _) in
                 if let data = data {
-                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
-                        print(json)
-                    }
+                    let json = JSON(data)
+                    let items = json["response"]["items"].arrayValue
+                    let friends = items.map { User0($0) }
+                    print(friends)
+//                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
+//                        print(json)
+//                    }
                 }
             }
             task.resume()
@@ -67,7 +72,7 @@ class NetworkServices {
             let task = session.dataTask(with: request) { (data, _, _) in
                 if let data = data {
                     if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
-                        print(json)
+                       // print(json)
                     }
                 }
             }
@@ -87,7 +92,7 @@ class NetworkServices {
             AF.request(host+path,
                        method: .get,
                        parameters: parameters).responseJSON { (json) in
-                            print(json)
+                          //  print(json)
                        }
     }
     
@@ -103,7 +108,7 @@ class NetworkServices {
             AF.request(host+path,
                        method: .get,
                        parameters: parameters).responseJSON { (json) in
-                            print(json)
+                           // print(json)
                        }
     }
 }

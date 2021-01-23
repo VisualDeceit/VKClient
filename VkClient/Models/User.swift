@@ -47,7 +47,7 @@ struct User0 {
     let lastName: String
     let avatarUrl: String
     
-    init(json: JSON) {
+    init(_ json: JSON) {
         self.id = json["id"].intValue
         self.firstName = json["first_name"].stringValue
         self.lastName = json["last_name"].stringValue
