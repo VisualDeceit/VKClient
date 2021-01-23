@@ -81,7 +81,7 @@ class NetworkServices {
     }
     
     //получение списка групп пользователя через  Alamofire
-    func getUserGroups() {
+    func getUserGroups(closure: @escaping ([Group]) -> ()) {
         let host = "https://api.vk.com"
         let path = "/method/groups.get"
         let parameters: Parameters = [
@@ -95,7 +95,8 @@ class NetworkServices {
                     switch response.result {
                     case .success(let data):
                         do {
-                            
+                            let groups = try JSONDecoder().decode(GroupListResponse.self, from: data).response.items
+                            closure(groups)
                         }
                         catch {
                             print(error)

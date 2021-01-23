@@ -11,9 +11,11 @@ class AllGroupsTableViewController: UITableViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var allGroups = [Group(name: "Пикабу", screen_name: "pikabu", logo: #imageLiteral(resourceName: "rZi7F9_vu-8") ),
-                     Group(name: "ТОПОР — Хранилище", screen_name: "toportg", logo: #imageLiteral(resourceName: "-LGOrMnatj4")),
-                     Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4")),]
+    //var allGroups = [Group(name: "Пикабу", screen_name: "pikabu", logo: #imageLiteral(resourceName: "rZi7F9_vu-8") ),
+    //                 Group(name: "ТОПОР — Хранилище", screen_name: "toportg", logo: #imageLiteral(resourceName: "-LGOrMnatj4")),
+    //                 Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4")),]
+    
+    var allGroups = [Group]()
     var filtredAllGroups = [Group]()
     
     override func viewDidLoad() {
@@ -48,7 +50,7 @@ class AllGroupsTableViewController: UITableViewController {
         
         cell.groupName.text = filtredAllGroups[indexPath.row].name
         //cell.groupImage.image = filtredAllGroups[indexPath.row].logo!
-        cell.groupImage.logoView.image =  filtredAllGroups[indexPath.row].logo ?? UIImage()
+       // cell.groupImage.logoView.image =  filtredAllGroups[indexPath.row].logo ?? UIImage()
         
         return cell
     }

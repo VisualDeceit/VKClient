@@ -26,19 +26,7 @@
 import Foundation
 import SwiftyJSON
 
-//struct User1: Codable {
-//
-//    let id: Int
-//    let firstName: String
-//    let lastName: String
-//    let avatarUrl: String
-//
-//    enum CodingKeys: String, CodingKey {
-//        case firstName = "first_name"
-//        case lastName =  "last_name"
-//        case avatarUrl = "photo_50"
-//    }
-//}
+//эта модель через SwiftyJSON
 
 struct User0 {
     

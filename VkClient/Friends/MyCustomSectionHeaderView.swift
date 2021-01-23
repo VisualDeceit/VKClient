@@ -33,7 +33,7 @@ class MyCustomSectionHeaderView: UITableViewHeaderFooterView {
     
     func configureContents() {
        
-        gradient.colors = [UIColor.lightGray.cgColor, UIColor.init(white: 1, alpha: 0).cgColor]
+        gradient.colors = [UIColor.secondarySystemBackground.cgColor, UIColor.init(white: 1, alpha: 0).cgColor]
         gradient.locations = [0.0, 1.0]
         gradient.startPoint = .zero
         gradient.endPoint = CGPoint(x: 1, y: 0)
@@ -44,8 +44,8 @@ class MyCustomSectionHeaderView: UITableViewHeaderFooterView {
         contentView.layer.addSublayer(gradient)
  
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.textColor = .white
-        title.font = .boldSystemFont(ofSize: 17)
+        title.textColor = .black
+        title.font = .boldSystemFont(ofSize: 14)
         contentView.addSubview(title)
     
         NSLayoutConstraint.activate([
