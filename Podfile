@@ -8,5 +8,6 @@ target 'VkClient' do
   # Pods for VkClient
 
 pod 'Alamofire', '~> 5.2'
+pod 'SwiftyJSON'
 
 end
