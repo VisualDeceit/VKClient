@@ -13,7 +13,7 @@ class NetworkServices {
     
     let vAPI = "5.126"
     
-    //получение списка друзей
+//получение списка друзей
     func getUserFriends(closure: @escaping ([User0]) -> Void) {
         //собираем url
         let urlComponent: URLComponents = {
@@ -34,13 +34,15 @@ class NetworkServices {
             //создаем задание
             let task = session.dataTask(with: url) { (data, _, _) in
                 if let data = data {
-                    let json = JSON(data)
-                    let items = json["response"]["items"].arrayValue
-                    let friends = items.map { User0($0) }
-                    closure(friends)
-//                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
-//                        print(json)
-//                    }
+                    do {
+                        let json = try JSON(data: data)
+                        let items = json["response"]["items"].arrayValue
+                        let friends = items.map { User0($0) }
+                        closure(friends)
+                    }
+                    catch {
+                        print(error)
+                    }
                 }
             }
             task.resume()
@@ -72,7 +74,6 @@ class NetworkServices {
             let task = session.dataTask(with: request) { (data, _, _) in
                 if let data = data {
                     if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
-                       // print(json)
                     }
                 }
             }
@@ -80,7 +81,7 @@ class NetworkServices {
         }
     }
     
-    //получение списка групп пользователя через  Alamofire
+//получение списка групп пользователя через  Alamofire
     func getUserGroups(closure: @escaping ([Group]) -> ()) {
         let host = "https://api.vk.com"
         let path = "/method/groups.get"
