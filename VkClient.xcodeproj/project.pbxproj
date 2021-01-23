@@ -41,6 +41,7 @@
 		15D31FE825AED4E8003D312E /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FE725AED4E8003D312E /* UILabel.swift */; };
 		15D31FEB25AED521003D312E /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FEA25AED521003D312E /* UIImage.swift */; };
 		15D91F0C25BA9B2C00169520 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F0B25BA9B2C00169520 /* User.swift */; };
+		15D91F4325BBDED900169520 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F4225BBDED900169520 /* UIImageView.swift */; };
 		15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,7 @@
 		15D31FE725AED4E8003D312E /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		15D31FEA25AED521003D312E /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		15D91F0B25BA9B2C00169520 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		15D91F4225BBDED900169520 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipePhotoGalleryViewController.swift; sourceTree = "<group>"; };
 		2EC931B1E2F207BD2EADB328 /* Pods-VkClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VkClient.debug.xcconfig"; path = "Target Support Files/Pods-VkClient/Pods-VkClient.debug.xcconfig"; sourceTree = "<group>"; };
 		42243C5033FC97721A60923E /* Pods_VkClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VkClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -250,6 +252,7 @@
 				15D31FE325AED4B0003D312E /* UIView.swift */,
 				15D31FE725AED4E8003D312E /* UILabel.swift */,
 				15D31FEA25AED521003D312E /* UIImage.swift */,
+				15D91F4225BBDED900169520 /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 				1542524D25A2EF240014F40A /* FeedController.swift in Sources */,
 				15B176092586793D00042450 /* LikeControl.swift in Sources */,
 				1542525725AB74AE0014F40A /* FeedCell.swift in Sources */,
+				15D91F4325BBDED900169520 /* UIImageView.swift in Sources */,
 				15D31FEB25AED521003D312E /* UIImage.swift in Sources */,
 				15B3E5BF258F777B001C025E /* NewsTableViewController.swift in Sources */,
 				1542525025A2F4AD0014F40A /* MainTabBarController.swift in Sources */,
