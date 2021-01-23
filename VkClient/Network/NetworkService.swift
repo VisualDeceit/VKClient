@@ -14,7 +14,7 @@ class NetworkServices {
     let vAPI = "5.126"
     
     //получение списка друзей
-    func getUserFriends() {
+    func getUserFriends(closure: @escaping ([User0]) -> Void) {
         //собираем url
         let urlComponent: URLComponents = {
             var url = URLComponents()
@@ -37,7 +37,7 @@ class NetworkServices {
                     let json = JSON(data)
                     let items = json["response"]["items"].arrayValue
                     let friends = items.map { User0($0) }
-                    print(friends)
+                    closure(friends)
 //                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
 //                        print(json)
 //                    }

@@ -55,6 +55,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         User(first_name: "Николай", last_name: "Перепел"),
     ]
     
+    var friends0 = [User0]()
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -108,6 +109,12 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
      
         searchBar.delegate = self
+        
+        let networkService = NetworkServices()
+        
+        networkService.getUserFriends { [weak self] users in
+            self?.friends0 = users
+        }
         
     }
     
