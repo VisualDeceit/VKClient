@@ -110,11 +110,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        //заголовки секций
-//        return friendsLastNameTitles[section]
-//    }
-//
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
        //отображение сеций справа
         return friendsLastNameTitles
@@ -123,14 +118,14 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "showUserPhotos",
               let controller = segue.destination as? PhotoCollectionViewController else { return }
-        
+       
         //передача данных в PhotoCollectionViewController
-//        let selectedUser = tableView.indexPathForSelectedRow
-//        let lastNameKey = friendsLastNameTitles[selectedUser!.section]
-//        if let userValues = filtredFriendsDictionary[lastNameKey] {
-//            controller.user = userValues[selectedUser!.row]
-//        }
-//        controller.delegate = self // подписали на делегат
+        let selectedUser = tableView.indexPathForSelectedRow
+        let lastNameKey = friendsLastNameTitles[selectedUser!.section]
+        if let userValues = filtredFriendsDictionary[lastNameKey] {
+            controller.userID = userValues[selectedUser!.row].id
+        }
+        controller.delegate = self // подписали на делегат
 
     }
     

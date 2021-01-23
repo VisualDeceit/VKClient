@@ -9,15 +9,15 @@ import Foundation
 
 //эта модель через Decodable
 
-struct GroupListResponse: Decodable {
-    let response: Response
+struct GroupModel: Decodable {
+    let response: GroupResponse
     
     enum CodingKeys: String, CodingKey {
         case response
     }
 }
 
-struct Response: Decodable {
+struct GroupResponse: Decodable {
     let items: [Group]
     
     enum CodingKeys: String, CodingKey {

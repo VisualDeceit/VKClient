@@ -13,13 +13,17 @@ class PhotoCollectionViewController: UICollectionViewController {
     
     var user = User(first_name: "", last_name: "", album: nil)
     
+    var userID: Int = 246569525
+    
     //объявляем слабую ссылку на делегат для передачи данных
     weak var delegate: FriendsTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "\(user.first_name) \(user.last_name)"
-       // downloadAlbum()
+       // self.navigationItem.title = "\(user.first_name) \(user.last_name)"
+        
+        let networkService = NetworkServices()
+        networkService.getPhotos(for: userID)
     }
     
     func downloadAlbum() {

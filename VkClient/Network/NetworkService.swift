@@ -51,7 +51,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for userID: String) {
+    func getPhotos(for userID: Int) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -59,7 +59,7 @@ class NetworkServices {
             url.path = "/method/photos.getAll"
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
-                              URLQueryItem(name: "owner_id", value: userID),
+                              URLQueryItem(name: "owner_id", value: String(userID)),
                               URLQueryItem(name: "extended", value: "1")]
             return url
         }()
@@ -96,7 +96,7 @@ class NetworkServices {
                     switch response.result {
                     case .success(let data):
                         do {
-                            let groups = try JSONDecoder().decode(GroupListResponse.self, from: data).response.items
+                            let groups = try JSONDecoder().decode(GroupModel.self, from: data).response.items
                             closure(groups)
                         }
                         catch {
