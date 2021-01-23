@@ -20,7 +20,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     
     var friendsLastNameTitles = [String]() //массив начальных букв sections
     var friendsDictionary = [String: [User0]]()  //словарь
-    var filtredFriendsDictionary = [String: [User0]]() //for display
+    var filtredFriendsDictionary = [String: [User0]]() //для отображения
     
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
@@ -66,16 +66,16 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         searchBar.delegate = self
         
         let networkService = NetworkServices()
-        networkService.getUserFriends {friends in
-            self.friends = friends
+        networkService.getUserFriends {[weak self] friends in
+            self?.friends = friends
             // если не сделать, то выдапает ошибка
             /// UITableView.reloadData() must be used from main thread only
             DispatchQueue.main.async {
                 // разбор исходных данных
-                (self.friendsLastNameTitles, self.friendsDictionary) = self.splitOnSections(for: friends)
+                (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: friends)
                 //copy dictionary for display
-                self.filtredFriendsDictionary = self.friendsDictionary
-                self.tableView.reloadData()
+                self?.filtredFriendsDictionary = self!.friendsDictionary
+                self?.tableView.reloadData()
             }
         }
         
