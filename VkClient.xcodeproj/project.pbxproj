@@ -42,6 +42,7 @@
 		15D31FEB25AED521003D312E /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FEA25AED521003D312E /* UIImage.swift */; };
 		15D91F0C25BA9B2C00169520 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F0B25BA9B2C00169520 /* User.swift */; };
 		15D91F4325BBDED900169520 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F4225BBDED900169520 /* UIImageView.swift */; };
+		15D91F4B25BC162300169520 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F4A25BC162300169520 /* Group.swift */; };
 		15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		15D31FEA25AED521003D312E /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		15D91F0B25BA9B2C00169520 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		15D91F4225BBDED900169520 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		15D91F4A25BC162300169520 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipePhotoGalleryViewController.swift; sourceTree = "<group>"; };
 		2EC931B1E2F207BD2EADB328 /* Pods-VkClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VkClient.debug.xcconfig"; path = "Target Support Files/Pods-VkClient/Pods-VkClient.debug.xcconfig"; sourceTree = "<group>"; };
 		42243C5033FC97721A60923E /* Pods_VkClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VkClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +107,7 @@
 			children = (
 				1504D9332583AE9500B4EBEE /* Data.swift */,
 				15D91F0B25BA9B2C00169520 /* User.swift */,
+				15D91F4A25BC162300169520 /* Group.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15D91F4B25BC162300169520 /* Group.swift in Sources */,
 				1535229025AF0A6F006498A6 /* Session.swift in Sources */,
 				1533D93F2593A6BB008A44EB /* LoadingIndicator.swift in Sources */,
 				153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */,

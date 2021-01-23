@@ -89,11 +89,21 @@ class NetworkServices {
             "v": vAPI,
             "extended": "1"
         ]
-            AF.request(host+path,
-                       method: .get,
-                       parameters: parameters).responseJSON { (json) in
-                          //  print(json)
-                       }
+        AF.request(host+path,
+                   method: .get,
+                   parameters: parameters).responseData { (response) in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            
+                        }
+                        catch {
+                            print(error)
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                   }
     }
     
     //поиск группы

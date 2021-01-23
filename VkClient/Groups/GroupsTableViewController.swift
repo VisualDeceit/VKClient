@@ -20,6 +20,9 @@ class GroupsTableViewController: UITableViewController {
         searchBar.delegate = self
         
         filtredUserGroups = userGroups
+        
+        let networService = NetworkServices()
+        networService.getUserGroups()
     }
 
     // MARK: - Table view data source
