@@ -12,13 +12,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var likeControl: LikeControl!
     
-    var imageURL: URL? {
-    didSet {
-        photo?.image = nil
-        updateUI()
-        }
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         photo.image = nil
@@ -41,20 +34,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         //добавляем таргет
       //  self.likeControl.addTarget(self, action: #selector(pushLike(_:)), for: .valueChanged)
     }
-    
-    
-    private func updateUI(){
-        if let url = imageURL {
-            DispatchQueue.global(qos: .userInitiated).async {
-                let data = try? Data(contentsOf: url)
-                DispatchQueue.main.async {
-                    if let imageData = data {
-                        self.photo.image = UIImage(data: imageData)
-                    }
-                }
-            }
-        }
-        
-    }
+
     
 }

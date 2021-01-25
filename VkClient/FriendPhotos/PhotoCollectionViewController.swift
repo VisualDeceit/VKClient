@@ -32,23 +32,6 @@ class PhotoCollectionViewController: UICollectionViewController {
         }
     }
     
-//    func downloadAlbum() {
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            for index in 0..<self.user.album!.count {
-//                if let url = URL(string: self.user.album![index].imageURL) {
-//                    let data = try? Data(contentsOf: url)
-//                    if let imageData = data {
-//                        self.user.album![index].imageData = UIImage(data: imageData)!
-//                    }
-//                }
-//            }
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
-//        }
-//
-//    }
-    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {

@@ -54,6 +54,18 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         setupAnimations()
     }
     
+    func getImage(for index: Int, to imageView: UIImageView){
+        //пропорциональная копия с максимальной стороной 320px
+        if let photo = datasource[index].sizes.first(where: {$0.type == "q"}) {
+         imageView.download(from: photo.url)
+        } else {
+            //пропорциональная копия изображения с максимальной стороной 604px
+            if let photo =  datasource[index].sizes.first(where: {$0.type == "x"}) {
+                imageView.download(from: photo.url)
+            }
+        }
+    }
+    
 
     private func setupGallery() {
         
@@ -82,27 +94,22 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         
         // картинки по умолчанию
        //centerImageView.image = datasource[index].imageData
-        centerImageView.download(from: datasource[index].sizes.first { $0.width >= 320
-        }!.url)
+        getImage(for: index, to: centerImageView)
         
         if index + 1 < datasource.count {
            // rightImageView.image = datasource[index + 1].imageData
-            rightImageView.download(from: datasource[index+1].sizes.first { $0.width >= 320
-            }!.url)
+        getImage(for: index+1, to: rightImageView)
         } else {
             //rightImageView.image = datasource[0].imageData
-            rightImageView.download(from: datasource[0].sizes.first { $0.width >= 320
-            }!.url)
+            getImage(for: 0, to: rightImageView)
         }
         
         if index - 1 >= 0 {
             //leftImageView.image = datasource[index - 1].imageData
-            leftImageView.download(from: datasource[index-1].sizes.first { $0.width >= 320
-            }!.url)
+            getImage(for: index - 1, to: leftImageView)
         } else {
             //leftImageView.image = datasource[datasource.count - 1].imageData
-            leftImageView.download(from: datasource[datasource.count - 1].sizes.first { $0.width >= 320
-            }!.url)
+            getImage(for: datasource.count - 1, to: leftImageView)
         }
         
         
@@ -161,7 +168,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         }
     }
 
-    //Перемещение ImageView поссле анимации
+    //Перемещение ImageView после анимации
     private func reconfigureImageViews(to dir: Direction) {
         //пролистали влево
         if dir == .Left {
@@ -196,22 +203,18 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         
         if index == datasource.count-1 {
         //rightImageView.image = datasource[0].imageData
-            rightImageView.download(from: datasource[0].sizes.first { $0.width >= 320
-            }!.url)
+            getImage(for: 0, to: rightImageView)
         } else {
             //rightImageView.image = datasource[index + 1].imageData
-            rightImageView.download(from: datasource[index+1].sizes.first { $0.width >= 320
-            }!.url)
+            getImage(for: index + 1, to: rightImageView)
         }
        
         if index == 0 {
             //leftImageView.image = datasource[datasource.count-1].imageData
-            leftImageView.download(from: datasource[datasource.count-1].sizes.first { $0.width >= 320
-            }!.url)
+            getImage(for: datasource.count-1, to: leftImageView)
         } else {
             //leftImageView.image = datasource[index - 1].imageData
-            leftImageView.download(from: datasource[index - 1].sizes.first { $0.width >= 320
-            }!.url)
+            getImage(for: index - 1, to: leftImageView)
         }
         
     }
