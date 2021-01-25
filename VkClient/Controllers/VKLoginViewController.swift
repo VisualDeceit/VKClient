@@ -72,13 +72,8 @@ extension VKLoginViewController: WKNavigationDelegate {
         Session.shared.token = params["access_token"]
         Session.shared.userId = params["user_id"]
         
-        let networkService = NetworkServices()
-        networkService.getUserFriends()
-        networkService.getPhotos(for: "246569525")
-        networkService.getUserGroups()
-        networkService.searchGroups(by: "подслушано коломна")
-        
         decisionHandler(.cancel)
+        
         performSegue(withIdentifier: "ToMainTabBar", sender: nil)
     }
 }

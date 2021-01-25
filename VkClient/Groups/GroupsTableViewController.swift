@@ -9,7 +9,7 @@ import UIKit
 
 class GroupsTableViewController: UITableViewController {
 
-    var userGroups = [Group(name: "Подслушано Коломна", screen_name: "kolomna_tut", logo: #imageLiteral(resourceName: "i9FnKM0Gxt4"))]
+    var groups = [Group]()
     var filtredUserGroups = [Group]()
         
     @IBOutlet weak var searchBar: UISearchBar!
@@ -19,7 +19,12 @@ class GroupsTableViewController: UITableViewController {
         
         searchBar.delegate = self
         
-        filtredUserGroups = userGroups
+        let networService = NetworkServices()
+        networService.getUserGroups { [weak self] groups in
+            self?.groups = groups
+            self?.filtredUserGroups = groups
+            self?.tableView.reloadData()
+        }
     }
 
     // MARK: - Table view data source
@@ -38,9 +43,7 @@ class GroupsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as? GroupTableViewCell
         else { return UITableViewCell() }
         
-        cell.groupName.text = filtredUserGroups[indexPath.row].name
-        cell.groupLogo.logoView.image =  filtredUserGroups[indexPath.row].logo ?? UIImage()
-        
+        cell.populate(group: filtredUserGroups[indexPath.row])
         return cell
     }
 
@@ -49,8 +52,8 @@ class GroupsTableViewController: UITableViewController {
         if editingStyle == .delete {
             // Delete the row from the data source
             let removed = filtredUserGroups.remove(at: indexPath.row)
-            if let index = userGroups.firstIndex(of: removed) {
-                userGroups.remove(at: index)
+            if let index = groups.firstIndex(of: removed) {
+                groups.remove(at: index)
             }
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -69,14 +72,14 @@ class GroupsTableViewController: UITableViewController {
             guard let allGroupsController = segue.source as? AllGroupsTableViewController else
             { return }
             
-            if let indexPath = allGroupsController.tableView.indexPathForSelectedRow {
-                let group = allGroupsController.filtredAllGroups[indexPath.row]
-                if !userGroups.contains(group) {
-                    filtredUserGroups.append(group)
-                    userGroups.append(group)
-                    tableView.reloadData()
-                }
-            }
+//            if let indexPath = allGroupsController.tableView.indexPathForSelectedRow {
+//                let group = allGroupsController.filtredAllGroups[indexPath.row]
+//                if !userGroups.contains(group) {
+//                    filtredUserGroups.append(group)
+//                    userGroups.append(group)
+//                    tableView.reloadData()
+//                }
+//            }
         }
         
     }
@@ -86,11 +89,11 @@ extension GroupsTableViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard searchText != "" else {
-            filtredUserGroups = userGroups
+            filtredUserGroups = groups
             tableView.reloadData()
             return
         }
-        filtredUserGroups = userGroups.filter{ $0.name.lowercased().contains(searchText.lowercased())}
+        filtredUserGroups = groups.filter{ $0.name.lowercased().contains(searchText.lowercased())}
         
         tableView.reloadData()
     }

@@ -12,15 +12,15 @@ class GroupTableViewCell: UITableViewCell {
     @IBOutlet weak var groupLogo: CellLogo!
     @IBOutlet var groupName: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        groupLogo.logoView.image = nil
+        groupName.text = nil
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    func populate(group: Group) {
+        self.groupLogo.logoView.download(from: group.avatarUrl)
+        self.groupName.text = group.name
     }
     
   

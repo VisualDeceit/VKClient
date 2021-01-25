@@ -7,13 +7,14 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 class NetworkServices {
     
     let vAPI = "5.126"
     
-    //получение списка друзей
-    func getUserFriends() {
+//получение списка друзей
+    func getUserFriends(closure: @escaping ([User0]) -> Void) {
         //собираем url
         let urlComponent: URLComponents = {
             var url = URLComponents()
@@ -33,8 +34,14 @@ class NetworkServices {
             //создаем задание
             let task = session.dataTask(with: url) { (data, _, _) in
                 if let data = data {
-                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
-                        print(json)
+                    do {
+                        let json = try JSON(data: data)
+                        let items = json["response"]["items"].arrayValue
+                        let friends = items.map { User0($0) }
+                        closure(friends)
+                    }
+                    catch {
+                        print(error)
                     }
                 }
             }
@@ -44,7 +51,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for userID: String) {
+    func getPhotos(for userID: Int, closure: @escaping ([UserPhoto]) -> () ) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -52,7 +59,7 @@ class NetworkServices {
             url.path = "/method/photos.getAll"
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
-                              URLQueryItem(name: "owner_id", value: userID),
+                              URLQueryItem(name: "owner_id", value: String(userID)),
                               URLQueryItem(name: "extended", value: "1")]
             return url
         }()
@@ -63,11 +70,15 @@ class NetworkServices {
         if let url  = urlComponent.url {
             //создаем запрос
             let request = URLRequest(url: url)
-           //создаем задание
+            //создаем задание
             let task = session.dataTask(with: request) { (data, _, _) in
                 if let data = data {
-                    if let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) {
-                        print(json)
+                    do {
+                        let userPhoto = try JSONDecoder().decode(UserPhotoModel.self, from: data).response.items
+                        closure(userPhoto)
+                    }
+                    catch {
+                        print(error)
                     }
                 }
             }
@@ -75,8 +86,8 @@ class NetworkServices {
         }
     }
     
-    //получение списка групп пользователя через  Alamofire
-    func getUserGroups() {
+//получение списка групп пользователя через  Alamofire
+    func getUserGroups(closure: @escaping ([Group]) -> ()) {
         let host = "https://api.vk.com"
         let path = "/method/groups.get"
         let parameters: Parameters = [
@@ -84,11 +95,22 @@ class NetworkServices {
             "v": vAPI,
             "extended": "1"
         ]
-            AF.request(host+path,
-                       method: .get,
-                       parameters: parameters).responseJSON { (json) in
-                            print(json)
-                       }
+        AF.request(host+path,
+                   method: .get,
+                   parameters: parameters).responseData { (response) in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let groups = try JSONDecoder().decode(GroupModel.self, from: data).response.items
+                            closure(groups)
+                        }
+                        catch {
+                            print(error)
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                   }
     }
     
     //поиск группы
@@ -103,7 +125,7 @@ class NetworkServices {
             AF.request(host+path,
                        method: .get,
                        parameters: parameters).responseJSON { (json) in
-                            print(json)
+                        
                        }
     }
 }

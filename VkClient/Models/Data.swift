@@ -31,22 +31,6 @@ struct User {
     }
 }
 
-struct Group {
-    let id: Int  = 0
-    let name: String
-    let screen_name: String
-    //let is_closed: Int = 0
-    //let type: String = "page"
-    //let is_admin: Int = 0
-    //let is_member: Int = 1
-    //let is_advertiser: Int = 0
-    //let photo_50: String
-    let logo: UIImage?
-}
-
-extension Group: Equatable {}
-
-
 struct Photo {
     var imageURL:  String = "https://picsum.photos/300"
     var imageData: UIImage?
