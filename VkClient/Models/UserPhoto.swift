@@ -20,7 +20,7 @@ struct UserPhoto: Decodable {
     let likesCount: Int
     let isLiked: Int
     let repostsCount: Int
-    let sizes: [PhotoSize]
+    var sizes: [PhotoSize]
     
     enum RepostsCodingKeys: String, CodingKey{
         case repostsCount = "count"
@@ -66,6 +66,7 @@ struct UserPhoto: Decodable {
 struct PhotoSize: Decodable {
     let height: Int
     let width: Int
+    let type: String
     let url: String
 }
 

@@ -27,7 +27,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     var rightFramePosition: CGRect!
     var leftFramePosition: CGRect!
     
-    var datasource =  [Photo]()
+    var datasource = [UserPhoto]() //[Photo]()
     var index: Int = 0
     
     enum Direction {
@@ -81,18 +81,28 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         leftImageView = imageView3
         
         // картинки по умолчанию
-        centerImageView.image = datasource[index].imageData
+       //centerImageView.image = datasource[index].imageData
+        centerImageView.download(from: datasource[index].sizes.first { $0.width >= 320
+        }!.url)
         
         if index + 1 < datasource.count {
-            rightImageView.image = datasource[index + 1].imageData
+           // rightImageView.image = datasource[index + 1].imageData
+            rightImageView.download(from: datasource[index+1].sizes.first { $0.width >= 320
+            }!.url)
         } else {
-            rightImageView.image = datasource[0].imageData
+            //rightImageView.image = datasource[0].imageData
+            rightImageView.download(from: datasource[0].sizes.first { $0.width >= 320
+            }!.url)
         }
         
         if index - 1 >= 0 {
-            leftImageView.image = datasource[index - 1].imageData
+            //leftImageView.image = datasource[index - 1].imageData
+            leftImageView.download(from: datasource[index-1].sizes.first { $0.width >= 320
+            }!.url)
         } else {
-            leftImageView.image = datasource[datasource.count - 1].imageData
+            //leftImageView.image = datasource[datasource.count - 1].imageData
+            leftImageView.download(from: datasource[datasource.count - 1].sizes.first { $0.width >= 320
+            }!.url)
         }
         
         
@@ -185,15 +195,23 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         }
         
         if index == datasource.count-1 {
-        rightImageView.image = datasource[0].imageData
+        //rightImageView.image = datasource[0].imageData
+            rightImageView.download(from: datasource[0].sizes.first { $0.width >= 320
+            }!.url)
         } else {
-            rightImageView.image = datasource[index + 1].imageData
+            //rightImageView.image = datasource[index + 1].imageData
+            rightImageView.download(from: datasource[index+1].sizes.first { $0.width >= 320
+            }!.url)
         }
        
         if index == 0 {
-        leftImageView.image = datasource[datasource.count-1].imageData
+            //leftImageView.image = datasource[datasource.count-1].imageData
+            leftImageView.download(from: datasource[datasource.count-1].sizes.first { $0.width >= 320
+            }!.url)
         } else {
-            leftImageView.image = datasource[index - 1].imageData
+            //leftImageView.image = datasource[index - 1].imageData
+            leftImageView.download(from: datasource[index - 1].sizes.first { $0.width >= 320
+            }!.url)
         }
         
     }
