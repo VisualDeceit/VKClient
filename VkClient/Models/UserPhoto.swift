@@ -21,7 +21,7 @@ class UserPhoto: Object, Decodable {
     @objc dynamic var likesCount: Int = 0
     @objc dynamic var isLiked: Int = 0
     @objc dynamic var repostsCount: Int = 0
-    var sizes = List<PhotoSize>()
+    let sizes = List<PhotoSize>()
     
     enum RepostsCodingKeys: String, CodingKey{
         case repostsCount = "count"
@@ -45,8 +45,8 @@ class UserPhoto: Object, Decodable {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let sizesArray = try container.decode([PhotoSize].self, forKey: .sizes)
-        sizesArray.forEach{ self.sizes.append($0) }
-        
+        //sizesArray.forEach{ self.sizes.append($0) }
+        sizes.append(objectsIn: sizesArray)
         let likeContainer = try container.nestedContainer(keyedBy: LikesCodingKeys.self, forKey: .likes)
         self.isLiked = try likeContainer.decode(Int.self, forKey: .isLiked)
         self.likesCount = try likeContainer.decode(Int.self, forKey: .likesCount)
