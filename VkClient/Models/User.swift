@@ -29,14 +29,15 @@ import RealmSwift
 
 //эта модель через SwiftyJSON
 
-class User0: Object {
+class User: Object {
     
-    @objc dynamic var id: Int
-    @objc dynamic var firstName: String
-    @objc dynamic var lastName: String
-    @objc dynamic var avatarUrl: String
+    @objc dynamic var id: Int = 0
+    @objc dynamic var firstName: String = ""
+    @objc dynamic var lastName: String = ""
+    @objc dynamic var avatarUrl: String = ""
     
-    init(_ json: JSON) {
+    convenience required init(_ json: JSON) {
+        self.init()
         self.id = json["id"].intValue
         self.firstName = json["first_name"].stringValue
         self.lastName = json["last_name"].stringValue

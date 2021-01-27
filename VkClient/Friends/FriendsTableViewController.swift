@@ -14,13 +14,13 @@ protocol FriendsTableViewControllerDelegate: class {
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
-    var friends = [User0]()
+    var friends = [User]()
     
     @IBOutlet weak var searchBar: UISearchBar!
     
     var friendsLastNameTitles = [String]() //массив начальных букв sections
-    var friendsDictionary = [String: [User0]]()  //словарь
-    var filtredFriendsDictionary = [String: [User0]]() //для отображения
+    var friendsDictionary = [String: [User]]()  //словарь
+    var filtredFriendsDictionary = [String: [User]]() //для отображения
     
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
@@ -34,10 +34,10 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     //
-    private func splitOnSections(for inputArray: [User0]) -> ([String], [String: [User0]]) {
+    private func splitOnSections(for inputArray: [User]) -> ([String], [String: [User]]) {
         
         var sectionsTitle = [String]()
-        var sectionData = [String: [User0]]()
+        var sectionData = [String: [User]]()
        
         //разбираем исходный массив в словарь для индексации таблицы
         for user in inputArray {

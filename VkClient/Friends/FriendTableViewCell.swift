@@ -19,7 +19,7 @@ class FriendTableViewCell: UITableViewCell {
         friendName.text = nil
     }
     
-    func populate(user: User0) {
+    func populate(user: User) {
         friendName.text = "\(user.firstName) \(user.lastName)"
         friendAvatar.logoView.download(from: user.avatarUrl)
     }
