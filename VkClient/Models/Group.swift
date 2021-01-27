@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 //эта модель через Decodable
 
@@ -31,10 +32,10 @@ struct GroupResponse: Decodable {
      */
 }
 
-struct Group: Decodable, Equatable {
-    let id: Int
-    let name: String
-    let avatarUrl: String
+class Group: Object, Decodable {
+    @objc dynamic var id: Int = 0
+    @objc dynamic var name: String = ""
+    @objc dynamic var avatarUrl: String = ""
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -42,13 +43,15 @@ struct Group: Decodable, Equatable {
         case avatarUrl = "photo_50"
     }
     
-    init(from decoder: Decoder) throws {
+    convenience required init(from decoder: Decoder) throws {
+        self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         self.avatarUrl = try container.decode(String.self, forKey: .avatarUrl)
         
     }
+
 }
 
 
