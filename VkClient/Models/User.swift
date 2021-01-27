@@ -25,15 +25,16 @@
 
 import Foundation
 import SwiftyJSON
+import RealmSwift
 
 //эта модель через SwiftyJSON
 
-struct User0 {
+class User0: Object {
     
-    let id: Int
-    let firstName: String
-    let lastName: String
-    let avatarUrl: String
+    @objc dynamic var id: Int
+    @objc dynamic var firstName: String
+    @objc dynamic var lastName: String
+    @objc dynamic var avatarUrl: String
     
     init(_ json: JSON) {
         self.id = json["id"].intValue
