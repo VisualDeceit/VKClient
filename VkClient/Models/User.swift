@@ -36,7 +36,7 @@ class User: Object {
     @objc dynamic var lastName: String = ""
     @objc dynamic var avatarUrl: String = ""
     
-    convenience required init(_ json: JSON) {
+    convenience init(_ json: JSON) {
         self.init()
         self.id = json["id"].intValue
         self.firstName = json["first_name"].stringValue
