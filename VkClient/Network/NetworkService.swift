@@ -74,7 +74,7 @@ class NetworkServices {
             let task = session.dataTask(with: request) { (data, _, _) in
                 if let data = data {
                     do {
-                        let userPhoto = try JSONDecoder().decode(UserPhotoModel.self, from: data).response.items
+                        let userPhoto = try JSONDecoder().decode(UserPhotoResponse.self, from: data).items
                         closure(userPhoto)
                     }
                     catch {

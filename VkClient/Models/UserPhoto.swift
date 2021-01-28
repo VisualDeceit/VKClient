@@ -9,12 +9,19 @@
 import Foundation
 import RealmSwift
 
-struct UserPhotoModel: Decodable {
-    let response: UserPhotoResponse
-}
-
 struct UserPhotoResponse: Decodable {
     let items: [UserPhoto]
+    
+    enum ResponseCodingKeys: CodingKey {
+        case response
+        case items
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: ResponseCodingKeys.self)
+        let response = try container.nestedContainer(keyedBy: ResponseCodingKeys.self, forKey: .response)
+        self.items = try response.decode([UserPhoto].self, forKey: .items)
+    }
 }
 
 class UserPhoto: Object, Decodable {

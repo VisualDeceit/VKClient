@@ -23,12 +23,6 @@ struct GroupResponse: Decodable {
         let response = try container.nestedContainer(keyedBy: ResponseCodingKeys.self, forKey: .response)
         self.items = try response.decode([Group].self, forKey: .items)
     }
-    
-    /*
-     сработает автоматическая функция init
-     если написать декодирование самостоятельно, то:
-     self.items = try container.decode([Group0].self, forKey: .items)
-     */
 }
 
 class Group: Object, Decodable {
