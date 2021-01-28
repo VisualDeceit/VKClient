@@ -10,19 +10,18 @@ import RealmSwift
 
 //эта модель через Decodable
 
-struct GroupModel: Decodable {
-    let response: GroupResponse
-    
-    enum CodingKeys: String, CodingKey {
-        case response
-    }
-}
-
 struct GroupResponse: Decodable {
     let items: [Group]
     
-    enum CodingKeys: String, CodingKey {
+    enum ResponseCodingKeys: CodingKey {
+        case response
         case items
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: ResponseCodingKeys.self)
+        let response = try container.nestedContainer(keyedBy: ResponseCodingKeys.self, forKey: .response)
+        self.items = try response.decode([Group].self, forKey: .items)
     }
     
     /*

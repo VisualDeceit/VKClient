@@ -101,7 +101,7 @@ class NetworkServices {
                     switch response.result {
                     case .success(let data):
                         do {
-                            let groups = try JSONDecoder().decode(GroupModel.self, from: data).response.items
+                            let groups = try JSONDecoder().decode(GroupResponse.self, from: data).items
                             closure(groups)
                         }
                         catch {
