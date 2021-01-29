@@ -7,29 +7,29 @@
 
 import UIKit
 
-struct User {
-    let id: Int = 0
-    let first_name: String
-    let last_name: String
-    var album: [Photo]?
-
-    init(first_name: String, last_name: String) {
-        self.first_name = first_name
-        self.last_name = last_name
-        self.album = []
-        
-        for _ in 1..<Int.random(in: 10...20) {
-            self.album?.append(Photo(like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))))
-        }
-
-    }
-
-    init(first_name: String, last_name: String, album: [Photo]?) {
-        self.first_name = first_name
-        self.last_name = last_name
-        self.album = album
-    }
-}
+//struct User {
+//    let id: Int = 0
+//    let first_name: String
+//    let last_name: String
+//    var album: [Photo]?
+//
+//    init(first_name: String, last_name: String) {
+//        self.first_name = first_name
+//        self.last_name = last_name
+//        self.album = []
+//        
+//        for _ in 1..<Int.random(in: 10...20) {
+//            self.album?.append(Photo(like: Like(isLiked: false, totalCount: Int.random(in: 1...1000))))
+//        }
+//
+//    }
+//
+//    init(first_name: String, last_name: String, album: [Photo]?) {
+//        self.first_name = first_name
+//        self.last_name = last_name
+//        self.album = album
+//    }
+//}
 
 struct Photo {
     var imageURL:  String = "https://picsum.photos/300"

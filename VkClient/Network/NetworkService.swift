@@ -14,7 +14,7 @@ class NetworkServices {
     let vAPI = "5.126"
     
 //получение списка друзей
-    func getUserFriends(closure: @escaping ([User0]) -> Void) {
+    func getUserFriends(closure: @escaping ([User]) -> Void) {
         //собираем url
         let urlComponent: URLComponents = {
             var url = URLComponents()
@@ -37,7 +37,7 @@ class NetworkServices {
                     do {
                         let json = try JSON(data: data)
                         let items = json["response"]["items"].arrayValue
-                        let friends = items.map { User0($0) }
+                        let friends = items.map { User($0) }
                         closure(friends)
                     }
                     catch {
@@ -74,7 +74,7 @@ class NetworkServices {
             let task = session.dataTask(with: request) { (data, _, _) in
                 if let data = data {
                     do {
-                        let userPhoto = try JSONDecoder().decode(UserPhotoModel.self, from: data).response.items
+                        let userPhoto = try JSONDecoder().decode(UserPhotoResponse.self, from: data).items
                         closure(userPhoto)
                     }
                     catch {
@@ -101,7 +101,7 @@ class NetworkServices {
                     switch response.result {
                     case .success(let data):
                         do {
-                            let groups = try JSONDecoder().decode(GroupModel.self, from: data).response.items
+                            let groups = try JSONDecoder().decode(GroupResponse.self, from: data).items
                             closure(groups)
                         }
                         catch {
