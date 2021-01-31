@@ -14,7 +14,7 @@ class NetworkServices {
     let vAPI = "5.126"
     
 //получение списка друзей
-    func getUserFriends(closure: @escaping ([User]) -> Void) {
+    func getUserFriends(closure: @escaping () -> Void) {
         //собираем url
         let urlComponent: URLComponents = {
             var url = URLComponents()
@@ -38,7 +38,11 @@ class NetworkServices {
                         let json = try JSON(data: data)
                         let items = json["response"]["items"].arrayValue
                         let friends = items.map { User($0) }
-                        closure(friends)
+                        //сохранение данных в Realm
+                        DispatchQueue.main.async {
+                            try? RealmService.save(items: friends)
+                        }
+                        closure()
                     }
                     catch {
                         print(error)
@@ -87,7 +91,7 @@ class NetworkServices {
     }
     
 //получение списка групп пользователя через  Alamofire
-    func getUserGroups(closure: @escaping ([Group]) -> ()) {
+    func getUserGroups(closure: @escaping () -> ()) {
         let host = "https://api.vk.com"
         let path = "/method/groups.get"
         let parameters: Parameters = [
@@ -102,7 +106,9 @@ class NetworkServices {
                     case .success(let data):
                         do {
                             let groups = try JSONDecoder().decode(GroupResponse.self, from: data).items
-                            closure(groups)
+                            //сохранение данных в Realm
+                            try? RealmService.save(items: groups)
+                            closure()
                         }
                         catch {
                             print(error)

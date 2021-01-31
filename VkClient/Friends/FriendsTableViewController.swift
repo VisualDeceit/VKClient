@@ -76,16 +76,14 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         searchBar.delegate = self
         
         let networkService = NetworkServices()
-        networkService.getUserFriends {[weak self] friends in
+        networkService.getUserFriends {[weak self] in
             // если не сделать, то выдапает ошибка
             /// UITableView.reloadData() must be used from main thread only
             DispatchQueue.main.async {
-                //сохранение данных в Realm
-                try? RealmService.save(items: friends)
                 //загрузка данных из Realm
                 self?.friends = Array(try! RealmService.load(typeOf: User.self))
                 // разбор исходных данных
-                (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: friends)
+                (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: self?.friends ?? [User]())
                 //copy dictionary for display
                 self?.filtredFriendsDictionary = self!.friendsDictionary
                 self?.tableView.reloadData()

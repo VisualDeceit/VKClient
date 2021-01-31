@@ -20,12 +20,10 @@ class GroupsTableViewController: UITableViewController {
         searchBar.delegate = self
         
         let networService = NetworkServices()
-        networService.getUserGroups { [weak self] groups in
-            //сохранение данных в Realm
-            try? RealmService.save(items: groups)
+        networService.getUserGroups { [weak self] in
             //загрузка данных из Realm
             self?.groups = Array(try! RealmService.load(typeOf: Group.self))
-            self?.filtredUserGroups = groups
+            self?.filtredUserGroups = self?.groups ?? [Group]()
             self?.tableView.reloadData()
         }
     }
