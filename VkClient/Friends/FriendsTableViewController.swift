@@ -35,7 +35,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
         //получаем данные из делегата
-        let lastNameKey = friendsLastNameTitles[tableView.indexPathForSelectedRow!.section]
+//        let lastNameKey = friendsLastNameTitles[tableView.indexPathForSelectedRow!.section]
 //        if var userValues = friendsDictionary[lastNameKey] {
 //            userValues[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
 //            friendsDictionary[lastNameKey] = userValues
@@ -98,8 +98,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
 
     @objc
-    func refresh(sender:AnyObject)
-    {
+    func refresh(sender:AnyObject) {
         getData()
         self.refreshControl?.endRefreshing()
     }

@@ -33,8 +33,7 @@ class GroupsTableViewController: UITableViewController {
     }
     
     @objc
-    func refresh(sender:AnyObject)
-    {
+    func refresh(sender:AnyObject) {
         getData()
         self.refreshControl?.endRefreshing()
     }

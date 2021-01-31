@@ -17,8 +17,6 @@ class User: Object {
     @objc dynamic var firstName: String = ""
     @objc dynamic var lastName: String = ""
     @objc dynamic var avatarUrl: String = ""
-    //let photos = List<UserPhoto>()
-
     
     convenience init(_ json: JSON) {
         self.init()
