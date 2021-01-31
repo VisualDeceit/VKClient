@@ -148,15 +148,6 @@
 			path = FriendPhotos;
 			sourceTree = "<group>";
 		};
-		1535228E25AF0A5C006498A6 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				1535228F25AF0A6F006498A6 /* Session.swift */,
-				15A901C425B429A6006C5A25 /* NetworkService.swift */,
-			);
-			path = Network;
-			sourceTree = "<group>";
-		};
 		1535229225AF0CF5006498A6 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -219,7 +210,6 @@
 				1504D92B2583AD3E00B4EBEE /* Groups */,
 				1504D9292583AD2200B4EBEE /* Models */,
 				1546282B259D9BB4008F9411 /* NavigationController */,
-				1535228E25AF0A5C006498A6 /* Network */,
 				15B3E5B5258F6696001C025E /* News */,
 				15B176022586222500042450 /* Storyboards */,
 			);
@@ -238,6 +228,8 @@
 		1572BDB725C6835E00B320F9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				15A901C425B429A6006C5A25 /* NetworkService.swift */,
+				1535228F25AF0A6F006498A6 /* Session.swift */,
 				1572BDB825C6837D00B320F9 /* RealmService.swift */,
 			);
 			path = Services;

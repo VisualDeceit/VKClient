@@ -72,9 +72,15 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
         //регистрируем кастомный хедер
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
+        // обновление
+        self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         searchBar.delegate = self
+        getData()
         
+    }
+    
+    func getData() {
         let networkService = NetworkServices()
         networkService.getUserFriends {[weak self] in
             // если не сделать, то выдапает ошибка
@@ -89,7 +95,13 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
                 self?.tableView.reloadData()
             }
         }
-        
+    }
+
+    @objc
+    func refresh(sender:AnyObject)
+    {
+        getData()
+        self.refreshControl?.endRefreshing()
     }
     
     // MARK: - Table view data source
