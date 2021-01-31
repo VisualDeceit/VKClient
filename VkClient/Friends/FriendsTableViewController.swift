@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 //протокол для делегата
 protocol FriendsTableViewControllerDelegate: class {
@@ -14,7 +15,16 @@ protocol FriendsTableViewControllerDelegate: class {
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
-    var friends = [User]()
+    private var friends = [User]()
+//    private lazy var friends = try? RealmService.load(typeOf: User.self){
+//        didSet {
+//            // разбор исходных данных
+//            (friendsLastNameTitles, friendsDictionary) = splitOnSections(for: friends!)
+//            //copy dictionary for display
+//            filtredFriendsDictionary = friendsDictionary
+//            tableView.reloadData()
+//        }
+//    }
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -62,17 +72,18 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
         //регистрируем кастомный хедер
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-     
+        
         searchBar.delegate = self
         
         let networkService = NetworkServices()
         networkService.getUserFriends {[weak self] friends in
-            self?.friends = friends
             // если не сделать, то выдапает ошибка
             /// UITableView.reloadData() must be used from main thread only
             DispatchQueue.main.async {
                 //сохранение данных в Realm
                 try? RealmService.save(items: friends)
+                //загрузка данных из Realm
+                self?.friends = Array(try! RealmService.load(typeOf: User.self))
                 // разбор исходных данных
                 (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: friends)
                 //copy dictionary for display
