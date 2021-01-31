@@ -55,7 +55,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for userID: Int, closure: @escaping ([UserPhoto]) -> () ) {
+    func getPhotos(for user: User, closure: @escaping ([UserPhoto]) -> () ) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -63,7 +63,7 @@ class NetworkServices {
             url.path = "/method/photos.getAll"
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
-                              URLQueryItem(name: "owner_id", value: String(userID)),
+                              URLQueryItem(name: "owner_id", value: String(user.id)),
                               URLQueryItem(name: "extended", value: "1")]
             return url
         }()
@@ -79,6 +79,11 @@ class NetworkServices {
                 if let data = data {
                     do {
                         let userPhoto = try JSONDecoder().decode(UserPhotoResponse.self, from: data).items
+                        //сохранение данных в Realm
+                        DispatchQueue.main.async {
+                            userPhoto.forEach{$0.owner = user}
+                            try? RealmService.save(items: userPhoto)
+                        }
                         closure(userPhoto)
                     }
                     catch {

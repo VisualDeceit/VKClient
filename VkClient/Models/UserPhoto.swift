@@ -25,10 +25,13 @@ struct UserPhotoResponse: Decodable {
 }
 
 class UserPhoto: Object, Decodable {
+    @objc dynamic var id: Int = 0
     @objc dynamic var likesCount: Int = 0
     @objc dynamic var isLiked: Int = 0
     @objc dynamic var repostsCount: Int = 0
     let sizes = List<PhotoSize>()
+    @objc dynamic var owner: User?
+
     
     enum RepostsCodingKeys: String, CodingKey{
         case repostsCount = "count"
@@ -40,6 +43,7 @@ class UserPhoto: Object, Decodable {
     }
     
     enum CodingKeys: String, CodingKey {
+        case id
         case likesCount
         case isLiked
         case repostsCount
@@ -51,6 +55,7 @@ class UserPhoto: Object, Decodable {
     convenience required init(from decoder: Decoder) throws {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(Int.self, forKey: .id)
         let sizesArray = try container.decode([PhotoSize].self, forKey: .sizes)
         //sizesArray.forEach{ self.sizes.append($0) }
         sizes.append(objectsIn: sizesArray)
@@ -60,6 +65,10 @@ class UserPhoto: Object, Decodable {
         
         let repostsContainer = try container.nestedContainer(keyedBy: RepostsCodingKeys.self, forKey: .reposts)
         self.repostsCount = try repostsContainer.decode(Int.self, forKey: .repostsCount)
+    }
+    
+    override class func primaryKey() -> String? {
+        "id"
     }
 }
 

@@ -146,7 +146,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         let selectedUser = tableView.indexPathForSelectedRow
         let lastNameKey = friendsLastNameTitles[selectedUser!.section]
         if let userValues = filtredFriendsDictionary[lastNameKey] {
-            controller.userID = userValues[selectedUser!.row].id
+            controller.user = userValues[selectedUser!.row]
         }
         controller.delegate = self // подписали на делегат
 

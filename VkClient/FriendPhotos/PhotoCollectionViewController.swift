@@ -13,7 +13,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     
    // var user = User(first_name: "", last_name: "", album: nil)
     
-    var userID: Int = -1
+    var user = User()
     var userPhotos = [UserPhoto]()
     
     //объявляем слабую ссылку на делегат для передачи данных
@@ -24,7 +24,7 @@ class PhotoCollectionViewController: UICollectionViewController {
         // self.navigationItem.title = "\(user.first_name) \(user.last_name)"
         
         let networkService = NetworkServices()
-        networkService.getPhotos(for: userID) { [weak self] photos in
+        networkService.getPhotos(for: user) { [weak self] photos in
             self?.userPhotos = photos
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
