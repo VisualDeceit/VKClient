@@ -71,6 +71,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             // если не сделать, то выдапает ошибка
             /// UITableView.reloadData() must be used from main thread only
             DispatchQueue.main.async {
+                //сохранение данных в Realm
+                try? RealmService.save(items: friends)
                 // разбор исходных данных
                 (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: friends)
                 //copy dictionary for display

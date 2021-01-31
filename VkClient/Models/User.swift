@@ -25,4 +25,8 @@ class User: Object {
         self.lastName = json["last_name"].stringValue
         self.avatarUrl = json["photo_50"].stringValue
     }
+    
+    override class func primaryKey() -> String? {
+        "id"
+    }
 }

@@ -38,8 +38,6 @@ class NetworkServices {
                         let json = try JSON(data: data)
                         let items = json["response"]["items"].arrayValue
                         let friends = items.map { User($0) }
-                        //сохраняем в Realm
-                        try RealmService.save(items: friends)
                         closure(friends)
                     }
                     catch {
