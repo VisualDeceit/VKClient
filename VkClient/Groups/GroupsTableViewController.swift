@@ -22,7 +22,7 @@ class GroupsTableViewController: UITableViewController {
         getData()
     }
     
-    func getData() {
+    private func getData() {
         let networService = NetworkServices()
         networService.getUserGroups { [weak self] in
             //загрузка данных из Realm

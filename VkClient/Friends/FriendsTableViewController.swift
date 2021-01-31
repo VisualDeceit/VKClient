@@ -80,7 +80,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
     }
     
-    func getData() {
+    private func getData() {
         let networkService = NetworkServices()
         networkService.getUserFriends {[weak self] in
             // если не сделать, то выдапает ошибка

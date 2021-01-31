@@ -373,7 +373,7 @@
                                 <connections>
                                     <outlet property="likeControl" destination="Y2H-O6-3Ld" id="9Ua-Bo-BUr"/>
                                     <outlet property="photo" destination="5Ym-3G-hSF" id="jig-P1-q0g"/>
-                                    <segue destination="x22-fL-NUt" kind="modal" identifier="ShowGallery" id="jcF-j6-Cvu"/>
+                                    <segue destination="x22-fL-NUt" kind="presentation" identifier="ShowGallery" modalPresentationStyle="fullScreen" id="jcF-j6-Cvu"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -393,7 +393,7 @@
             <objects>
                 <viewController id="x22-fL-NUt" customClass="SwipePhotoGalleryViewController" customModule="VkClient" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eFo-KV-kCY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lah-Ju-rnl">
