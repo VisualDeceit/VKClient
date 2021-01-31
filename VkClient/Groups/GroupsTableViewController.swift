@@ -21,6 +21,8 @@ class GroupsTableViewController: UITableViewController {
         
         let networService = NetworkServices()
         networService.getUserGroups { [weak self] groups in
+            //сохранение данных в Realm
+            try? RealmService.save(items: groups)
             self?.groups = groups
             self?.filtredUserGroups = groups
             self?.tableView.reloadData()
