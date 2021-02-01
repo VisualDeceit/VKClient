@@ -55,15 +55,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     }
     
     func getImage(for index: Int, to imageView: UIImageView){
-        //пропорциональная копия с максимальной стороной 320px
-        if let photo = datasource[index].sizes.first(where: {$0.type == "q"}) {
-         imageView.download(from: photo.url)
-        } else {
-            //пропорциональная копия изображения с максимальной стороной 604px
-            if let photo =  datasource[index].sizes.first(where: {$0.type == "x"}) {
-                imageView.download(from: photo.url)
-            }
-        }
+        imageView.download(from: datasource[index].link)
     }
     
 
