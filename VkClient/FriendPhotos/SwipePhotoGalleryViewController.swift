@@ -71,12 +71,15 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
 
         //imageView1.backgroundColor = .red
         imageView1.frame = centerFramePosition
+        imageView1.enableZoom()
         
         
         imageView2.frame = rightFramePosition
+        imageView2.enableZoom()
         //imageView2.backgroundColor = .blue
         
         imageView3.frame = leftFramePosition
+        imageView3.enableZoom()
         //imageView3.backgroundColor = .green
        
         //ссылки на imageViews для удобвства анимации и перемещения
