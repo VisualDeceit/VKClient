@@ -16,7 +16,10 @@ extension UIImageView {
                 let image = UIImage(data: data)
             else { return }
             DispatchQueue.main.async {
-                self.image = image
+                //защита от неправильного отображения фото прии скролле
+                if url == response?.url {
+                    self.image = image
+                }
             }
         }.resume()
     }
