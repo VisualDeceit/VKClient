@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 //протокол для делегата
 protocol FriendsTableViewControllerDelegate: class {
@@ -14,7 +15,16 @@ protocol FriendsTableViewControllerDelegate: class {
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
-    var friends = [User]()
+    private var friends = [User]()
+//    private lazy var friends = try? RealmService.load(typeOf: User.self){
+//        didSet {
+//            // разбор исходных данных
+//            (friendsLastNameTitles, friendsDictionary) = splitOnSections(for: friends!)
+//            //copy dictionary for display
+//            filtredFriendsDictionary = friendsDictionary
+//            tableView.reloadData()
+//        }
+//    }
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -25,7 +35,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
         //получаем данные из делегата
-        let lastNameKey = friendsLastNameTitles[tableView.indexPathForSelectedRow!.section]
+//        let lastNameKey = friendsLastNameTitles[tableView.indexPathForSelectedRow!.section]
 //        if var userValues = friendsDictionary[lastNameKey] {
 //            userValues[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
 //            friendsDictionary[lastNameKey] = userValues
@@ -62,23 +72,35 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
         //регистрируем кастомный хедер
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-     
-        searchBar.delegate = self
+        // обновление
+        self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
+        searchBar.delegate = self
+        getData()
+        
+    }
+    
+    private func getData() {
         let networkService = NetworkServices()
-        networkService.getUserFriends {[weak self] friends in
-            self?.friends = friends
+        networkService.getUserFriends {[weak self] in
             // если не сделать, то выдапает ошибка
             /// UITableView.reloadData() must be used from main thread only
             DispatchQueue.main.async {
+                //загрузка данных из Realm
+                self?.friends = Array(try! RealmService.load(typeOf: User.self))
                 // разбор исходных данных
-                (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: friends)
+                (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: self?.friends ?? [User]())
                 //copy dictionary for display
                 self?.filtredFriendsDictionary = self!.friendsDictionary
                 self?.tableView.reloadData()
             }
         }
-        
+    }
+
+    @objc
+    func refresh(sender:AnyObject) {
+        getData()
+        self.refreshControl?.endRefreshing()
     }
     
     // MARK: - Table view data source
@@ -123,7 +145,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         let selectedUser = tableView.indexPathForSelectedRow
         let lastNameKey = friendsLastNameTitles[selectedUser!.section]
         if let userValues = filtredFriendsDictionary[lastNameKey] {
-            controller.userID = userValues[selectedUser!.row].id
+            controller.user = userValues[selectedUser!.row]
         }
         controller.delegate = self // подписали на делегат
 

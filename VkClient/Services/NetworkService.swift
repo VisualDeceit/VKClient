@@ -14,7 +14,7 @@ class NetworkServices {
     let vAPI = "5.126"
     
 //получение списка друзей
-    func getUserFriends(closure: @escaping ([User]) -> Void) {
+    func getUserFriends(closure: @escaping () -> Void) {
         //собираем url
         let urlComponent: URLComponents = {
             var url = URLComponents()
@@ -38,7 +38,11 @@ class NetworkServices {
                         let json = try JSON(data: data)
                         let items = json["response"]["items"].arrayValue
                         let friends = items.map { User($0) }
-                        closure(friends)
+                        //сохранение данных в Realm
+                        DispatchQueue.main.async {
+                            try? RealmService.save(items: friends)
+                        }
+                        closure()
                     }
                     catch {
                         print(error)
@@ -51,7 +55,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for userID: Int, closure: @escaping ([UserPhoto]) -> () ) {
+    func getPhotos(for user: User, closure: @escaping () -> () ) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -59,8 +63,9 @@ class NetworkServices {
             url.path = "/method/photos.getAll"
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
-                              URLQueryItem(name: "owner_id", value: String(userID)),
-                              URLQueryItem(name: "extended", value: "1")]
+                              URLQueryItem(name: "owner_id", value: String(user.id)),
+                              URLQueryItem(name: "extended", value: "1"),
+                              URLQueryItem(name: "count", value: "200"),]
             return url
         }()
         
@@ -75,7 +80,12 @@ class NetworkServices {
                 if let data = data {
                     do {
                         let userPhoto = try JSONDecoder().decode(UserPhotoResponse.self, from: data).items
-                        closure(userPhoto)
+                        //сохранение данных в Realm
+                        DispatchQueue.main.async {
+                            userPhoto.forEach{$0.owner = user}
+                            try? RealmService.save(items: userPhoto)
+                        }
+                        closure()
                     }
                     catch {
                         print(error)
@@ -87,7 +97,7 @@ class NetworkServices {
     }
     
 //получение списка групп пользователя через  Alamofire
-    func getUserGroups(closure: @escaping ([Group]) -> ()) {
+    func getUserGroups(closure: @escaping () -> ()) {
         let host = "https://api.vk.com"
         let path = "/method/groups.get"
         let parameters: Parameters = [
@@ -102,7 +112,9 @@ class NetworkServices {
                     case .success(let data):
                         do {
                             let groups = try JSONDecoder().decode(GroupResponse.self, from: data).items
-                            closure(groups)
+                            //сохранение данных в Realm
+                            try? RealmService.save(items: groups)
+                            closure()
                         }
                         catch {
                             print(error)

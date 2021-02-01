@@ -1,7 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "VK_Compact_Logo@40x40.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
@@ -22,7 +21,6 @@
       "size" : "29x29"
     },
     {
-      "filename" : "VK_Compact_Logo 80x80.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"

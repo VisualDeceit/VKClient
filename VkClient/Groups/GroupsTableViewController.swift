@@ -17,14 +17,25 @@ class GroupsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         searchBar.delegate = self
-        
+        getData()
+    }
+    
+    private func getData() {
         let networService = NetworkServices()
-        networService.getUserGroups { [weak self] groups in
-            self?.groups = groups
-            self?.filtredUserGroups = groups
+        networService.getUserGroups { [weak self] in
+            //загрузка данных из Realm
+            self?.groups = Array(try! RealmService.load(typeOf: Group.self))
+            self?.filtredUserGroups = self?.groups ?? [Group]()
             self?.tableView.reloadData()
         }
+    }
+    
+    @objc
+    func refresh(sender:AnyObject) {
+        getData()
+        self.refreshControl?.endRefreshing()
     }
 
     // MARK: - Table view data source

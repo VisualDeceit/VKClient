@@ -10,23 +10,39 @@ import UIKit
 //private let reuseIdentifier = "Cell"
 
 class PhotoCollectionViewController: UICollectionViewController {
-    
-   // var user = User(first_name: "", last_name: "", album: nil)
-    
-    var userID: Int = -1
+    var user = User()
     var userPhotos = [UserPhoto]()
+    
+    var refresher: UIRefreshControl!
     
     //объявляем слабую ссылку на делегат для передачи данных
     weak var delegate: FriendsTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // self.navigationItem.title = "\(user.first_name) \(user.last_name)"
+        self.navigationItem.title = "\(user.firstName) \(user.lastName)"
         
+        //обновление
+        self.refresher = UIRefreshControl()
+        self.collectionView!.alwaysBounceVertical = true
+        //self.refresher.tintColor = UIColor.red
+        self.refresher.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.collectionView!.addSubview(refresher)
+        //загрузка данных
+        getData()
+    }
+    
+    @objc func refresh(sender:AnyObject) {
+        getData()
+        self.refresher?.endRefreshing()
+    }
+    
+    private func getData() {
         let networkService = NetworkServices()
-        networkService.getPhotos(for: userID) { [weak self] photos in
-            self?.userPhotos = photos
+        networkService.getPhotos(for: user) { [weak self] in
             DispatchQueue.main.async {
+                //загрузка данных из Realm
+                self?.userPhotos = Array(try! RealmService.load(typeOf: UserPhoto.self).filter("owner.id = %@", self?.user.id ?? -1 ))
                 self?.collectionView.reloadData()
             }
         }

@@ -44,6 +44,10 @@ class Group: Object, Decodable {
         self.avatarUrl = try container.decode(String.self, forKey: .avatarUrl)
         
     }
+    
+    override class func primaryKey() -> String? {
+        "id"
+    }
 
 }
 

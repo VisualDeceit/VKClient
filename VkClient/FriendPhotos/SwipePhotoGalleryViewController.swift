@@ -55,15 +55,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     }
     
     func getImage(for index: Int, to imageView: UIImageView){
-        //пропорциональная копия с максимальной стороной 320px
-        if let photo = datasource[index].sizes.first(where: {$0.type == "q"}) {
-         imageView.download(from: photo.url)
-        } else {
-            //пропорциональная копия изображения с максимальной стороной 604px
-            if let photo =  datasource[index].sizes.first(where: {$0.type == "x"}) {
-                imageView.download(from: photo.url)
-            }
-        }
+        imageView.download(from: datasource[index].link)
     }
     
 
@@ -79,12 +71,15 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
 
         //imageView1.backgroundColor = .red
         imageView1.frame = centerFramePosition
+        imageView1.enableZoom()
         
         
         imageView2.frame = rightFramePosition
+        imageView2.enableZoom()
         //imageView2.backgroundColor = .blue
         
         imageView3.frame = leftFramePosition
+        imageView3.enableZoom()
         //imageView3.backgroundColor = .green
        
         //ссылки на imageViews для удобвства анимации и перемещения
