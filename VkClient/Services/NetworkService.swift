@@ -64,7 +64,8 @@ class NetworkServices {
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
                               URLQueryItem(name: "owner_id", value: String(user.id)),
-                              URLQueryItem(name: "extended", value: "1")]
+                              URLQueryItem(name: "extended", value: "1"),
+                              URLQueryItem(name: "count", value: "200"),]
             return url
         }()
         
