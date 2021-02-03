@@ -19,7 +19,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     var token: NotificationToken?
         
     var friendsLastNameTitles = [String]() //массив начальных букв sections
-    var friendsDictionary = [String: [User]]()  //словарь
+    var friendsDictionary = [String: [User]]()  //словарь; Int - индекс в Realm
     var filtredFriendsDictionary = [String: [User]]() //для отображения
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -58,15 +58,19 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
                 //разбиваем на секции
                 self?.splitOnSections(for: result)
                 self?.tableView.reloadData()
-            case .update(_, let deletions, let insertions, let modifications):
-                tableView.beginUpdates()
-                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
-                                     with: .automatic)
-                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-                                     with: .automatic)
-                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
-                                     with: .automatic)
-                tableView.endUpdates()
+            case .update(let result, let deletions, let insertions, let modifications):
+                self?.splitOnSections(for: result)
+                self?.tableView.reloadData()
+                // как найти секцию и нужную строку хз пока
+//                tableView.beginUpdates()
+//                //находим секцию ???
+//                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+//                                     with: .automatic)
+//                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+//                                     with: .automatic)
+//                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+//                                     with: .automatic)
+//                tableView.endUpdates()
             case .error(let error):
                 fatalError("\(error)")
             }
@@ -81,12 +85,14 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         friendsDictionary.removeAll()
        
         //разбираем исходный массив в словарь для индексации таблицы
-        for user in Array(array) {
+        for (index,user) in Array(array).enumerated() {
             let lastNameKey = String(user.lastName.prefix(1))
             if var userValues = friendsDictionary[lastNameKey] {
                 userValues.append(user)
+                //добавляем
                 friendsDictionary[lastNameKey] = userValues
             } else {
+                //новое
                 friendsDictionary[lastNameKey] = [user]
             }
         }
@@ -135,12 +141,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         if let userValues = filtredFriendsDictionary[lastNameKey] {
             cell.populate(user: userValues[indexPath.row])
         }
-//        guard let user = friends?[indexPath.row] else {
-//            return UITableViewCell()
-//        }
-//
-//        cell.populate(user: user)
-        
         return cell
     }
     
@@ -159,9 +159,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         if let userValues = filtredFriendsDictionary[lastNameKey] {
             controller.user = userValues[selectedUser!.row]
         }
-//        if let user = friends?[tableView.indexPathForSelectedRow?.row ?? 0]  {
-//            controller.user = user
-//        }
         
         controller.delegate = self // подписали на делегат
 
