@@ -38,6 +38,12 @@ class NetworkServices {
                         let json = try JSON(data: data)
                         let items = json["response"]["items"].arrayValue
                         let friends = items.map { User($0) }
+                        
+                        // удаляем старых друзей
+                        let ids = friends.map { $0.id}
+                        let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
+                        try RealmService.delete(object: objectsToDelete)
+      
                         //сохранение данных в Realm
                         DispatchQueue.main.async {
                             try? RealmService.save(items: friends)
