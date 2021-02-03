@@ -14,7 +14,7 @@ class NetworkServices {
     let vAPI = "5.126"
     
 //получение списка друзей
-    func getUserFriends(closure: @escaping () -> Void) {
+    func getUserFriends() {
         //собираем url
         let urlComponent: URLComponents = {
             var url = URLComponents()
@@ -42,7 +42,6 @@ class NetworkServices {
                         DispatchQueue.main.async {
                             try? RealmService.save(items: friends)
                         }
-                        closure()
                     }
                     catch {
                         print(error)
