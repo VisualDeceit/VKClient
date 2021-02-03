@@ -15,16 +15,8 @@ protocol FriendsTableViewControllerDelegate: class {
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
-    private var friends = [User]()
-//    private lazy var friends = try? RealmService.load(typeOf: User.self){
-//        didSet {
-//            // разбор исходных данных
-//            (friendsLastNameTitles, friendsDictionary) = splitOnSections(for: friends!)
-//            //copy dictionary for display
-//            filtredFriendsDictionary = friendsDictionary
-//            tableView.reloadData()
-//        }
-//    }
+    private var friends: Results<User>?
+    var token: NotificationToken?
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -44,10 +36,33 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     //
-    private func splitOnSections(for inputArray: [User]) -> ([String], [String: [User]]) {
+//    private func splitOnSections(for inputArray: [User]) -> ([String], [String: [User]]) {
+//
+//        var sectionsTitle = [String]()
+//        var sectionData = [String: [User]]()
+//
+//        //разбираем исходный массив в словарь для индексации таблицы
+//        for user in inputArray {
+//            let lastNameKey = String(user.lastName.prefix(1))
+//            if var userValues = sectionData[lastNameKey] {
+//                userValues.append(user)
+//                sectionData[lastNameKey] = userValues
+//            } else {
+//                sectionData[lastNameKey] = [user]
+//            }
+//        }
+//
+//        //сортируем по алфавиту
+//        sectionsTitle = [String](sectionData.keys).sorted(by: <)
+//
+//        return (sectionsTitle, sectionData)
+//
+//    }
+    
+    private func splitOnSections(for inputArray: Results<User>) -> ([String], [String: Results<User>]) {
         
         var sectionsTitle = [String]()
-        var sectionData = [String: [User]]()
+        var sectionData = [String: Results<User>]()
        
         //разбираем исходный массив в словарь для индексации таблицы
         for user in inputArray {
@@ -80,21 +95,31 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
     }
     
+    deinit {
+        token?.invalidate()
+    }
+    
     private func getData() {
+        //загрузка данных из сети
         let networkService = NetworkServices()
-        networkService.getUserFriends {[weak self] in
-            // если не сделать, то выдапает ошибка
-            /// UITableView.reloadData() must be used from main thread only
-            DispatchQueue.main.async {
-                //загрузка данных из Realm
-                self?.friends = Array(try! RealmService.load(typeOf: User.self))
-                // разбор исходных данных
-                (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: self?.friends ?? [User]())
-                //copy dictionary for display
-                self?.filtredFriendsDictionary = self!.friendsDictionary
-                self?.tableView.reloadData()
-            }
+        networkService.getUserFriends()
+        
+        //загрузка данных из Realm
+        do {
+            friends = try? RealmService.load(typeOf: User.self).sorted(byKeyPath: #keyPath(User.lastName))
+            //подписываемся на уведомления
+            token = friends?.observe(tableView.applyChanges)
+            // разбор исходных данных
+//            (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: self?.friends ?? [User]())
+//            //copy dictionary for display
+//            self?.filtredFriendsDictionary = self!.friendsDictionary
+//            self?.tableView.reloadData()
         }
+        catch {
+            print(error)
+        }
+        
+        
     }
 
     @objc
@@ -107,16 +132,18 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         //кол-во секций
-        return filtredFriendsDictionary.count
+       // return filtredFriendsDictionary.count
+        1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //указываем количество строк в секции
-        let lastNameKey = friendsLastNameTitles[section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            return userValues.count
-        }
-        return 0
+//        let lastNameKey = friendsLastNameTitles[section]
+//        if let userValues = filtredFriendsDictionary[lastNameKey] {
+//            return userValues.count
+//        }
+//        return 0
+        friends?.count ?? 0
     }
 
     
@@ -125,38 +152,48 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             return UITableViewCell()
         }
         //передаем данные в ячейку
-        let lastNameKey = friendsLastNameTitles[indexPath.section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            cell.populate(user: userValues[indexPath.row])
+//        let lastNameKey = friendsLastNameTitles[indexPath.section]
+//        if let userValues = filtredFriendsDictionary[lastNameKey] {
+//            cell.populate(user: userValues[indexPath.row])
+//        }
+        guard let user = friends?[indexPath.row] else {
+            return UITableViewCell()
         }
+        
+        cell.populate(user: user)
+        
         return cell
     }
     
-    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-       //отображение сеций справа
-        return friendsLastNameTitles
-   }
+//    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+//       //отображение сеций справа
+//        return friendsLastNameTitles
+//   }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "showUserPhotos",
               let controller = segue.destination as? PhotoCollectionViewController else { return }
        
         //передача данных в PhotoCollectionViewController
-        let selectedUser = tableView.indexPathForSelectedRow
-        let lastNameKey = friendsLastNameTitles[selectedUser!.section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            controller.user = userValues[selectedUser!.row]
+//        let selectedUser = tableView.indexPathForSelectedRow
+//        let lastNameKey = friendsLastNameTitles[selectedUser!.section]
+//        if let userValues = filtredFriendsDictionary[lastNameKey] {
+//            controller.user = userValues[selectedUser!.row]
+//        }
+        if let user = friends?[tableView.indexPathForSelectedRow?.row ?? 0]  {
+            controller.user = user
         }
+        
         controller.delegate = self // подписали на делегат
 
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
-                                                                "sectionHeader") as! MyCustomSectionHeaderView
-        view.title.text = friendsLastNameTitles[section]
-        return view
-    }
+//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
+//                                                                "sectionHeader") as! MyCustomSectionHeaderView
+//        view.title.text = friendsLastNameTitles[section]
+//        return view
+//    }
     
 }
 
