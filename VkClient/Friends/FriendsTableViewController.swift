@@ -39,8 +39,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         let networkService = NetworkServices()
         networkService.getUserFriends()
         
-        //устанавливаем наблюдатель
-        pairTableAndRealm()
+        //устанавливаем уведомления
+        addNotificationBlock()
         
         // обновление
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -49,7 +49,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     
-    func pairTableAndRealm() {
+    func addNotificationBlock() {
         friends = try? RealmService.load(typeOf: User.self)
         token = friends?.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
@@ -62,6 +62,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
                 self?.splitOnSections(for: result)
                 self?.tableView.reloadData()
                 // как найти секцию и нужную строку хз пока
+                ///https://stackoverflow.com/questions/40365792/add-notification-to-array-of-realm-results
 //                tableView.beginUpdates()
 //                //находим секцию ???
 //                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
