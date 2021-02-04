@@ -102,7 +102,7 @@ class NetworkServices {
     }
     
 //получение списка групп пользователя через  Alamofire
-    func getUserGroups(closure: @escaping () -> ()) {
+    func getUserGroups() {
         let host = "https://api.vk.com"
         let path = "/method/groups.get"
         let parameters: Parameters = [
@@ -117,9 +117,14 @@ class NetworkServices {
                     case .success(let data):
                         do {
                             let groups = try JSONDecoder().decode(GroupResponse.self, from: data).items
+                            
+                            // удаляем старых друзей
+                            let ids = groups.map { $0.id}
+                            let objectsToDelete = try RealmService.load(typeOf: Group.self).filter("NOT id IN %@", ids)
+                            try RealmService.delete(object: objectsToDelete)
+                            
                             //сохранение данных в Realm
                             try? RealmService.save(items: groups)
-                            closure()
                         }
                         catch {
                             print(error)
