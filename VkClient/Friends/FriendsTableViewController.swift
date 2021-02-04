@@ -16,7 +16,7 @@ protocol FriendsTableViewControllerDelegate: class {
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
     private var friends: Results<User>?
-    var token: NotificationToken?
+    var notificationTokens = [NotificationToken]()
         
     var friendsLastNameTitles = [String]() //массив начальных букв sections
     var friendsDictionary = [String: [User]]()  //словарь; Int - индекс в Realm
@@ -40,7 +40,9 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         networkService.getUserFriends()
         
         //устанавливаем уведомления
-        addNotificationBlock()
+        let object = try! RealmService.load(typeOf: User.self)
+        splitOnSections(for: object)
+        initObjectsBySection(sections: friendsLastNameTitles)
         
         // обновление
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -48,45 +50,55 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         searchBar.delegate = self
     }
     
+    // MARK: - Notifications
     
-    func addNotificationBlock() {
-        friends = try? RealmService.load(typeOf: User.self)
-        token = friends?.observe { [weak self] (changes: RealmCollectionChange) in
+    func initObjectsBySection (sections: [String]) {
+        var objectsBySection = [Results<User>]()
+        
+        for section in sections {
+            let objects =  try? RealmService.load(typeOf: User.self).filter("lastName BEGINSWITH %@", section)
+            if let objects = objects {
+                objectsBySection.append(objects)
+            }
+        }
+        
+        for (index, objects) in objectsBySection.enumerated() {
+            addNotificationBlock(for: objects, in: index)
+        }
+        
+    }
+    
+    
+    func addNotificationBlock(for results: Results<User>?, in section:Int) {
+        let token = (results?.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
             switch changes {
-            case .initial(let result):
-                //разбиваем на секции
-                self?.splitOnSections(for: result)
+            case .initial:
                 self?.tableView.reloadData()
-            case .update(let result, let deletions, let insertions, let modifications):
-                self?.splitOnSections(for: result)
-                self?.tableView.reloadData()
-                // как найти секцию и нужную строку хз пока
-                ///https://stackoverflow.com/questions/40365792/add-notification-to-array-of-realm-results
-//                tableView.beginUpdates()
-//                //находим секцию ???
-//                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
-//                                     with: .automatic)
-//                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-//                                     with: .automatic)
-//                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
-//                                     with: .automatic)
-//                tableView.endUpdates()
+            case .update(_, let deletions, let insertions, let modifications):
+                tableView.beginUpdates()
+                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: section) }),
+                                     with: .automatic)
+                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: section)}),
+                                     with: .automatic)
+                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: section) }),
+                                     with: .automatic)
+                tableView.endUpdates()
             case .error(let error):
                 fatalError("\(error)")
             }
-        }
+        })
+        
+        notificationTokens.append(token!)
     }
     
-    private func splitOnSections(for inputArray: Results<User>?) {
-        
-        guard let array = inputArray else { return }
+    private func splitOnSections(for inputArray: Results<User>) {
         
         friendsLastNameTitles.removeAll()
         friendsDictionary.removeAll()
        
         //разбираем исходный массив в словарь для индексации таблицы
-        for (index,user) in Array(array).enumerated() {
+        for user in Array(inputArray) {
             let lastNameKey = String(user.lastName.prefix(1))
             if var userValues = friendsDictionary[lastNameKey] {
                 userValues.append(user)
@@ -106,7 +118,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
 
     
     deinit {
-        token?.invalidate()
+        notificationTokens.forEach{$0.invalidate()}
     }
     
     @objc func refresh(sender:AnyObject) {
