@@ -60,7 +60,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for user: User, closure: @escaping () -> () ) {
+    func getPhotos(for user: User) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -90,7 +90,6 @@ class NetworkServices {
                             userPhoto.forEach{$0.owner = user}
                             try? RealmService.save(items: userPhoto)
                         }
-                        closure()
                     }
                     catch {
                         print(error)
