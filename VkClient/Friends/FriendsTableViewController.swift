@@ -15,12 +15,9 @@ protocol FriendsTableViewControllerDelegate: class {
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
-    private var friends: Results<User>?
+    private var friendsBySection = [Results<User>]()
     var notificationTokens = [NotificationToken]()
-        
-    var friendsLastNameTitles = [String]() //массив начальных букв sections
-    var friendsDictionary = [String: [User]]()  //словарь; Int - индекс в Realm
-    var filtredFriendsDictionary = [String: [User]]() //для отображения
+    var friendsLastNameTitles = [String]() //массив начальных букв секций
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -40,43 +37,50 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         networkService.getUserFriends()
         
         //устанавливаем уведомления
-        let object = try! RealmService.load(typeOf: User.self)
-        splitOnSections(for: object)
-        initObjectsBySection(sections: friendsLastNameTitles)
-        
+        do {
+            let friends = try RealmService.load(typeOf: User.self)
+                ///рабиваем на секции
+                friendsLastNameTitles.removeAll()
+                friendsLastNameTitles = splitOnSections(for: friends)
+                /// подписываем
+                initFriendsBySection(sections: friendsLastNameTitles)
+        }
+        catch {
+            print(error)
+        }
+         
         // обновление
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
-        searchBar.delegate = self
+       searchBar.delegate = self
     }
     
     // MARK: - Notifications
     
-    func initObjectsBySection (sections: [String]) {
-        var objectsBySection = [Results<User>]()
-        
+    func initFriendsBySection (sections: [String]) {
+        //получаем коллекцию для каждой секции по первой букве фамилии
         for section in sections {
-            let objects =  try? RealmService.load(typeOf: User.self).filter("lastName BEGINSWITH %@", section)
-            if let objects = objects {
-                objectsBySection.append(objects)
+            let friends =  try? RealmService.load(typeOf: User.self).filter("lastName BEGINSWITH %@", section)
+            if let friends = friends {
+                friendsBySection.append(friends)
             }
         }
-        
-        for (index, objects) in objectsBySection.enumerated() {
-            addNotificationBlock(for: objects, in: index)
+        //устанавливаем для коллекции уведомления
+        for (index, friends) in friendsBySection.enumerated() {
+            addNotification(for: friends, in: index)
         }
-        
     }
     
     
-    func addNotificationBlock(for results: Results<User>?, in section:Int) {
-        let token = (results?.observe { [weak self] (changes: RealmCollectionChange) in
+    func addNotification(for results: Results<User>, in section:Int) {
+        let token = (results.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
             switch changes {
             case .initial:
                 self?.tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
                 tableView.beginUpdates()
+                //tableView.reloadSections(IndexSet.init(integer: section), with: .automatic)
                 tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: section) }),
                                      with: .automatic)
                 tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: section)}),
@@ -88,31 +92,30 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
                 fatalError("\(error)")
             }
         })
-        
-        notificationTokens.append(token!)
+        //запоминаем токен в масссив
+        notificationTokens.append(token)
     }
     
-    private func splitOnSections(for inputArray: Results<User>) {
+    //находим массив первых букв
+    func splitOnSections(for inputArray: Results<User>) -> [String] {
         
         friendsLastNameTitles.removeAll()
-        friendsDictionary.removeAll()
+        var dictionary = [String: [User]]()
        
         //разбираем исходный массив в словарь для индексации таблицы
         for user in Array(inputArray) {
             let lastNameKey = String(user.lastName.prefix(1))
-            if var userValues = friendsDictionary[lastNameKey] {
+            if var userValues = dictionary[lastNameKey] {
                 userValues.append(user)
                 //добавляем
-                friendsDictionary[lastNameKey] = userValues
+                dictionary[lastNameKey] = userValues
             } else {
                 //новое
-                friendsDictionary[lastNameKey] = [user]
+                dictionary[lastNameKey] = [user]
             }
         }
-        
-        filtredFriendsDictionary = friendsDictionary
-        //сортируем по алфавиту
-        friendsLastNameTitles = [String](friendsDictionary.keys).sorted(by: <)
+
+        return [String](dictionary.keys).sorted(by: <)
 
     }
 
@@ -132,16 +135,12 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         //кол-во секций
-        return filtredFriendsDictionary.count
+        return friendsBySection.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //указываем количество строк в секции
-        let lastNameKey = friendsLastNameTitles[section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            return userValues.count
-        }
-        return 0
+        return friendsBySection[section].count
     }
 
     
@@ -150,10 +149,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             return UITableViewCell()
         }
         //передаем данные в ячейку
-        let lastNameKey = friendsLastNameTitles[indexPath.section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            cell.populate(user: userValues[indexPath.row])
-        }
+        cell.populate(user: friendsBySection[indexPath.section][indexPath.row])
         return cell
     }
     
@@ -168,11 +164,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
        
         //передача данных в PhotoCollectionViewController
         let selectedUser = tableView.indexPathForSelectedRow
-        let lastNameKey = friendsLastNameTitles[selectedUser!.section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            controller.user = userValues[selectedUser!.row]
-        }
-        
+        controller.user = friendsBySection[selectedUser!.section][selectedUser!.row]
         controller.delegate = self // подписали на делегат
 
     }
@@ -188,7 +180,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
 
 //searching
 extension FriendsTableViewController: UISearchBarDelegate {
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard searchText != "" else {
             filtredFriendsDictionary = friendsDictionary
@@ -196,22 +188,22 @@ extension FriendsTableViewController: UISearchBarDelegate {
             tableView.reloadData()
             return
         }
-        
+
         filtredFriendsDictionary = friendsDictionary.mapValues{
             $0.filter {
                 $0.firstName.lowercased().contains(searchText.lowercased()) ||
                     $0.lastName.lowercased().contains(searchText.lowercased())
             }
         }.filter {!$0.value.isEmpty}
-        
+
         friendsLastNameTitles = [String](filtredFriendsDictionary.keys).sorted(by: <)
         tableView.reloadData()
     }
-    
+
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         searchBar.endEditing(true)
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
