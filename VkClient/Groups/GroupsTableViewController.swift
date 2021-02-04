@@ -94,42 +94,12 @@ class GroupsTableViewController: UITableViewController {
         return cell
     }
 
-//    // Override to support editing the table view.
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            // Delete the row from the data source
-//          //  let removed = filtredUserGroups.remove(at: indexPath.row)
-////            if let index = groups.firstIndex(of: removed) {
-////                groups.remove(at: index)
-//          //  }
-//          ///  tableView.deleteRows(at: [indexPath], with: .fade)
-//        } else if editingStyle == .insert {
-//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-//        }
-//    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //снимаем выделение
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    //Добавление группы
-    @IBAction func addGroup(segue: UIStoryboardSegue) {
-        if segue.identifier == "AddGroup" {
-            guard let allGroupsController = segue.source as? AllGroupsTableViewController else
-            { return }
-            
-//            if let indexPath = allGroupsController.tableView.indexPathForSelectedRow {
-//                let group = allGroupsController.filtredAllGroups[indexPath.row]
-//                if !userGroups.contains(group) {
-//                    filtredUserGroups.append(group)
-//                    userGroups.append(group)
-//                    tableView.reloadData()
-//                }
-//            }
-        }
-        
-    }
 }
 
 extension GroupsTableViewController: UISearchBarDelegate {
