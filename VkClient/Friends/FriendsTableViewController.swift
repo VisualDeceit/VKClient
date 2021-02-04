@@ -38,10 +38,10 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
         //устанавливаем уведомления
         do {
-            let friends = try RealmService.load(typeOf: User.self)
+            let allFriends = try RealmService.load(typeOf: User.self)
                 ///рабиваем на секции
                 friendsLastNameTitles.removeAll()
-                friendsLastNameTitles = splitOnSections(for: friends)
+                friendsLastNameTitles = splitOnSections(for: allFriends)
                 /// подписываем
                 initFriendsBySection(sections: friendsLastNameTitles)
         }
@@ -178,26 +178,52 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     
 }
 
-//searching
+//MARK: - Searching
+
 extension FriendsTableViewController: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard searchText != "" else {
-            filtredFriendsDictionary = friendsDictionary
-            friendsLastNameTitles = [String](filtredFriendsDictionary.keys).sorted(by: <)
-            tableView.reloadData()
+            //устанавливаем уведомления
+            notificationTokens.forEach{$0.invalidate()}
+            notificationTokens.removeAll()
+            friendsBySection.removeAll()
+            do {
+                let allFriends = try RealmService.load(typeOf: User.self)
+                ///рабиваем на секции
+                friendsLastNameTitles.removeAll()
+                friendsLastNameTitles = splitOnSections(for: allFriends)
+                /// подписываем
+                initFriendsBySection(sections: friendsLastNameTitles)
+            }
+            catch {
+                print(error)
+            }
             return
         }
 
-        filtredFriendsDictionary = friendsDictionary.mapValues{
-            $0.filter {
-                $0.firstName.lowercased().contains(searchText.lowercased()) ||
-                    $0.lastName.lowercased().contains(searchText.lowercased())
+        notificationTokens.forEach{$0.invalidate()}
+        notificationTokens.removeAll()
+        friendsBySection.removeAll()
+        //устанавливаем уведомления
+        do {
+            let filtedFriends = try RealmService.load(typeOf: User.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
+            ///рабиваем на секции
+            friendsLastNameTitles.removeAll()
+            friendsLastNameTitles = splitOnSections(for: filtedFriends)
+            ////получаем коллекцию для каждой секции по первой букве фамилии
+            for section in friendsLastNameTitles {
+                let friends = filtedFriends.filter("lastName BEGINSWITH %@", section)
+                friendsBySection.append(friends)
             }
-        }.filter {!$0.value.isEmpty}
-
-        friendsLastNameTitles = [String](filtredFriendsDictionary.keys).sorted(by: <)
-        tableView.reloadData()
+            //устанавливаем для коллекции уведомления
+            for (index, friends) in friendsBySection.enumerated() {
+                addNotification(for: friends, in: index)
+            }
+        }
+        catch {
+            print(error)
+        }
     }
 
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
