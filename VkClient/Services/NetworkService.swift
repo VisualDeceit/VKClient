@@ -14,7 +14,7 @@ class NetworkServices {
     let vAPI = "5.126"
     
 //получение списка друзей
-    func getUserFriends(closure: @escaping () -> Void) {
+    func getUserFriends() {
         //собираем url
         let urlComponent: URLComponents = {
             var url = URLComponents()
@@ -38,11 +38,16 @@ class NetworkServices {
                         let json = try JSON(data: data)
                         let items = json["response"]["items"].arrayValue
                         let friends = items.map { User($0) }
+                        
+                        // удаляем старых друзей
+                        let ids = friends.map { $0.id}
+                        let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
+                        try RealmService.delete(object: objectsToDelete)
+      
                         //сохранение данных в Realm
                         DispatchQueue.main.async {
                             try? RealmService.save(items: friends)
                         }
-                        closure()
                     }
                     catch {
                         print(error)
@@ -55,7 +60,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for user: User, closure: @escaping () -> () ) {
+    func getPhotos(for user: User) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -85,7 +90,6 @@ class NetworkServices {
                             userPhoto.forEach{$0.owner = user}
                             try? RealmService.save(items: userPhoto)
                         }
-                        closure()
                     }
                     catch {
                         print(error)
@@ -97,7 +101,7 @@ class NetworkServices {
     }
     
 //получение списка групп пользователя через  Alamofire
-    func getUserGroups(closure: @escaping () -> ()) {
+    func getUserGroups() {
         let host = "https://api.vk.com"
         let path = "/method/groups.get"
         let parameters: Parameters = [
@@ -112,9 +116,14 @@ class NetworkServices {
                     case .success(let data):
                         do {
                             let groups = try JSONDecoder().decode(GroupResponse.self, from: data).items
+                            
+                            // удаляем старых друзей
+                            let ids = groups.map { $0.id}
+                            let objectsToDelete = try RealmService.load(typeOf: Group.self).filter("NOT id IN %@", ids)
+                            try RealmService.delete(object: objectsToDelete)
+                            
                             //сохранение данных в Realm
                             try? RealmService.save(items: groups)
-                            closure()
                         }
                         catch {
                             print(error)

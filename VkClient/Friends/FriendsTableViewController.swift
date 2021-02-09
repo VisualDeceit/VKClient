@@ -15,56 +15,15 @@ protocol FriendsTableViewControllerDelegate: class {
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
-    private var friends = [User]()
-//    private lazy var friends = try? RealmService.load(typeOf: User.self){
-//        didSet {
-//            // разбор исходных данных
-//            (friendsLastNameTitles, friendsDictionary) = splitOnSections(for: friends!)
-//            //copy dictionary for display
-//            filtredFriendsDictionary = friendsDictionary
-//            tableView.reloadData()
-//        }
-//    }
+    private var friendsBySection = [Results<User>]()
+    var notificationTokens = [NotificationToken]()
+    var friendsLastNameTitles = [String]() //массив начальных букв секций
     
     @IBOutlet weak var searchBar: UISearchBar!
-    
-    var friendsLastNameTitles = [String]() //массив начальных букв sections
-    var friendsDictionary = [String: [User]]()  //словарь
-    var filtredFriendsDictionary = [String: [User]]() //для отображения
     
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
         //получаем данные из делегата
-//        let lastNameKey = friendsLastNameTitles[tableView.indexPathForSelectedRow!.section]
-//        if var userValues = friendsDictionary[lastNameKey] {
-//            userValues[tableView.indexPathForSelectedRow!.row].album![indexPhoto].like = like
-//            friendsDictionary[lastNameKey] = userValues
-//            filtredFriendsDictionary[lastNameKey] = userValues
-//        }
-    }
-    
-    //
-    private func splitOnSections(for inputArray: [User]) -> ([String], [String: [User]]) {
-        
-        var sectionsTitle = [String]()
-        var sectionData = [String: [User]]()
-       
-        //разбираем исходный массив в словарь для индексации таблицы
-        for user in inputArray {
-            let lastNameKey = String(user.lastName.prefix(1))
-            if var userValues = sectionData[lastNameKey] {
-                userValues.append(user)
-                sectionData[lastNameKey] = userValues
-            } else {
-                sectionData[lastNameKey] = [user]
-            }
-        }
-        
-        //сортируем по алфавиту
-        sectionsTitle = [String](sectionData.keys).sorted(by: <)
-        
-        return (sectionsTitle, sectionData)
-        
     }
     
     override func viewDidLoad() {
@@ -72,34 +31,103 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
         //регистрируем кастомный хедер
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
+        
+        //загрузка данных из сети
+        let networkService = NetworkServices()
+        networkService.getUserFriends()
+        
+        //устанавливаем уведомления
+        do {
+            let allFriends = try RealmService.load(typeOf: User.self)
+                ///рабиваем на секции
+                friendsLastNameTitles.removeAll()
+                friendsLastNameTitles = splitOnSections(for: allFriends)
+                /// подписываем
+                initFriendsBySection(sections: friendsLastNameTitles)
+        }
+        catch {
+            print(error)
+        }
+         
         // обновление
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
-        searchBar.delegate = self
-        getData()
-        
+       searchBar.delegate = self
     }
     
-    private func getData() {
-        let networkService = NetworkServices()
-        networkService.getUserFriends {[weak self] in
-            // если не сделать, то выдапает ошибка
-            /// UITableView.reloadData() must be used from main thread only
-            DispatchQueue.main.async {
-                //загрузка данных из Realm
-                self?.friends = Array(try! RealmService.load(typeOf: User.self))
-                // разбор исходных данных
-                (self!.friendsLastNameTitles, self!.friendsDictionary) = self!.splitOnSections(for: self?.friends ?? [User]())
-                //copy dictionary for display
-                self?.filtredFriendsDictionary = self!.friendsDictionary
-                self?.tableView.reloadData()
+    // MARK: - Notifications
+    
+    func initFriendsBySection (sections: [String]) {
+        //получаем коллекцию для каждой секции по первой букве фамилии
+        for section in sections {
+            let friends =  try? RealmService.load(typeOf: User.self).filter("lastName BEGINSWITH %@", section)
+            if let friends = friends {
+                friendsBySection.append(friends)
             }
         }
+        //устанавливаем для коллекции уведомления
+        for (index, friends) in friendsBySection.enumerated() {
+            addNotification(for: friends, in: index)
+        }
+    }
+    
+    
+    func addNotification(for results: Results<User>, in section:Int) {
+        let token = (results.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                self?.tableView.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                tableView.beginUpdates()
+                //tableView.reloadSections(IndexSet.init(integer: section), with: .automatic)
+                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: section) }),
+                                     with: .automatic)
+                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: section)}),
+                                     with: .automatic)
+                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: section) }),
+                                     with: .automatic)
+                tableView.endUpdates()
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        })
+        //запоминаем токен в масссив
+        notificationTokens.append(token)
+    }
+    
+    //находим массив первых букв
+    func splitOnSections(for inputArray: Results<User>) -> [String] {
+        
+        friendsLastNameTitles.removeAll()
+        var dictionary = [String: [User]]()
+       
+        //разбираем исходный массив в словарь для индексации таблицы
+        for user in Array(inputArray) {
+            let lastNameKey = String(user.lastName.prefix(1))
+            if var userValues = dictionary[lastNameKey] {
+                userValues.append(user)
+                //добавляем
+                dictionary[lastNameKey] = userValues
+            } else {
+                //новое
+                dictionary[lastNameKey] = [user]
+            }
+        }
+
+        return [String](dictionary.keys).sorted(by: <)
+
     }
 
-    @objc
-    func refresh(sender:AnyObject) {
-        getData()
+    
+    deinit {
+        notificationTokens.forEach{$0.invalidate()}
+    }
+    
+    @objc func refresh(sender:AnyObject) {
+        //загрузка данных из сети
+        let networkService = NetworkServices()
+        networkService.getUserFriends()
         self.refreshControl?.endRefreshing()
     }
     
@@ -107,16 +135,12 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         //кол-во секций
-        return filtredFriendsDictionary.count
+        return friendsBySection.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //указываем количество строк в секции
-        let lastNameKey = friendsLastNameTitles[section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            return userValues.count
-        }
-        return 0
+        return friendsBySection[section].count
     }
 
     
@@ -125,10 +149,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             return UITableViewCell()
         }
         //передаем данные в ячейку
-        let lastNameKey = friendsLastNameTitles[indexPath.section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            cell.populate(user: userValues[indexPath.row])
-        }
+        cell.populate(user: friendsBySection[indexPath.section][indexPath.row])
         return cell
     }
     
@@ -143,10 +164,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
        
         //передача данных в PhotoCollectionViewController
         let selectedUser = tableView.indexPathForSelectedRow
-        let lastNameKey = friendsLastNameTitles[selectedUser!.section]
-        if let userValues = filtredFriendsDictionary[lastNameKey] {
-            controller.user = userValues[selectedUser!.row]
-        }
+        controller.user = friendsBySection[selectedUser!.section][selectedUser!.row]
         controller.delegate = self // подписали на делегат
 
     }
@@ -160,32 +178,58 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     
 }
 
-//searching
+//MARK: - Searching
+
 extension FriendsTableViewController: UISearchBarDelegate {
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard searchText != "" else {
-            filtredFriendsDictionary = friendsDictionary
-            friendsLastNameTitles = [String](filtredFriendsDictionary.keys).sorted(by: <)
-            tableView.reloadData()
+            //устанавливаем уведомления
+            notificationTokens.forEach{$0.invalidate()}
+            notificationTokens.removeAll()
+            friendsBySection.removeAll()
+            do {
+                let allFriends = try RealmService.load(typeOf: User.self)
+                ///рабиваем на секции
+                friendsLastNameTitles.removeAll()
+                friendsLastNameTitles = splitOnSections(for: allFriends)
+                /// подписываем
+                initFriendsBySection(sections: friendsLastNameTitles)
+            }
+            catch {
+                print(error)
+            }
             return
         }
-        
-        filtredFriendsDictionary = friendsDictionary.mapValues{
-            $0.filter {
-                $0.firstName.lowercased().contains(searchText.lowercased()) ||
-                    $0.lastName.lowercased().contains(searchText.lowercased())
+
+        notificationTokens.forEach{$0.invalidate()}
+        notificationTokens.removeAll()
+        friendsBySection.removeAll()
+        //устанавливаем уведомления
+        do {
+            let filtedFriends = try RealmService.load(typeOf: User.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
+            ///рабиваем на секции
+            friendsLastNameTitles.removeAll()
+            friendsLastNameTitles = splitOnSections(for: filtedFriends)
+            ////получаем коллекцию для каждой секции по первой букве фамилии
+            for section in friendsLastNameTitles {
+                let friends = filtedFriends.filter("lastName BEGINSWITH %@", section)
+                friendsBySection.append(friends)
             }
-        }.filter {!$0.value.isEmpty}
-        
-        friendsLastNameTitles = [String](filtredFriendsDictionary.keys).sorted(by: <)
-        tableView.reloadData()
+            //устанавливаем для коллекции уведомления
+            for (index, friends) in friendsBySection.enumerated() {
+                addNotification(for: friends, in: index)
+            }
+        }
+        catch {
+            print(error)
+        }
     }
-    
+
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         searchBar.endEditing(true)
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }

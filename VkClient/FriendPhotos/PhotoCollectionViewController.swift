@@ -6,13 +6,15 @@
 //
 
 import UIKit
+import RealmSwift
 
 //private let reuseIdentifier = "Cell"
 
 class PhotoCollectionViewController: UICollectionViewController {
-    var user = User()
-    var userPhotos = [UserPhoto]()
     
+    var user = User()
+    var userPhotos: Results<UserPhoto>!
+    var token: NotificationToken?
     var refresher: UIRefreshControl!
     
     //объявляем слабую ссылку на делегат для передачи данных
@@ -28,25 +30,50 @@ class PhotoCollectionViewController: UICollectionViewController {
         //self.refresher.tintColor = UIColor.red
         self.refresher.addTarget(self, action: #selector(refresh), for: .valueChanged)
         self.collectionView!.addSubview(refresher)
+        
         //загрузка данных
-        getData()
+        let networkService = NetworkServices()
+        networkService.getPhotos(for: user)
+        
+        //устанавливаем уведомления
+        do {
+            userPhotos = try RealmService.load(typeOf: UserPhoto.self).filter("owner.id = %@", user.id)
+            /// подписываем
+            if let userPhotos = userPhotos {
+                addNotification(for: userPhotos)
+            }
+        }
+        catch {
+            print(error)
+        }
+    
+    }
+    
+    func addNotification(for results: Results<UserPhoto>) {
+        token = (results.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let collectionView = self?.collectionView else { return }
+            switch changes {
+            case .initial:
+                self?.collectionView.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                collectionView.performBatchUpdates({
+                    collectionView.insertItems(at: insertions.map({ IndexPath(row: $0, section: 0) }))
+                    collectionView.deleteItems(at: deletions.map({ IndexPath(row: $0, section: 0)}))
+                    collectionView.reloadItems(at: modifications.map({ IndexPath(row: $0, section: 0) }))
+                }, completion: nil)
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        })
     }
     
     @objc func refresh(sender:AnyObject) {
-        getData()
+        //загрузка данных
+        let networkService = NetworkServices()
+        networkService.getPhotos(for: user)
         self.refresher?.endRefreshing()
     }
     
-    private func getData() {
-        let networkService = NetworkServices()
-        networkService.getPhotos(for: user) { [weak self] in
-            DispatchQueue.main.async {
-                //загрузка данных из Realm
-                self?.userPhotos = Array(try! RealmService.load(typeOf: UserPhoto.self).filter("owner.id = %@", self?.user.id ?? -1 ))
-                self?.collectionView.reloadData()
-            }
-        }
-    }
     
     // MARK: UICollectionViewDataSource
 
@@ -106,7 +133,7 @@ class PhotoCollectionViewController: UICollectionViewController {
         
         let indexPaths = self.collectionView.indexPath(for: cell)
         
-        controller.datasource = userPhotos //user.album!
+        controller.datasource = Array(userPhotos) //user.album!
         controller.index = indexPaths!.row
     }
     
