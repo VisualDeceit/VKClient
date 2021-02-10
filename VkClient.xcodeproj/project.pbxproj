@@ -31,6 +31,7 @@
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1572BDB825C6837D00B320F9 /* RealmService.swift */; };
 		1593ABBB25D45586005B7FD1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1593ABBA25D45586005B7FD1 /* GoogleService-Info.plist */; };
+		1593ABC025D4566B005B7FD1 /* FirebaseUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1593ABBF25D4566B005B7FD1 /* FirebaseUsers.swift */; };
 		15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C125B4166E006C5A25 /* VKLoginViewController.swift */; };
 		15A901C525B429A6006C5A25 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C425B429A6006C5A25 /* NetworkService.swift */; };
 		15B17600258621F500042450 /* CellLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* CellLogo.swift */; };
@@ -77,6 +78,7 @@
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		1572BDB825C6837D00B320F9 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		1593ABBA25D45586005B7FD1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1593ABBF25D4566B005B7FD1 /* FirebaseUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUsers.swift; sourceTree = "<group>"; };
 		15A901C125B4166E006C5A25 /* VKLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginViewController.swift; sourceTree = "<group>"; };
 		15A901C425B429A6006C5A25 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		15B175FF258621F500042450 /* CellLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLogo.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 		153F21A12577F3780018A18D /* VkClient */ = {
 			isa = PBXGroup;
 			children = (
+				1593ABBE25D4564D005B7FD1 /* Firebase */,
 				1572BDB725C6835E00B320F9 /* Services */,
 				1535229425AF0D0E006498A6 /* Application */,
 				1535229225AF0CF5006498A6 /* Controllers */,
@@ -238,6 +241,14 @@
 				1572BDB825C6837D00B320F9 /* RealmService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		1593ABBE25D4564D005B7FD1 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				1593ABBF25D4566B005B7FD1 /* FirebaseUsers.swift */,
+			);
+			path = Firebase;
 			sourceTree = "<group>";
 		};
 		15B176022586222500042450 /* Storyboards */ = {
@@ -422,6 +433,7 @@
 				1504D9402583D16100B4EBEE /* GroupsTableViewController.swift in Sources */,
 				1504D9342583AE9500B4EBEE /* Data.swift in Sources */,
 				15B17600258621F500042450 /* CellLogo.swift in Sources */,
+				1593ABC025D4566B005B7FD1 /* FirebaseUsers.swift in Sources */,
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
 				15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
