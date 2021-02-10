@@ -1,5 +1,5 @@
 //
-//  FirebaseUsers.swift
+//  FirebaseUser.swift
 //  VkClient
 //
 //  Created by Alexander Fomin on 10.02.2021.
@@ -8,7 +8,7 @@
 import Foundation
 import Firebase
 
-class FirebaseUsers {
+class FirebaseUser {
     let id: String
     let date: Int
     let ref: DatabaseReference?

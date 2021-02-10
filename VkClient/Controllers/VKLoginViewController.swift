@@ -82,7 +82,7 @@ extension VKLoginViewController: WKNavigationDelegate {
     }
     
     func addToFirebase(id: String?) {
-        let firebaseUser = FirebaseUsers(id: id ?? "-1", date: Int(Date().timeIntervalSince1970))
+        let firebaseUser = FirebaseUser(id: id ?? "-1", date: Int(Date().timeIntervalSince1970))
         
         let ref = Database.database(url: "https://vkclient-a78cb-default-rtdb.europe-west1.firebasedatabase.app/").reference(withPath: "users")
         
