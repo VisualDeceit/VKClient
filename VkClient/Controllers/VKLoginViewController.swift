@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import Firebase
 
 
 class VKLoginViewController: UIViewController {
@@ -72,9 +73,21 @@ extension VKLoginViewController: WKNavigationDelegate {
         Session.shared.token = params["access_token"]
         Session.shared.userId = params["user_id"]
         
+        //сохраняем данные о юзаре в Firebase
+        addToFirebase(id: Session.shared.userId)
+        
         decisionHandler(.cancel)
         
         performSegue(withIdentifier: "ToMainTabBar", sender: nil)
+    }
+    
+    func addToFirebase(id: String?) {
+        let firebaseUser = FirebaseUsers(id: id ?? "-1", date: Int(Date().timeIntervalSince1970))
+        
+        let ref = Database.database(url: "https://vkclient-a78cb-default-rtdb.europe-west1.firebasedatabase.app/").reference(withPath: "users")
+        
+        let userRef = ref.child(id ?? "-1")
+        userRef.setValue(firebaseUser.toAnyObject())
     }
 }
 
