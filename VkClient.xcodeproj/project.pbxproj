@@ -30,6 +30,7 @@
 		15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15462828259D9AD9008F9411 /* CustomNavigationController.swift */; };
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1572BDB825C6837D00B320F9 /* RealmService.swift */; };
+		1593ABBB25D45586005B7FD1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1593ABBA25D45586005B7FD1 /* GoogleService-Info.plist */; };
 		15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C125B4166E006C5A25 /* VKLoginViewController.swift */; };
 		15A901C525B429A6006C5A25 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C425B429A6006C5A25 /* NetworkService.swift */; };
 		15B17600258621F500042450 /* CellLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* CellLogo.swift */; };
@@ -75,6 +76,7 @@
 		15462828259D9AD9008F9411 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		1572BDB825C6837D00B320F9 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
+		1593ABBA25D45586005B7FD1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		15A901C125B4166E006C5A25 /* VKLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginViewController.swift; sourceTree = "<group>"; };
 		15A901C425B429A6006C5A25 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		15B175FF258621F500042450 /* CellLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLogo.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				153F21A12577F3780018A18D /* VkClient */,
 				153F21AB2577F37B0018A18D /* Assets.xcassets */,
 				153F21B02577F37B0018A18D /* Info.plist */,
+				1593ABBA25D45586005B7FD1 /* GoogleService-Info.plist */,
 				153F21A02577F3780018A18D /* Products */,
 				3892D2053B3659B863F1371F /* Pods */,
 				7C9542E8FCF66F273995843D /* Frameworks */,
@@ -347,6 +350,7 @@
 			files = (
 				153F21AF2577F37B0018A18D /* LaunchScreen.storyboard in Resources */,
 				153F21AC2577F37B0018A18D /* Assets.xcassets in Resources */,
+				1593ABBB25D45586005B7FD1 /* GoogleService-Info.plist in Resources */,
 				153F21AA2577F3780018A18D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
