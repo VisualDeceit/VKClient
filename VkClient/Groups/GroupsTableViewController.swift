@@ -11,7 +11,9 @@ import RealmSwift
 class GroupsTableViewController: UITableViewController {
 
     private var groups: Results<Group>!
+    private var groupsBackup: Results<Group>!
     var token: NotificationToken?
+    var isSearching: Bool = false
         
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -32,6 +34,7 @@ class GroupsTableViewController: UITableViewController {
             /// подписываем
             if let groups = groups {
                 addNotification(for: groups)
+                groupsBackup = groups
             }
         }
         catch {
@@ -47,6 +50,7 @@ class GroupsTableViewController: UITableViewController {
             case .initial:
                 self?.tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
+                guard self?.isSearching == false else { return }
                 tableView.beginUpdates()
                 //tableView.reloadSections(IndexSet.init(integer: section), with: .automatic)
                 tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
@@ -106,29 +110,18 @@ extension GroupsTableViewController: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard searchText != "" else {
-            token?.invalidate()
-            //устанавливаем уведомления
-            do {
-                groups = try RealmService.load(typeOf: Group.self).sorted(byKeyPath: "name")
-                /// подписываем
-                if let groups = groups {
-                    addNotification(for: groups)
-                }
-            }
-            catch {
-                print(error)
-            }
+            groups = groupsBackup
+            isSearching = false
+            tableView.reloadData()
             return
         }
        
-        token?.invalidate()
-        //устанавливаем уведомления
         do {
-            groups = try RealmService.load(typeOf: Group.self).sorted(byKeyPath: "name").filter("name CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
-            /// подписываем
-            if let groups = groups {
-                addNotification(for: groups)
-            }
+            isSearching = true
+            let predicate = NSPredicate(format: "name CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
+            let filteredGroups = try RealmService.load(typeOf: Group.self).sorted(byKeyPath: "name").filter(predicate)
+            groups = filteredGroups
+            tableView.reloadData()
         }
         catch {
             print(error)
