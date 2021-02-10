@@ -16,8 +16,10 @@ protocol FriendsTableViewControllerDelegate: class {
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
   
     private var friendsBySection = [Results<User>]()
+    private var friendsBySectionBackup = [Results<User>]()
     var notificationTokens = [NotificationToken]()
-    var friendsLastNameTitles = [String]() //массив начальных букв секций
+    var friendsLastNameTitles = [String]()
+    var friendsLastNameTitlesBackup = [String]()
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -40,10 +42,12 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         do {
             let allFriends = try RealmService.load(typeOf: User.self)
                 ///рабиваем на секции
-                friendsLastNameTitles.removeAll()
                 friendsLastNameTitles = splitOnSections(for: allFriends)
                 /// подписываем
                 initFriendsBySection(sections: friendsLastNameTitles)
+                /// for serch
+                friendsBySectionBackup = friendsBySection
+                friendsLastNameTitlesBackup = friendsLastNameTitles
         }
         catch {
             print(error)
@@ -99,7 +103,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     //находим массив первых букв
     func splitOnSections(for inputArray: Results<User>) -> [String] {
         
-        friendsLastNameTitles.removeAll()
         var dictionary = [String: [User]]()
        
         //разбираем исходный массив в словарь для индексации таблицы
@@ -184,42 +187,25 @@ extension FriendsTableViewController: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard searchText != "" else {
-            //устанавливаем уведомления
-            notificationTokens.forEach{$0.invalidate()}
-            notificationTokens.removeAll()
-            friendsBySection.removeAll()
-            do {
-                let allFriends = try RealmService.load(typeOf: User.self)
-                ///рабиваем на секции
-                friendsLastNameTitles.removeAll()
-                friendsLastNameTitles = splitOnSections(for: allFriends)
-                /// подписываем
-                initFriendsBySection(sections: friendsLastNameTitles)
-            }
-            catch {
-                print(error)
-            }
-            return
+            friendsBySection = friendsBySectionBackup
+            friendsLastNameTitles = friendsLastNameTitlesBackup
+            tableView.reloadData()
+           return
         }
 
-        notificationTokens.forEach{$0.invalidate()}
-        notificationTokens.removeAll()
-        friendsBySection.removeAll()
-        //устанавливаем уведомления
         do {
-            let filtedFriends = try RealmService.load(typeOf: User.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
+            let predicate = NSPredicate(format: "firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
+            let filteredFriends =  try RealmService.load(typeOf: User.self).filter(predicate)
             ///рабиваем на секции
             friendsLastNameTitles.removeAll()
-            friendsLastNameTitles = splitOnSections(for: filtedFriends)
+            friendsLastNameTitles = splitOnSections(for: filteredFriends)
             ////получаем коллекцию для каждой секции по первой букве фамилии
+            friendsBySection.removeAll()
             for section in friendsLastNameTitles {
-                let friends = filtedFriends.filter("lastName BEGINSWITH %@", section)
+                let friends = filteredFriends.filter("lastName BEGINSWITH %@", section)
                 friendsBySection.append(friends)
             }
-            //устанавливаем для коллекции уведомления
-            for (index, friends) in friendsBySection.enumerated() {
-                addNotification(for: friends, in: index)
-            }
+            tableView.reloadData()
         }
         catch {
             print(error)

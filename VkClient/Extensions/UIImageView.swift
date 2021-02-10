@@ -17,9 +17,10 @@ extension UIImageView {
             else { return }
             DispatchQueue.main.async {
                 //защита от неправильного отображения фото прии скролле
-                if url == response?.url {
+             //   if url == response?.url
+               
                     self.image = image
-                }
+                
             }
         }.resume()
     }
