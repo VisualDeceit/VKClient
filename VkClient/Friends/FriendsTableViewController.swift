@@ -20,6 +20,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     var notificationTokens = [NotificationToken]()
     var friendsLastNameTitles = [String]()
     var friendsLastNameTitlesBackup = [String]()
+    var isSearching: Bool = false
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -83,6 +84,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             case .initial:
                 self?.tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
+                guard self?.isSearching == false else { return }
                 tableView.beginUpdates()
                 //tableView.reloadSections(IndexSet.init(integer: section), with: .automatic)
                 tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: section) }),
@@ -117,9 +119,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
                 dictionary[lastNameKey] = [user]
             }
         }
-
         return [String](dictionary.keys).sorted(by: <)
-
     }
 
     
@@ -189,11 +189,13 @@ extension FriendsTableViewController: UISearchBarDelegate {
         guard searchText != "" else {
             friendsBySection = friendsBySectionBackup
             friendsLastNameTitles = friendsLastNameTitlesBackup
+            isSearching = false
             tableView.reloadData()
            return
         }
 
         do {
+            isSearching = true
             let predicate = NSPredicate(format: "firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
             let filteredFriends =  try RealmService.load(typeOf: User.self).filter(predicate)
             ///рабиваем на секции
