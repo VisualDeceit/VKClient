@@ -22,12 +22,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     var friendsLastNameTitlesBackup = [String]()
     var isSearching: Bool = false
     
-    private lazy var allFriends = try? RealmService.load(typeOf: User.self) {
-        didSet {
-            print("get data")
-        }
-    }
-    
+    private var allFriends = try? RealmService.load(typeOf: User.self)
+
     var allFriendsToken: NotificationToken?
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -54,14 +50,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             case .initial: break
             case .update(let result, _, _, _):
                 //устанавливаем уведомления
-                //рабиваем на секции
-                self?.friendsLastNameTitles = (self?.splitOnSections(for: result))!
-                // подписываем
-                self?.initFriendsBySection(sections: (self?.friendsLastNameTitles)!)
-                // for serch
-                self?.friendsBySectionBackup = (self?.friendsBySection)!
-                self?.friendsLastNameTitlesBackup = (self?.friendsLastNameTitles)!
-                //отписсываемя
+                self?.setNotificatoins(for: result)
+                //отписываемcя
                 self?.allFriendsToken?.invalidate()
                 tableView.reloadData()
             case .error(let error):
@@ -76,6 +66,16 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     // MARK: - Notifications
+    
+    func setNotificatoins(for container: Results<User>) {
+        //рабиваем на секции
+        friendsLastNameTitles = splitOnSections(for: container)
+        // подписываем
+        initFriendsBySection(sections: friendsLastNameTitles)
+        // for serch
+        friendsBySectionBackup = friendsBySection
+        friendsLastNameTitlesBackup = friendsLastNameTitles
+    }
     
     func initFriendsBySection (sections: [String]) {
         //получаем коллекцию для каждой секции по первой букве фамилии
@@ -92,8 +92,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     
-    func addNotification(for results: Results<User>, in section:Int) {
-        let token = (results.observe { [weak self] (changes: RealmCollectionChange) in
+    func addNotification(for container: Results<User>, in section:Int) {
+        let token = (container.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
             switch changes {
             case .initial:
