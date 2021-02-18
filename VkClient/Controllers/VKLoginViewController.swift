@@ -13,51 +13,59 @@ import Firebase
 class VKLoginViewController: UIViewController {
     @IBOutlet weak var webView: WKWebView!
     
-    @IBAction func unwindToLogin(_ unwindSegue: UIStoryboardSegue) {}
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        webView.navigationDelegate = self
-        
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "oauth.vk.com"
-        urlComponents.path = "/authorize"
-        urlComponents.queryItems = [
+    var urlComponents: URLComponents = {
+        var urlComp = URLComponents()
+        urlComp.scheme = "https"
+        urlComp.host = "oauth.vk.com"
+        urlComp.path = "/authorize"
+        urlComp.queryItems = [
             URLQueryItem(name: "client_id", value: "7728935"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
             URLQueryItem(name: "scope", value: "262150"),
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "v", value: "5.126")
-        ]
-        
-        let request = URLRequest(url: urlComponents.url!)
-        
+    ]
+        return urlComp
+    }()
+    
+    lazy var request = URLRequest(url: urlComponents.url!)
+    
+    @IBAction func unwindToLogin(_ unwindSegue: UIStoryboardSegue) {
         //очищаем cookie
         let dataStore = WKWebsiteDataStore.default()
-            dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-                for record in records {
-                    if record.displayName.contains("vk") {
-                        dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: {
-                            print("Deleted: " + record.displayName);
-                        })
-                    }
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+            for record in records {
+                if record.displayName.contains("vk") {
+                    dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: { [weak self] in
+                        self?.webView.load(self!.request)
+                    })
                 }
             }
+        }
         
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        webView.navigationDelegate = self
         webView.load(request)
+        
     }
 }
 
 extension VKLoginViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        
+       
         guard let url = navigationResponse.response.url, url.path == "/blank.html", let fragment = url.fragment  else {
             decisionHandler(.allow)
             return
         }
+        
+        // очищаем поля ввода
+        webView.evaluateJavaScript("document.getElementsByName('email')[0].value = ''")
+        webView.evaluateJavaScript("document.getElementsByName('pass')[0].value = ''")
 
         let params = fragment
             .components(separatedBy: "&")
@@ -77,7 +85,6 @@ extension VKLoginViewController: WKNavigationDelegate {
         addToFirebase(id: Session.shared.userId)
         
         decisionHandler(.cancel)
-        
         performSegue(withIdentifier: "ToMainTabBar", sender: nil)
     }
     

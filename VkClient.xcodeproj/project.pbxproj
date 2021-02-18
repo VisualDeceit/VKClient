@@ -40,6 +40,7 @@
 		15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */; };
 		15B3E5BB258F670C001C025E /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5BA258F670C001C025E /* NewsTableViewCell.swift */; };
 		15B3E5BF258F777B001C025E /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5BE258F777B001C025E /* NewsTableViewController.swift */; };
+		15C6ACBB25DEC5790060E0E9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15C6ACBA25DEC5790060E0E9 /* WebKit.framework */; };
 		15D31FE425AED4B0003D312E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FE325AED4B0003D312E /* UIView.swift */; };
 		15D31FE825AED4E8003D312E /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FE725AED4E8003D312E /* UILabel.swift */; };
 		15D31FEB25AED521003D312E /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FEA25AED521003D312E /* UIImage.swift */; };
@@ -88,6 +89,7 @@
 		15B3E5B1258E4913001C025E /* MyCustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomSectionHeaderView.swift; sourceTree = "<group>"; };
 		15B3E5BA258F670C001C025E /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		15B3E5BE258F777B001C025E /* NewsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
+		15C6ACBA25DEC5790060E0E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		15D31FE325AED4B0003D312E /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		15D31FE725AED4E8003D312E /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		15D31FEA25AED521003D312E /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15C6ACBB25DEC5790060E0E9 /* WebKit.framework in Frameworks */,
 				C71B9E29C51FF0FC13B504BC /* Pods_VkClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,6 +301,7 @@
 		7C9542E8FCF66F273995843D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				15C6ACBA25DEC5790060E0E9 /* WebKit.framework */,
 				31AD423F7FA4685CA9D60236 /* Pods_VkClient.framework */,
 			);
 			name = Frameworks;

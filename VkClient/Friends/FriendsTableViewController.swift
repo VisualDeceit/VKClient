@@ -44,19 +44,23 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         networkService.getUserFriends()
         
         //на первый запуск
-        allFriendsToken = allFriends?.observe { [weak self] (changes: RealmCollectionChange) in
-            guard let tableView = self?.tableView else { return }
-            switch changes {
-            case .initial: break
-            case .update(let result, _, _, _):
-                //устанавливаем уведомления
-                self?.setNotificatoins(for: result)
-                //отписываемcя
-                self?.allFriendsToken?.invalidate()
-                tableView.reloadData()
-            case .error(let error):
-                fatalError("\(error)")
+        if (allFriends?.count == 0) {
+            allFriendsToken = allFriends?.observe { [weak self] (changes: RealmCollectionChange) in
+                guard let tableView = self?.tableView else { return }
+                switch changes {
+                case .initial: break
+                case .update(let result, _, _, _):
+                    //устанавливаем уведомления
+                    self?.setNotificatoins(for: result)
+                    //отписываемcя
+                    self?.allFriendsToken?.invalidate()
+                    tableView.reloadData()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
             }
+        } else {
+            setNotificatoins(for: allFriends!)
         }
         
         // обновление
