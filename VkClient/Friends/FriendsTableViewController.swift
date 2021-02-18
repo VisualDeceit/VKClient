@@ -14,13 +14,17 @@ protocol FriendsTableViewControllerDelegate: class {
 }
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
-  
+    
     private var friendsBySection = [Results<User>]()
     private var friendsBySectionBackup = [Results<User>]()
     var notificationTokens = [NotificationToken]()
     var friendsLastNameTitles = [String]()
     var friendsLastNameTitlesBackup = [String]()
     var isSearching: Bool = false
+    
+    private var allFriends = try? RealmService.load(typeOf: User.self)
+
+    var allFriendsToken: NotificationToken?
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -39,28 +43,43 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         let networkService = NetworkServices()
         networkService.getUserFriends()
         
-        //устанавливаем уведомления
-        do {
-            let allFriends = try RealmService.load(typeOf: User.self)
-                ///рабиваем на секции
-                friendsLastNameTitles = splitOnSections(for: allFriends)
-                /// подписываем
-                initFriendsBySection(sections: friendsLastNameTitles)
-                /// for serch
-                friendsBySectionBackup = friendsBySection
-                friendsLastNameTitlesBackup = friendsLastNameTitles
+        //на первый запуск
+        if (allFriends?.count == 0) {
+            allFriendsToken = allFriends?.observe { [weak self] (changes: RealmCollectionChange) in
+                guard let tableView = self?.tableView else { return }
+                switch changes {
+                case .initial: break
+                case .update(let result, _, _, _):
+                    //устанавливаем уведомления
+                    self?.setNotificatoins(for: result)
+                    //отписываемcя
+                    self?.allFriendsToken?.invalidate()
+                    tableView.reloadData()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
+        } else {
+            setNotificatoins(for: allFriends!)
         }
-        catch {
-            print(error)
-        }
-         
+        
         // обновление
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
-       searchBar.delegate = self
+        searchBar.delegate = self
     }
     
     // MARK: - Notifications
+    
+    func setNotificatoins(for container: Results<User>) {
+        //рабиваем на секции
+        friendsLastNameTitles = splitOnSections(for: container)
+        // подписываем
+        initFriendsBySection(sections: friendsLastNameTitles)
+        // for serch
+        friendsBySectionBackup = friendsBySection
+        friendsLastNameTitlesBackup = friendsLastNameTitles
+    }
     
     func initFriendsBySection (sections: [String]) {
         //получаем коллекцию для каждой секции по первой букве фамилии
@@ -77,8 +96,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     
-    func addNotification(for results: Results<User>, in section:Int) {
-        let token = (results.observe { [weak self] (changes: RealmCollectionChange) in
+    func addNotification(for container: Results<User>, in section:Int) {
+        let token = (container.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
             switch changes {
             case .initial:

@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import Firebase
 
 class GroupsTableViewController: UITableViewController {
 
@@ -109,24 +110,33 @@ class GroupsTableViewController: UITableViewController {
 extension GroupsTableViewController: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+       //Throttled search
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(GroupsTableViewController.reload), object: nil)
+            self.perform(#selector(GroupsTableViewController.reload), with: nil, afterDelay: 1)
+        
+    }
+    
+    @objc func reload() {
+        guard let searchText = searchBar.text else { return }
         guard searchText != "" else {
             groups = groupsBackup
             isSearching = false
             tableView.reloadData()
             return
         }
-       
+        
         do {
             isSearching = true
             let predicate = NSPredicate(format: "name CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
             let filteredGroups = try RealmService.load(typeOf: Group.self).sorted(byKeyPath: "name").filter(predicate)
             groups = filteredGroups
+            //добавление результата в Firebase
+            addToFirebase(groups)
             tableView.reloadData()
         }
         catch {
             print(error)
         }
-        
     }
 
 
@@ -136,6 +146,23 @@ extension GroupsTableViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
+    }
+    
+    func addToFirebase(_ result: Results<Group>) {
+        let ref = Database.database(url: "https://vkclient-a78cb-default-rtdb.europe-west1.firebasedatabase.app/").reference(withPath: "users/" + (Session.shared.userId ?? "-1"))
+        
+        for group in result {
+            let firebaseGroup = FirebaseGroup(id: "\(group.id)", name: group.name)
+            let childRef = ref.child("group_search")
+            let groupRef = childRef.child("\(group.id)")
+            groupRef.setValue(firebaseGroup.toAnyObject())
+        }
+        //let firebaseUser = FirebaseUser(id: id ?? "-1", date: Int(Date().timeIntervalSince1970))
+        
+  
+        
+        //let userRef = ref.child(id ?? "-1")
+       // userRef.setValue(firebaseUser.toAnyObject())
     }
 
 }
