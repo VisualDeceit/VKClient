@@ -11,6 +11,8 @@ class GroupTableViewCell: UITableViewCell {
 
     @IBOutlet weak var groupLogo: CellLogo!
     @IBOutlet var groupName: UILabel!
+    //для сохранения запрошенного адреса
+    var imageURL: URL?
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -19,7 +21,10 @@ class GroupTableViewCell: UITableViewCell {
     }
     
     func populate(group: Group) {
-        self.groupLogo.logoView.download(from: group.avatarUrl)
+        imageURL = URL(string: group.avatarUrl)
+        self.groupLogo.logoView.download(from:imageURL!) {[weak self] url in
+            self?.imageURL == url
+        }
         self.groupName.text = group.name
     }
     

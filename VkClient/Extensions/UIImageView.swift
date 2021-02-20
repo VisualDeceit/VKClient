@@ -8,7 +8,16 @@
 import UIKit
 
 extension UIImageView {
-    func download(from url: URL) {
+    func download(from url: URL, closure: @escaping (URL) -> (Bool)) {
+
+        let activityView = UIActivityIndicatorView(style: .medium)
+        self.addSubview(activityView)
+        activityView.frame = self.bounds
+        activityView.translatesAutoresizingMaskIntoConstraints = false
+        activityView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        activityView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        activityView.startAnimating()
+        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard
                 let data = data,
@@ -16,17 +25,17 @@ extension UIImageView {
                 let image = UIImage(data: data)
             else { return }
             DispatchQueue.main.async {
-                //защита от неправильного отображения фото прии скролле
-             //   if url == response?.url
-               
+                if closure(url) {
+                    activityView.stopAnimating()
+                    activityView.removeFromSuperview()
                     self.image = image
-                
+                }
             }
         }.resume()
     }
-    func download(from link: String) {
+    func download(from link: String, closure: @escaping (URL) -> (Bool)) {
         guard let url = URL(string: link) else { return }
-        download(from: url)
+        download(from: url, closure: closure)
     }
 }
 

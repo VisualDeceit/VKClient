@@ -55,7 +55,9 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     }
     
     func getImage(for index: Int, to imageView: UIImageView){
-        imageView.download(from: datasource[index].link)
+        imageView.download(from: datasource[index].link) {[weak self] url in
+            URL(string: (self?.datasource[index].link)!) == url
+        }
     }
     
 
