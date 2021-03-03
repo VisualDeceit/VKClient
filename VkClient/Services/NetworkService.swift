@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class NetworkServices {
     
-    let vAPI = "5.126"
+   private let vAPI = "5.130"
     
 //получение списка друзей
     func getUserFriends() {
