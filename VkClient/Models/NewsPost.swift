@@ -49,8 +49,31 @@ class NewsPost: Decodable {
         case viewsCount = "count"
     }
     
+    enum CodingKeys: CodingKey {
+        case date
+        case text
+        case likes
+        case reposts
+        case views
+        
+    }
+    
     convenience required init(from decoder: Decoder) throws {
         self.init()
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.date = try container.decode(Int.self, forKey: .date)
+        self.text = try container.decode(String.self, forKey: .text)
+        
+        let likeContainer = try container.nestedContainer(keyedBy: LikesCodingKeys.self, forKey: .likes)
+        self.isLiked = try likeContainer.decode(Int.self, forKey: .isLiked)
+        self.likesCount = try likeContainer.decode(Int.self, forKey: .likesCount)
+        
+        let repostsContainer = try container.nestedContainer(keyedBy: RepostsCodingKeys.self, forKey: .reposts)
+        self.repostsCount = try repostsContainer.decode(Int.self, forKey: .repostsCount)
+        
+        let viewsContainer = try container.nestedContainer(keyedBy: ViewsCodingKeys.self, forKey: .views)
+        self.viewsCount = try viewsContainer.decode(Int.self, forKey: .viewsCount)
         
     }
     
