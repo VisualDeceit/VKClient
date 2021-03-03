@@ -76,7 +76,6 @@ class NewsTableViewController: UITableViewController {
         
         self.tableView.estimatedRowHeight = 44
         self.tableView.rowHeight = UITableView.automaticDimension
-    
     }
 
     // MARK: - Table view data source

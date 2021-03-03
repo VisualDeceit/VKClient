@@ -11,6 +11,7 @@ import UIKit
 
 class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
+    var newsPosts = [NewsPost]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,13 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView.backgroundColor = .secondarySystemBackground
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.identifier)
         collectionView.alwaysBounceVertical = true
+        
+        //загрузка данных из сети
+        let networkService = NetworkServices()
+        networkService.getNewsFeed(type: .post) { [weak self] news in
+            self?.newsPosts = news
+        }
+    
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

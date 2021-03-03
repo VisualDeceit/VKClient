@@ -9,9 +9,19 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+public struct NewsFeedType: RawRepresentable, Hashable {
+    public static let post = NewsFeedType(rawValue: "post")
+    public static let photo = NewsFeedType(rawValue: "photo")
+   
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
 class NetworkServices {
     
-   private let vAPI = "5.130"
+    private let vAPI = "5.130"
     
 //получение списка друзей
     func getUserFriends() {
@@ -148,5 +158,43 @@ class NetworkServices {
                        parameters: parameters).responseJSON { (json) in
                         
                        }
+    }
+    
+    // новости типа post
+    func getNewsFeed(type: NewsFeedType, completion: @escaping ([NewsPost]) ->()) {
+        let urlComponent: URLComponents = {
+            var url = URLComponents()
+            url.scheme = "https"
+            url.host = "api.vk.com"
+            url.path = "/method/newsfeed.get"
+            url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
+                              URLQueryItem(name: "v", value: vAPI),
+                              URLQueryItem(name: "filters", value: type.rawValue),
+                              URLQueryItem(name: "count", value: "10"),
+                              URLQueryItem(name: "max_photos", value: "4"),
+            ]
+            return url
+        }()
+        
+        //создаем сессию
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        //проверяем url
+        if let url  = urlComponent.url {
+            //создаем запрос
+            let request = URLRequest(url: url)
+            //создаем задание
+            let task = session.dataTask(with: request) { (data, _, _) in
+                if let data = data {
+                    do {
+                        let newsPosts = try JSONDecoder().decode(NewsPostResponse.self, from: data).items
+                        completion(newsPosts)
+                    }
+                    catch {
+                        print(error)
+                    }
+                }
+            }
+            task.resume()
+        }
     }
 }
