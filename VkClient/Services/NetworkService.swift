@@ -170,7 +170,7 @@ class NetworkServices {
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
                               URLQueryItem(name: "filters", value: type.rawValue),
-                              URLQueryItem(name: "count", value: "10"),
+                              URLQueryItem(name: "count", value: "100"),
                               URLQueryItem(name: "max_photos", value: "4"),
             ]
             return url
@@ -187,6 +187,25 @@ class NetworkServices {
                 if let data = data {
                     do {
                         let newsPosts = try JSONDecoder().decode(NewsPostResponse.self, from: data).items
+                        let groups = try JSONDecoder().decode(NewsPostResponse.self, from: data).gpoups
+                        let profiles = try JSONDecoder().decode(NewsPostResponse.self, from: data).profiles
+                        newsPosts.forEach { news in
+                            if news.sourceId < 0 {
+                                //groups
+                               let group =  groups.first { (element) -> Bool in
+                                element.id == abs(news.sourceId)
+                                }
+                                news.name = group?.name ?? "Group name"
+                                news.avatarUrl = group?.photoURL ?? "https://vk.com/images/camera_50.png"
+                            } else {
+                                //profiles
+                                let profile =  profiles.first { (element) -> Bool in
+                                    element.id == abs(news.sourceId)
+                                 }
+                                 news.name = profile?.name ?? "Profile name"
+                                 news.avatarUrl = profile?.photoURL ?? "https://vk.com/images/camera_50.png"
+                            }
+                        }
                         completion(newsPosts)
                     }
                     catch {

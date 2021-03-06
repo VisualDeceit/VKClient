@@ -11,30 +11,70 @@ class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
-    var post: Post! {
+    //для сохранения запрошенного адреса
+    var imageURL: URL?
+        
+    var newsPost: NewsPost! {
         didSet {
-            profileImageView.logoView.image = post.logo
-            nameLabel.setAttributedText(text: post.caption, subtext: post.date)
             
-            if let text = post.text {
-                contentText.text = text
+            imageURL = URL(string: newsPost.avatarUrl)
+            profileImageView.logoView.download(from: (imageURL)!) {[weak self] url in
+                self?.imageURL == url
             }
             
-            contentImageViews.forEach{ $0.isHidden = true }
+            let dateFormatter = DateFormatter()
+            let date = Date(timeIntervalSince1970: Double(newsPost.date))
+            dateFormatter.timeStyle = DateFormatter.Style.short //Set time style
+            dateFormatter.dateStyle = DateFormatter.Style.short //Set date style
+            dateFormatter.timeZone = .current
+            let localDate = dateFormatter.string(from: date)
+            nameLabel.setAttributedText(text: newsPost.name, subtext: localDate)
             
-            contentImages = post.image
-            if let images = contentImages {
-                for i in 0..<images.count {
-                    if i >= 4  { break }
-                    contentImageViews[i].image = images[i]
-                    contentImageViews[i].isHidden = false
+            contentText.text = newsPost.text
+            
+            let imageGroup = DispatchGroup()
+            
+            if let attachments = newsPost.attachments {
+                for i in 0..<attachments.count {
+                    if  attachments[i].type != "photo" {
+                        continue
+                    }
+                    DispatchQueue.global().async(group: imageGroup) {
+                        if let url = URL(string: attachments[i].url),
+                           let data = try? Data(contentsOf: url) {
+                            self.contentImages?.append(UIImage(data: data)!)
+                        }
+                    }
                 }
             }
+
+
             
-            likeButton.totalCount = post.like.totalCount
-            likeButton.isLiked = post.like.isLiked
+            likeButton.totalCount = newsPost.likesCount
+            likeButton.isLiked = (newsPost.isLiked != 0)
+            var viewsCountString = ""
+            let viewsCount =  newsPost.viewsCount ?? 0
+                if viewsCount < 1000 {
+                    viewsCountString = "\(viewsCount)"
+                } else {
+                    viewsCountString = String(format: "%.1fk", Double(viewsCount)/1000.0)
+                }
+            viewsButton.setTitle(viewsCountString, for: .normal)
             
-            setupContentImagesSize()
+            
+            
+            imageGroup.notify(queue: DispatchQueue.main) {
+                self.contentImageViews.forEach{ $0.isHidden = true }
+                
+                if let images = self.contentImages {
+                    for i in 0..<images.count {
+                        if i >= 4  { break }
+                        self.contentImageViews[i].image = images[i]
+                        self.contentImageViews[i].isHidden = false
+                    }
+                }
+                self.setupContentImagesSize()
+            }
         }
     }
     
@@ -54,6 +94,7 @@ class FeedCell: UICollectionViewCell {
         nameLabel.text = nil
         profileImageView.logoView.image = nil
         contentText.text = nil
+        contentImages?.removeAll()
         contentImageViews.forEach { $0.image = nil }
     }
     
@@ -70,7 +111,7 @@ class FeedCell: UICollectionViewCell {
         return label
     }()
     
-    var contentImages: [UIImage]?
+    var contentImages: [UIImage]? = []
     var contentImageViews = [UIImageView]()
     var contentImageViewsHeight: NSLayoutConstraint?
     var contentImageViewsAspect1: NSLayoutConstraint?
@@ -141,7 +182,7 @@ class FeedCell: UICollectionViewCell {
         let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
         let views = UIImage(systemName: "eye", withConfiguration: imgConfig)
         button.setImage(views, for: .normal)
-        button.setTitle("15k", for: .normal)
+       // button.setTitle("15k", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.isEnabled = false
        return button
