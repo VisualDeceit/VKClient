@@ -13,6 +13,7 @@ class FeedCell: UICollectionViewCell {
     
     //для сохранения запрошенного адреса
     var imageURL: URL?
+    var attachURL: [URL]? = []
         
     var newsPost: NewsPost! {
         didSet {
@@ -34,15 +35,19 @@ class FeedCell: UICollectionViewCell {
             
             let imageGroup = DispatchGroup()
             
+            
             if let attachments = newsPost.attachments {
+                
                 for i in 0..<attachments.count {
                     if  attachments[i].type != "photo" {
                         continue
                     }
+                    attachURL?.append(URL(string: attachments[i].url)!)
+                    
                     DispatchQueue.global().async(group: imageGroup) {
                         if let url = URL(string: attachments[i].url),
                            let data = try? Data(contentsOf: url) {
-                            self.contentImages?.append(UIImage(data: data)!)
+                                self.contentImages?.append(UIImage(data: data)!)
                         }
                     }
                 }
@@ -61,10 +66,9 @@ class FeedCell: UICollectionViewCell {
                 }
             viewsButton.setTitle(viewsCountString, for: .normal)
             
-            
+            self.contentImageViews.forEach{ $0.isHidden = true }
             
             imageGroup.notify(queue: DispatchQueue.main) {
-                self.contentImageViews.forEach{ $0.isHidden = true }
                 
                 if let images = self.contentImages {
                     for i in 0..<images.count {
@@ -182,7 +186,7 @@ class FeedCell: UICollectionViewCell {
         let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
         let views = UIImage(systemName: "eye", withConfiguration: imgConfig)
         button.setImage(views, for: .normal)
-       // button.setTitle("15k", for: .normal)
+
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.isEnabled = false
        return button

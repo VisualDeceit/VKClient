@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 struct NewsPostResponse: Decodable {
@@ -73,6 +74,7 @@ struct NewsPostGroups: Decodable {
 struct NewsPostAttachment: Decodable {
     var type = ""
     var url = ""
+    var ratio: CGFloat = 0
     
     enum CodingKeys: String, CodingKey {
         case type
@@ -88,20 +90,24 @@ struct NewsPostAttachment: Decodable {
             let photoContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .photo)
             let sizesArray = try photoContainer.decode([PhotoSize].self, forKey: .sizes)
             // поиск максимальный размер
-            var maxSize = sizesArray.reduce(sizesArray[0]) { current, next -> PhotoSize in
-                let currentPoints = current.width * current.height
-                let nextPoints = next.width * next.height
-                return currentPoints >= nextPoints ? current : next
-            }
+//            var maxSize = sizesArray.reduce(sizesArray[0]) { current, next -> PhotoSize in
+//                let currentPoints = current.width * current.height
+//                let nextPoints = next.width * next.height
+//                return currentPoints >= nextPoints ? current : next
+//            }
             // для фото до 2012г
-            if maxSize.height == 0 {
-                maxSize = sizesArray.first(where: {$0.type == "x"}) ?? sizesArray[0]
-            }
+           // if maxSize.height == 0 {
+              let  maxSize = sizesArray.first(where: {$0.type == "x"}) ?? sizesArray[0]
+           // }
             
             self.url = maxSize.url
+            self.ratio = CGFloat( maxSize.width) / CGFloat( maxSize.height)
         }
-       
-        
+        if self.type == "video" {
+            self.url = "https://www.geirangerfjord.no/upload/images/2018_general/film-and-vid.jpg"
+            self.ratio = CGFloat( 1240.0 / 711.0 )
+        }
+
     }
     
 }

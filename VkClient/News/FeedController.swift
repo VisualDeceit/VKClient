@@ -53,8 +53,19 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             textHeight = rect.height + 24
         }
         
-        //let imagesHeight = calculateImageHeight(images: newsFeed[indexPath.item].image, width: view.frame.width)
-        let imagesHeight = CGFloat.zero
+      //  let imagesHeight = calculateImageHeight(images: newsPosts[indexPath.item].attachments?.first?.height, width: view.frame.width)
+        var imagesHeight: CGFloat = 0
+        switch newsPosts[indexPath.item].attachments?.count {
+        case 1:
+            if let ratio = newsPosts[indexPath.item].attachments?.first?.ratio, ratio != 0  {
+                imagesHeight =  view.frame.width / ratio
+            } else {
+                imagesHeight = 0
+            }
+        default:
+            imagesHeight =  view.frame.width
+        }
+        
         return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 21 + 30 )
     }
 }
