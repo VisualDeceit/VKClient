@@ -39,10 +39,10 @@ class FeedCell: UICollectionViewCell {
             if let attachments = newsPost.attachments {
                 
                 for i in 0..<attachments.count {
-                    if  attachments[i].type != "photo" {
+                  /*  if  attachments[i].type != "photo" || attachments[i].type != "video" {
                         continue
-                    }
-                    attachURL?.append(URL(string: attachments[i].url)!)
+                    } */
+                    //attachURL?.append(URL(string: attachments[i].url)!)
                     
                     DispatchQueue.global().async(group: imageGroup) {
                         if let url = URL(string: attachments[i].url),

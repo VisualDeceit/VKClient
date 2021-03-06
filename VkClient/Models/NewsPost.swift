@@ -107,6 +107,11 @@ struct NewsPostAttachment: Decodable {
             self.url = "https://www.geirangerfjord.no/upload/images/2018_general/film-and-vid.jpg"
             self.ratio = CGFloat( 1240.0 / 711.0 )
         }
+        
+        if self.type == "link" {
+            self.url = "https://www.pngitem.com/pimgs/m/249-2499939_url-chain-link-transparent-images-link-to-website.png"
+            self.ratio = CGFloat( 860.0 / 903.0)
+        }
 
     }
     
