@@ -7,22 +7,25 @@
 
 import UIKit
 
+let imageCache = NSCache<NSString, UIImage>()
+
 class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
-    //для сохранения запрошенного адреса
     var imageURL: URL?
     var attachURL: [URL]?
         
     var newsPost: NewsPost! {
         didSet {
             
+            //аватар
             imageURL = URL(string: newsPost.avatarUrl)
             profileImageView.logoView.download(from: (imageURL)!) {[weak self] url in
                 self?.imageURL == url
             }
             
+            //дата и заголовок
             let dateFormatter = DateFormatter()
             let date = Date(timeIntervalSince1970: Double(newsPost.date))
             dateFormatter.timeStyle = DateFormatter.Style.short //Set time style
@@ -31,41 +34,10 @@ class FeedCell: UICollectionViewCell {
             let localDate = dateFormatter.string(from: date)
             nameLabel.setAttributedText(text: newsPost.name, subtext: localDate)
             
-            self.contentImageViews.forEach{
-                $0.isHidden = true
-        }
-            
+            //текст
             contentText.text = newsPost.text
             
-            let imageGroup = DispatchGroup()
-            
-            
-            if let attachments = newsPost.attachments {
-                attachURL?.removeAll()
-                for i in 0..<attachments.count {
-                    
-                    if attachURL?.append(URL(string: attachments[i].url)!) == nil {
-                        attachURL = [ URL(string: attachments[i].url)! ]
-                    }
-                    
-                    DispatchQueue.global().async(group: imageGroup) {
-                        if let url = URL(string: attachments[i].url),
-                           let data = try? Data(contentsOf: url) {
-                         //   if self.attachURL!.contains(url) {
-                                self.contentImages?.append(UIImage(data: data)!)
-                         //   }
-                        }
-                    }
-                }
-            } else {
-                contentImageViewsHeight?.constant = 0
-                subImagesStackView.heightAnchor.constraint(equalToConstant: 0).isActive = true
-                NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
-                layoutIfNeeded()
-            }
-
-
-            
+            //лайки и просмотры
             likeButton.totalCount = newsPost.likesCount
             likeButton.isLiked = (newsPost.isLiked != 0)
             var viewsCountString = ""
@@ -77,7 +49,62 @@ class FeedCell: UICollectionViewCell {
                 }
             viewsButton.setTitle(viewsCountString, for: .normal)
             
+            
+            self.contentImageViews.forEach { $0.isHidden = true }
+            
+            let imageGroup = DispatchGroup()
+
+            //есть содержимер
+            if let attachments = newsPost.attachments {
+                
+                attachURL?.removeAll()
+                
+                for i in 0..<attachments.count where i < 4 {
+                    
+                    //  эти пока не обрабатываем
+                    if attachments[i].type == "doc"  || attachments[i].type == "poll"  { continue }
+                    
+                    subcontentImageViewsHeight?.isActive = false
+                    
+                    //сохранияем url
+                    if attachURL?.append(URL(string: attachments[i].url)!) == nil {
+                        attachURL = [ URL(string: attachments[i].url)! ]
+                    }
+                    //изображение есть к кеше
+                    if let imageFromCache = imageCache.object(forKey: attachments[i].url as NSString) {
+                        //берем из кеша
+                        self.contentImages?.append(imageFromCache)
+                        self.contentImageViews[i].image = imageFromCache
+                        self.contentImageViews[i].isHidden = false
+                        self.setupContentImagesSize()
+                        self.layoutIfNeeded()
+                    } else { //загружаем из сети
+                        //создаем очередь
+                        DispatchQueue.global().async(group: imageGroup, qos: .userInitiated) {
+                            if let url = URL(string: attachments[i].url),
+                               let data = try? Data(contentsOf: url) {
+                                let imageToCache = UIImage(data: data)!
+                                //если это запрашиваемый url
+                                if self.attachURL!.contains(url) {
+                                    self.contentImages?.append(imageToCache)
+                                }
+                                //сохранияем в кеш
+                                imageCache.setObject(imageToCache, forKey: attachments[i].url as NSString)
+                            }
+                        }
+                    }
+                }
+            } else { //нет прикрепленного
+                //сжимаем область картинок
+                contentImageViewsHeight?.constant = 0
+                subcontentImageViewsHeight?.isActive = true
+                NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
+                layoutIfNeeded()
+            }
+
+            //все задания из группы закончились
             imageGroup.notify(queue: DispatchQueue.main) {
+                self.contentImageViews.forEach { $0.image = nil }
                 if let images = self.contentImages {
                     for i in 0..<images.count {
                         if i >= 4  { break }
@@ -127,6 +154,7 @@ class FeedCell: UICollectionViewCell {
     var contentImages: [UIImage]? = []
     var contentImageViews = [UIImageView]()
     var contentImageViewsHeight: NSLayoutConstraint?
+    var subcontentImageViewsHeight: NSLayoutConstraint?
     var contentImageViewsAspect1: NSLayoutConstraint?
     var contentImageViewsAspect2: NSLayoutConstraint?
     
@@ -142,7 +170,7 @@ class FeedCell: UICollectionViewCell {
     
     let subImagesStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = true
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = 4
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -206,7 +234,6 @@ class FeedCell: UICollectionViewCell {
         let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
         
         contentImageViewsHeight?.constant = imagesHeight
-        subImagesStackView.heightAnchor.constraint(equalToConstant: 0).isActive = false
         
         NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
         if let images  = contentImages {
@@ -270,7 +297,8 @@ class FeedCell: UICollectionViewCell {
         //высота поля с картинками
         contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
         imagesStackView.addConstraint(contentImageViewsHeight!)
-
+        subcontentImageViewsHeight = subImagesStackView.heightAnchor.constraint(equalToConstant: 0)
+        
         //соотношение сторон для области картинок в зависимоти от кол-ва
         contentImageViewsAspect1 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 1)
         contentImageViewsAspect2 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 3)
