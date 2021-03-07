@@ -32,19 +32,20 @@ class VKLoginViewController: UIViewController {
     lazy var request = URLRequest(url: urlComponents.url!)
     
     @IBAction func unwindToLogin(_ unwindSegue: UIStoryboardSegue) {
-        webView.load(request)
+        Session.shared.token = nil
+        Session.shared.userId = nil
    //     очищаем cookie
-//        let dataStore = WKWebsiteDataStore.default()
-//        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-//            for record in records {
-//                if record.displayName.contains("vk") {
-//                    dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: { [weak self] in
-//                        self?.webView.load(self!.request)
-//                    })
-//                }
-//            }
-//        }
-//
+        let dataStore = WKWebsiteDataStore.default()
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+            for record in records {
+                if record.displayName.contains("vk") {
+                    dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: { [weak self] in
+                        self?.webView.load(self!.request)
+                    })
+                }
+            }
+        }
+        webView.load(request)
     }
     
     override func viewDidLoad() {
