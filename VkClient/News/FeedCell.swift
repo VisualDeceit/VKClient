@@ -13,7 +13,7 @@ class FeedCell: UICollectionViewCell {
     
     //для сохранения запрошенного адреса
     var imageURL: URL?
-    var attachURL: [URL]? = []
+    var attachURL: [URL]?
         
     var newsPost: NewsPost! {
         didSet {
@@ -31,26 +31,37 @@ class FeedCell: UICollectionViewCell {
             let localDate = dateFormatter.string(from: date)
             nameLabel.setAttributedText(text: newsPost.name, subtext: localDate)
             
+            self.contentImageViews.forEach{
+                $0.isHidden = true
+        }
+            
             contentText.text = newsPost.text
             
             let imageGroup = DispatchGroup()
             
             
             if let attachments = newsPost.attachments {
-                
+                attachURL?.removeAll()
                 for i in 0..<attachments.count {
-                  /*  if  attachments[i].type != "photo" || attachments[i].type != "video" {
-                        continue
-                    } */
-                    //attachURL?.append(URL(string: attachments[i].url)!)
+                    
+                    if attachURL?.append(URL(string: attachments[i].url)!) == nil {
+                        attachURL = [ URL(string: attachments[i].url)! ]
+                    }
                     
                     DispatchQueue.global().async(group: imageGroup) {
                         if let url = URL(string: attachments[i].url),
                            let data = try? Data(contentsOf: url) {
+                         //   if self.attachURL!.contains(url) {
                                 self.contentImages?.append(UIImage(data: data)!)
+                         //   }
                         }
                     }
                 }
+            } else {
+                contentImageViewsHeight?.constant = 0
+                subImagesStackView.heightAnchor.constraint(equalToConstant: 0).isActive = true
+                NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
+                layoutIfNeeded()
             }
 
 
@@ -66,10 +77,7 @@ class FeedCell: UICollectionViewCell {
                 }
             viewsButton.setTitle(viewsCountString, for: .normal)
             
-            self.contentImageViews.forEach{ $0.isHidden = true }
-            
             imageGroup.notify(queue: DispatchQueue.main) {
-                
                 if let images = self.contentImages {
                     for i in 0..<images.count {
                         if i >= 4  { break }
@@ -78,6 +86,7 @@ class FeedCell: UICollectionViewCell {
                     }
                 }
                 self.setupContentImagesSize()
+                self.layoutIfNeeded()
             }
         }
     }
@@ -133,7 +142,7 @@ class FeedCell: UICollectionViewCell {
     
     let subImagesStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = true
         stackView.spacing = 4
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -195,7 +204,9 @@ class FeedCell: UICollectionViewCell {
     func setupContentImagesSize() {
         
         let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
+        
         contentImageViewsHeight?.constant = imagesHeight
+        subImagesStackView.heightAnchor.constraint(equalToConstant: 0).isActive = false
         
         NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
         if let images  = contentImages {
@@ -224,9 +235,7 @@ class FeedCell: UICollectionViewCell {
         addSubview(imagesStackView)
         addSubview(devider)
         addSubview(bottomStackView)
-        
-        //profileImageView.shadowRadius = 22
- 
+
         // наполняем  array imageviews
         for _ in 0...3 {
             let imageView = UIImageView()
@@ -261,7 +270,7 @@ class FeedCell: UICollectionViewCell {
         //высота поля с картинками
         contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
         imagesStackView.addConstraint(contentImageViewsHeight!)
-        
+
         //соотношение сторон для области картинок в зависимоти от кол-ва
         contentImageViewsAspect1 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 1)
         contentImageViewsAspect2 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 3)
