@@ -54,7 +54,7 @@ class FeedCell: UICollectionViewCell {
             
             let imageGroup = DispatchGroup()
 
-            //есть содержимер
+            //есть содержимое
             if let attachments = newsPost.attachments {
                 
                 attachURL?.removeAll()
