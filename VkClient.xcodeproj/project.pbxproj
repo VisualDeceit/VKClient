@@ -47,7 +47,8 @@
 		15D91F4B25BC162300169520 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F4A25BC162300169520 /* Group.swift */; };
 		15D91F5225BC400300169520 /* UserPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F5125BC400300169520 /* UserPhoto.swift */; };
 		15F45D7F25F920FA001DD0BE /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F45D7E25F920FA001DD0BE /* AsyncOperation.swift */; };
-		15F45D8325F925EB001DD0BE /* GetUserGroupsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F45D8225F925EB001DD0BE /* GetUserGroupsOperation.swift */; };
+		15F45D8325F925EB001DD0BE /* GetGroupsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F45D8225F925EB001DD0BE /* GetGroupsOperation.swift */; };
+		15F45D8625F93286001DD0BE /* ParsingGroupsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F45D8525F93286001DD0BE /* ParsingGroupsOperation.swift */; };
 		15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */; };
 		15FE81C625CAC440009E7445 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE81C525CAC440009E7445 /* UITableView.swift */; };
 		15FE9B2325EFFE55009C3087 /* NewsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE9B2225EFFE55009C3087 /* NewsPost.swift */; };
@@ -97,7 +98,8 @@
 		15D91F4A25BC162300169520 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		15D91F5125BC400300169520 /* UserPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhoto.swift; sourceTree = "<group>"; };
 		15F45D7E25F920FA001DD0BE /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
-		15F45D8225F925EB001DD0BE /* GetUserGroupsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUserGroupsOperation.swift; sourceTree = "<group>"; };
+		15F45D8225F925EB001DD0BE /* GetGroupsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGroupsOperation.swift; sourceTree = "<group>"; };
+		15F45D8525F93286001DD0BE /* ParsingGroupsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingGroupsOperation.swift; sourceTree = "<group>"; };
 		15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipePhotoGalleryViewController.swift; sourceTree = "<group>"; };
 		15FE81C525CAC440009E7445 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
 		15FE9B2225EFFE55009C3087 /* NewsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPost.swift; sourceTree = "<group>"; };
@@ -287,7 +289,8 @@
 			isa = PBXGroup;
 			children = (
 				15F45D7E25F920FA001DD0BE /* AsyncOperation.swift */,
-				15F45D8225F925EB001DD0BE /* GetUserGroupsOperation.swift */,
+				15F45D8225F925EB001DD0BE /* GetGroupsOperation.swift */,
+				15F45D8525F93286001DD0BE /* ParsingGroupsOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -432,11 +435,12 @@
 				1504D93C2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift in Sources */,
 				15FE81C625CAC440009E7445 /* UITableView.swift in Sources */,
 				15D91F0C25BA9B2C00169520 /* User.swift in Sources */,
-				15F45D8325F925EB001DD0BE /* GetUserGroupsOperation.swift in Sources */,
+				15F45D8325F925EB001DD0BE /* GetGroupsOperation.swift in Sources */,
 				1542524D25A2EF240014F40A /* FeedController.swift in Sources */,
 				15B176092586793D00042450 /* LikeControl.swift in Sources */,
 				1542525725AB74AE0014F40A /* FeedCell.swift in Sources */,
 				1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */,
+				15F45D8625F93286001DD0BE /* ParsingGroupsOperation.swift in Sources */,
 				15D91F4325BBDED900169520 /* UIImageView.swift in Sources */,
 				15D31FEB25AED521003D312E /* UIImage.swift in Sources */,
 				15B3E5BF258F777B001C025E /* NewsTableViewController.swift in Sources */,

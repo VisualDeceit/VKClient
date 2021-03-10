@@ -42,13 +42,18 @@ class GroupsTableViewController: UITableViewController {
             print(error)
         }
         
-        //операция
-        let getGroupsOperation = GetUserGroupsOperation()
-        getGroupsOperation.completionBlock =  {
-            print(try! JSON(data: getGroupsOperation.data!) )
-        }
+        //MARK: - Операции
+        //сырые данные
+        let getGroupsOperation = GetGroupsOperation()
+        //парсинг
+        let parsingGroupsOperation = ParsingGroupsOperation()
+        parsingGroupsOperation.addDependency(getGroupsOperation)
+        //добавлени в Realm
+        
+        //ссоздаем очередь
         let operationQ = OperationQueue()
         operationQ.addOperation(getGroupsOperation)
+        operationQ.addOperation(parsingGroupsOperation)
 
     }
     

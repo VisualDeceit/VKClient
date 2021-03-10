@@ -1,5 +1,5 @@
 //
-//  GetUserGroupsOperation.swift
+//  GetGroupsOperation.swift
 //  VkClient
 //
 //  Created by Alexander Fomin on 10.03.2021.
@@ -8,7 +8,7 @@
 import Foundation
 import  Alamofire
 
-class GetUserGroupsOperation: AsyncOperation {
+class GetGroupsOperation: AsyncOperation {
     
     // возвращаемые данные
     var data: Data?
