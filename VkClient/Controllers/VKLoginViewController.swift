@@ -7,7 +7,7 @@
 
 import UIKit
 import WebKit
-import Firebase
+//import Firebase
 
 
 class VKLoginViewController: UIViewController {
@@ -19,12 +19,12 @@ class VKLoginViewController: UIViewController {
         urlComp.host = "oauth.vk.com"
         urlComp.path = "/authorize"
         urlComp.queryItems = [
-            URLQueryItem(name: "client_id", value: "7766191"),
+            URLQueryItem(name: "client_id", value: "7783207"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
-            URLQueryItem(name: "scope", value: "262150"),
+            URLQueryItem(name: "scope", value: "270342"), //270342 //offline
             URLQueryItem(name: "response_type", value: "token"),
-            URLQueryItem(name: "v", value: "5.126")
+            URLQueryItem(name: "v", value: "5.130")
     ]
         return urlComp
     }()
@@ -32,6 +32,8 @@ class VKLoginViewController: UIViewController {
     lazy var request = URLRequest(url: urlComponents.url!)
     
     @IBAction func unwindToLogin(_ unwindSegue: UIStoryboardSegue) {
+        Session.shared.token = nil
+        Session.shared.userId = nil
    //     очищаем cookie
         let dataStore = WKWebsiteDataStore.default()
         dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
@@ -43,7 +45,7 @@ class VKLoginViewController: UIViewController {
                 }
             }
         }
-        
+        webView.load(request)
     }
     
     override func viewDidLoad() {
@@ -82,19 +84,21 @@ extension VKLoginViewController: WKNavigationDelegate {
         Session.shared.userId = params["user_id"]
         
         //сохраняем данные о юзаре в Firebase
-        addToFirebase(id: Session.shared.userId)
+       // addToFirebase(id: Session.shared.userId)
         
         decisionHandler(.cancel)
         performSegue(withIdentifier: "ToMainTabBar", sender: nil)
     }
+ /*
     
     func addToFirebase(id: String?) {
         let firebaseUser = FirebaseUser(id: id ?? "-1", date: Int(Date().timeIntervalSince1970))
-        
+
         let ref = Database.database(url: "https://vkclient-a78cb-default-rtdb.europe-west1.firebasedatabase.app/").reference(withPath: "users")
-        
+
         let userRef = ref.child(id ?? "-1")
         userRef.setValue(firebaseUser.toAnyObject())
     }
+ */
 }
 

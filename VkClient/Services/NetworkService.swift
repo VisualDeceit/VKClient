@@ -9,9 +9,19 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+public struct NewsFeedType: RawRepresentable, Hashable {
+    public static let post = NewsFeedType(rawValue: "post")
+    public static let photo = NewsFeedType(rawValue: "photo")
+   
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
 class NetworkServices {
     
-    let vAPI = "5.126"
+    private let vAPI = "5.130"
     
 //получение списка друзей
     func getUserFriends() {
@@ -148,5 +158,62 @@ class NetworkServices {
                        parameters: parameters).responseJSON { (json) in
                         
                        }
+    }
+    
+    // новости типа post
+    func getNewsFeed(type: NewsFeedType, completion: @escaping ([NewsPost]) ->()) {
+        let urlComponent: URLComponents = {
+            var url = URLComponents()
+            url.scheme = "https"
+            url.host = "api.vk.com"
+            url.path = "/method/newsfeed.get"
+            url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
+                              URLQueryItem(name: "v", value: vAPI),
+                              URLQueryItem(name: "filters", value: type.rawValue),
+                              URLQueryItem(name: "count", value: "100"),
+                              URLQueryItem(name: "max_photos", value: "4"),
+            ]
+            return url
+        }()
+        
+        //создаем сессию
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        //проверяем url
+        if let url  = urlComponent.url {
+            //создаем запрос
+            let request = URLRequest(url: url)
+            //создаем задание
+            let task = session.dataTask(with: request) { (data, _, _) in
+                if let data = data {
+                    do {
+                        let newsPosts = try JSONDecoder().decode(NewsPostResponse.self, from: data).items
+                        let groups = try JSONDecoder().decode(NewsPostResponse.self, from: data).gpoups
+                        let profiles = try JSONDecoder().decode(NewsPostResponse.self, from: data).profiles
+                        newsPosts.forEach { news in
+                            if news.sourceId < 0 {
+                                //groups
+                               let group =  groups.first { (element) -> Bool in
+                                element.id == abs(news.sourceId)
+                                }
+                                news.name = group?.name ?? "Group name"
+                                news.avatarUrl = group?.photoURL ?? "https://vk.com/images/camera_50.png"
+                            } else {
+                                //profiles
+                                let profile =  profiles.first { (element) -> Bool in
+                                    element.id == abs(news.sourceId)
+                                 }
+                                 news.name = profile?.name ?? "Profile name"
+                                 news.avatarUrl = profile?.photoURL ?? "https://vk.com/images/camera_50.png"
+                            }
+                        }
+                        completion(newsPosts)
+                    }
+                    catch {
+                        print(error)
+                    }
+                }
+            }
+            task.resume()
+        }
     }
 }

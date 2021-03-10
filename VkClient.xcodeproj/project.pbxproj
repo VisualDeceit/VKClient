@@ -31,8 +31,6 @@
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1572BDB825C6837D00B320F9 /* RealmService.swift */; };
 		1593ABBB25D45586005B7FD1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1593ABBA25D45586005B7FD1 /* GoogleService-Info.plist */; };
-		1593ABC025D4566B005B7FD1 /* FirebaseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1593ABBF25D4566B005B7FD1 /* FirebaseUser.swift */; };
-		1593ABC325D46385005B7FD1 /* FirebaseGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1593ABC225D46385005B7FD1 /* FirebaseGroup.swift */; };
 		15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C125B4166E006C5A25 /* VKLoginViewController.swift */; };
 		15A901C525B429A6006C5A25 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A901C425B429A6006C5A25 /* NetworkService.swift */; };
 		15B17600258621F500042450 /* CellLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B175FF258621F500042450 /* CellLogo.swift */; };
@@ -50,6 +48,7 @@
 		15D91F5225BC400300169520 /* UserPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D91F5125BC400300169520 /* UserPhoto.swift */; };
 		15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */; };
 		15FE81C625CAC440009E7445 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE81C525CAC440009E7445 /* UITableView.swift */; };
+		15FE9B2325EFFE55009C3087 /* NewsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FE9B2225EFFE55009C3087 /* NewsPost.swift */; };
 		C71B9E29C51FF0FC13B504BC /* Pods_VkClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31AD423F7FA4685CA9D60236 /* Pods_VkClient.framework */; };
 /* End PBXBuildFile section */
 
@@ -80,8 +79,6 @@
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		1572BDB825C6837D00B320F9 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		1593ABBA25D45586005B7FD1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		1593ABBF25D4566B005B7FD1 /* FirebaseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUser.swift; sourceTree = "<group>"; };
-		1593ABC225D46385005B7FD1 /* FirebaseGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseGroup.swift; sourceTree = "<group>"; };
 		15A901C125B4166E006C5A25 /* VKLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginViewController.swift; sourceTree = "<group>"; };
 		15A901C425B429A6006C5A25 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		15B175FF258621F500042450 /* CellLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLogo.swift; sourceTree = "<group>"; };
@@ -99,6 +96,7 @@
 		15D91F5125BC400300169520 /* UserPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhoto.swift; sourceTree = "<group>"; };
 		15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipePhotoGalleryViewController.swift; sourceTree = "<group>"; };
 		15FE81C525CAC440009E7445 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
+		15FE9B2225EFFE55009C3087 /* NewsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPost.swift; sourceTree = "<group>"; };
 		31AD423F7FA4685CA9D60236 /* Pods_VkClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VkClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49AB66AC5AB6D7A29F14CD36 /* Pods-VkClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VkClient.debug.xcconfig"; path = "Target Support Files/Pods-VkClient/Pods-VkClient.debug.xcconfig"; sourceTree = "<group>"; };
 		79E414BC426BDF48CF103EAB /* Pods-VkClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VkClient.release.xcconfig"; path = "Target Support Files/Pods-VkClient/Pods-VkClient.release.xcconfig"; sourceTree = "<group>"; };
@@ -124,6 +122,7 @@
 				15D91F0B25BA9B2C00169520 /* User.swift */,
 				15D91F4A25BC162300169520 /* Group.swift */,
 				15D91F5125BC400300169520 /* UserPhoto.swift */,
+				15FE9B2225EFFE55009C3087 /* NewsPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,7 +211,6 @@
 		153F21A12577F3780018A18D /* VkClient */ = {
 			isa = PBXGroup;
 			children = (
-				1593ABBE25D4564D005B7FD1 /* Firebase */,
 				1572BDB725C6835E00B320F9 /* Services */,
 				1535229425AF0D0E006498A6 /* Application */,
 				1535229225AF0CF5006498A6 /* Controllers */,
@@ -246,15 +244,6 @@
 				1572BDB825C6837D00B320F9 /* RealmService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		1593ABBE25D4564D005B7FD1 /* Firebase */ = {
-			isa = PBXGroup;
-			children = (
-				1593ABBF25D4566B005B7FD1 /* FirebaseUser.swift */,
-				1593ABC225D46385005B7FD1 /* FirebaseGroup.swift */,
-			);
-			path = Firebase;
 			sourceTree = "<group>";
 		};
 		15B176022586222500042450 /* Storyboards */ = {
@@ -426,7 +415,6 @@
 				1535229025AF0A6F006498A6 /* Session.swift in Sources */,
 				1533D93F2593A6BB008A44EB /* LoadingIndicator.swift in Sources */,
 				153F21B92577F6FF0018A18D /* LoginFormController.swift in Sources */,
-				1593ABC325D46385005B7FD1 /* FirebaseGroup.swift in Sources */,
 				1504D93C2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift in Sources */,
 				15FE81C625CAC440009E7445 /* UITableView.swift in Sources */,
 				15D91F0C25BA9B2C00169520 /* User.swift in Sources */,
@@ -441,7 +429,6 @@
 				1504D9402583D16100B4EBEE /* GroupsTableViewController.swift in Sources */,
 				1504D9342583AE9500B4EBEE /* Data.swift in Sources */,
 				15B17600258621F500042450 /* CellLogo.swift in Sources */,
-				1593ABC025D4566B005B7FD1 /* FirebaseUser.swift in Sources */,
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
 				15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
@@ -451,6 +438,7 @@
 				15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */,
 				15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
+				15FE9B2325EFFE55009C3087 /* NewsPost.swift in Sources */,
 				15D91F5225BC400300169520 /* UserPhoto.swift in Sources */,
 				1504D9312583ADA400B4EBEE /* FriendTableViewCell.swift in Sources */,
 				1504D92D2583AD7C00B4EBEE /* FriendsTableViewController.swift in Sources */,

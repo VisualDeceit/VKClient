@@ -7,34 +7,114 @@
 
 import UIKit
 
+let imageCache = NSCache<NSString, UIImage>()
+
 class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
-    var post: Post! {
+    var imageURL: URL?
+    var attachURL: [URL]?
+        
+    var newsPost: NewsPost! {
         didSet {
-            profileImageView.logoView.image = post.logo
-            nameLabel.setAttributedText(text: post.caption, subtext: post.date)
             
-            if let text = post.text {
-                contentText.text = text
+            //аватар
+            imageURL = URL(string: newsPost.avatarUrl)
+            profileImageView.logoView.download(from: (imageURL)!) {[weak self] url in
+                self?.imageURL == url
             }
             
-            contentImageViews.forEach{ $0.isHidden = true }
+            //дата и заголовок
+            let dateFormatter = DateFormatter()
+            let date = Date(timeIntervalSince1970: Double(newsPost.date))
+            dateFormatter.timeStyle = DateFormatter.Style.short //Set time style
+            dateFormatter.dateStyle = DateFormatter.Style.short //Set date style
+            dateFormatter.timeZone = .current
+            let localDate = dateFormatter.string(from: date)
+            nameLabel.setAttributedText(text: newsPost.name, subtext: localDate)
             
-            contentImages = post.image
-            if let images = contentImages {
-                for i in 0..<images.count {
-                    if i >= 4  { break }
-                    contentImageViews[i].image = images[i]
-                    contentImageViews[i].isHidden = false
+            //текст
+            contentText.text = newsPost.text
+            
+            //лайки и просмотры
+            likeButton.totalCount = newsPost.likesCount
+            likeButton.isLiked = (newsPost.isLiked != 0)
+            var viewsCountString = ""
+            let viewsCount =  newsPost.viewsCount ?? 0
+                if viewsCount < 1000 {
+                    viewsCountString = "\(viewsCount)"
+                } else {
+                    viewsCountString = String(format: "%.1fk", Double(viewsCount)/1000.0)
                 }
+            viewsButton.setTitle(viewsCountString, for: .normal)
+            
+            
+            self.contentImageViews.forEach { $0.isHidden = true }
+            
+            let imageGroup = DispatchGroup()
+
+            //есть содержимер
+            if let attachments = newsPost.attachments {
+                
+                attachURL?.removeAll()
+                
+                for i in 0..<attachments.count where i < 4 {
+                    
+                    //  эти пока не обрабатываем
+                    if attachments[i].type == "doc"  || attachments[i].type == "poll"  { continue }
+                    
+                    subcontentImageViewsHeight?.isActive = false
+                    
+                    //сохранияем url
+                    if attachURL?.append(URL(string: attachments[i].url)!) == nil {
+                        attachURL = [ URL(string: attachments[i].url)! ]
+                    }
+                    //изображение есть к кеше
+                    if let imageFromCache = imageCache.object(forKey: attachments[i].url as NSString) {
+                        //берем из кеша
+                        self.contentImages?.append(imageFromCache)
+                        self.contentImageViews[i].image = imageFromCache
+                        self.contentImageViews[i].isHidden = false
+                        self.setupContentImagesSize()
+                        self.layoutIfNeeded()
+                    } else { //загружаем из сети
+                        //создаем очередь
+                        DispatchQueue.global().async(group: imageGroup, qos: .userInitiated) {
+                            if let url = URL(string: attachments[i].url),
+                               let data = try? Data(contentsOf: url) {
+                                let imageToCache = UIImage(data: data)!
+                                //если это запрашиваемый url
+                                if self.attachURL!.contains(url) {
+                                    self.contentImages?.append(imageToCache)
+                                }
+                                //сохранияем в кеш
+                                imageCache.setObject(imageToCache, forKey: attachments[i].url as NSString)
+                            }
+                        }
+                    }
+                }
+            } else { //нет прикрепленного
+                //сжимаем область картинок
+                contentImageViewsHeight?.constant = 0
+                subcontentImageViewsHeight?.isActive = true
+                NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
+                layoutIfNeeded()
             }
-            
-            likeButton.totalCount = post.like.totalCount
-            likeButton.isLiked = post.like.isLiked
-            
-            setupContentImagesSize()
+
+            //все задания из группы закончились
+            imageGroup.notify(queue: DispatchQueue.main) {
+                self.contentImageViews.forEach { $0.image = nil }
+                if let images = self.contentImages {
+                    for i in 0..<images.count {
+                        if i >= 4  { break }
+                        self.contentImageViews[i].image = images[i]
+                        self.contentImageViews[i].isHidden = false
+                    }
+                }
+                self.setupContentImagesSize()
+                self.layoutIfNeeded()
+            }
         }
     }
     
@@ -54,6 +134,7 @@ class FeedCell: UICollectionViewCell {
         nameLabel.text = nil
         profileImageView.logoView.image = nil
         contentText.text = nil
+        contentImages?.removeAll()
         contentImageViews.forEach { $0.image = nil }
     }
     
@@ -70,9 +151,10 @@ class FeedCell: UICollectionViewCell {
         return label
     }()
     
-    var contentImages: [UIImage]?
+    var contentImages: [UIImage]? = []
     var contentImageViews = [UIImageView]()
     var contentImageViewsHeight: NSLayoutConstraint?
+    var subcontentImageViewsHeight: NSLayoutConstraint?
     var contentImageViewsAspect1: NSLayoutConstraint?
     var contentImageViewsAspect2: NSLayoutConstraint?
     
@@ -141,7 +223,7 @@ class FeedCell: UICollectionViewCell {
         let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
         let views = UIImage(systemName: "eye", withConfiguration: imgConfig)
         button.setImage(views, for: .normal)
-        button.setTitle("15k", for: .normal)
+
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.isEnabled = false
        return button
@@ -150,6 +232,7 @@ class FeedCell: UICollectionViewCell {
     func setupContentImagesSize() {
         
         let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
+        
         contentImageViewsHeight?.constant = imagesHeight
         
         NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
@@ -179,9 +262,7 @@ class FeedCell: UICollectionViewCell {
         addSubview(imagesStackView)
         addSubview(devider)
         addSubview(bottomStackView)
-        
-        //profileImageView.shadowRadius = 22
- 
+
         // наполняем  array imageviews
         for _ in 0...3 {
             let imageView = UIImageView()
@@ -216,6 +297,7 @@ class FeedCell: UICollectionViewCell {
         //высота поля с картинками
         contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
         imagesStackView.addConstraint(contentImageViewsHeight!)
+        subcontentImageViewsHeight = subImagesStackView.heightAnchor.constraint(equalToConstant: 0)
         
         //соотношение сторон для области картинок в зависимоти от кол-ва
         contentImageViewsAspect1 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 1)

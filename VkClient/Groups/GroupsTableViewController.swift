@@ -7,7 +7,7 @@
 
 import UIKit
 import RealmSwift
-import Firebase
+//import Firebase
 
 class GroupsTableViewController: UITableViewController {
 
@@ -131,7 +131,7 @@ extension GroupsTableViewController: UISearchBarDelegate {
             let filteredGroups = try RealmService.load(typeOf: Group.self).sorted(byKeyPath: "name").filter(predicate)
             groups = filteredGroups
             //добавление результата в Firebase
-            addToFirebase(groups)
+           // addToFirebase(groups)
             tableView.reloadData()
         }
         catch {
@@ -147,7 +147,8 @@ extension GroupsTableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
-    
+  
+    /*
     func addToFirebase(_ result: Results<Group>) {
         let ref = Database.database(url: "https://vkclient-a78cb-default-rtdb.europe-west1.firebasedatabase.app/").reference(withPath: "users/" + (Session.shared.userId ?? "-1"))
         
@@ -164,5 +165,5 @@ extension GroupsTableViewController: UISearchBarDelegate {
         //let userRef = ref.child(id ?? "-1")
        // userRef.setValue(firebaseUser.toAnyObject())
     }
-
+*/
 }
