@@ -15,6 +15,9 @@ class GroupsTableViewController: UITableViewController {
     private var groupsBackup: Results<Group>!
     var token: NotificationToken?
     var isSearching: Bool = false
+    
+    // очередь
+    let operationQ = OperationQueue()
         
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -26,8 +29,8 @@ class GroupsTableViewController: UITableViewController {
         searchBar.delegate = self
         
         //загрузка данных из сети
-        let networkService = NetworkServices()
-        networkService.getUserGroups()
+       // let networkService = NetworkServices()
+       // networkService.getUserGroups()
         
         //устанавливаем уведомления
         do {
@@ -48,12 +51,13 @@ class GroupsTableViewController: UITableViewController {
         //парсинг
         let parsingGroupsOperation = ParsingGroupsOperation()
         parsingGroupsOperation.addDependency(getGroupsOperation)
-        //добавлени в Realm
+        //сохранение в Realm
+        let saveToRealmOperation = SaveToRealmOperation()
+        saveToRealmOperation.addDependency(parsingGroupsOperation)
         
-        //ссоздаем очередь
-        let operationQ = OperationQueue()
         operationQ.addOperation(getGroupsOperation)
         operationQ.addOperation(parsingGroupsOperation)
+        operationQ.addOperation(saveToRealmOperation)
 
     }
     
@@ -87,8 +91,22 @@ class GroupsTableViewController: UITableViewController {
     @objc
     func refresh(sender:AnyObject) {
         //загрузка данных из сети
-        let networkService = NetworkServices()
-        networkService.getUserGroups()
+        //let networkService = NetworkServices()
+        //networkService.getUserGroups()
+        
+        //сырые данные
+        let getGroupsOperation = GetGroupsOperation()
+        //парсинг
+        let parsingGroupsOperation = ParsingGroupsOperation()
+        parsingGroupsOperation.addDependency(getGroupsOperation)
+        //сохранение в Realm
+        let saveToRealmOperation = SaveToRealmOperation()
+        saveToRealmOperation.addDependency(parsingGroupsOperation)
+        
+        operationQ.addOperation(getGroupsOperation)
+        operationQ.addOperation(parsingGroupsOperation)
+        operationQ.addOperation(saveToRealmOperation)
+        
         self.refreshControl?.endRefreshing()
     }
 
