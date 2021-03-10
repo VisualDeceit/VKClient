@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-public struct NewsFeedType: RawRepresentable, Hashable {
+public struct NewsFeedType: RawRepresentable {
     public static let post = NewsFeedType(rawValue: "post")
     public static let photo = NewsFeedType(rawValue: "photo")
    
@@ -19,6 +19,7 @@ public struct NewsFeedType: RawRepresentable, Hashable {
         self.rawValue = rawValue
     }
 }
+
 class NetworkServices {
     
     private let vAPI = "5.130"
