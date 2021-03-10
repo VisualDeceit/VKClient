@@ -7,7 +7,7 @@
 
 import UIKit
 import RealmSwift
-//import Firebase
+import SwiftyJSON
 
 class GroupsTableViewController: UITableViewController {
 
@@ -41,6 +41,14 @@ class GroupsTableViewController: UITableViewController {
         catch {
             print(error)
         }
+        
+        //операция
+        let getGroupsOperation = GetUserGroupsOperation()
+        getGroupsOperation.completionBlock =  {
+            print(try! JSON(data: getGroupsOperation.data!) )
+        }
+        let operationQ = OperationQueue()
+        operationQ.addOperation(getGroupsOperation)
 
     }
     
