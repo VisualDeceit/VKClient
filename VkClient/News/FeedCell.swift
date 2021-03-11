@@ -177,7 +177,7 @@ class FeedCell: UICollectionViewCell {
         self.contentImageViews.forEach { $0.isHidden = true }
         
         let imageGroup = DispatchGroup()
-
+        
         //есть содержимое
         if let attachments = newsPost.attachments {
             
@@ -185,8 +185,9 @@ class FeedCell: UICollectionViewCell {
             
             for i in 0..<attachments.count where i < 4 {
                 
-                //  эти пока не обрабатываем
-                if attachments[i].type == "doc"  || attachments[i].type == "poll"  { continue }
+                //  эти пока обрабатываем
+                // if attachments[i].type == "doc"  || attachments[i].type == "poll"  { continue }
+                guard attachments[i].type == "post" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
                 
                 subcontentImageViewsHeight?.isActive = false
                 
@@ -194,28 +195,21 @@ class FeedCell: UICollectionViewCell {
                 if attachURL?.append(URL(string: attachments[i].url)!) == nil {
                     attachURL = [ URL(string: attachments[i].url)! ]
                 }
-                //изображение есть к кеше
-                if let imageFromCache = imageCache.object(forKey: attachments[i].url as NSString) {
-                    //берем из кеша
-                    self.contentImages?.append(imageFromCache)
-                    self.contentImageViews[i].image = imageFromCache
-                    self.contentImageViews[i].isHidden = false
-                    self.setupContentImagesSize()
-                    self.layoutIfNeeded()
-                } else { //загружаем из сети
-                    //создаем очередь
-                    DispatchQueue.global().async(group: imageGroup, qos: .userInitiated) {
-                        if let url = URL(string: attachments[i].url),
-                           let data = try? Data(contentsOf: url) {
-                            let imageToCache = UIImage(data: data)!
+                //создаем очередь
+                
+                if let url = URL(string: attachments[i].url) {
+                    imageGroup.enter()
+                    let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
+                    URLSession.shared.dataTask(with: request) { (data, _, _) in
+                        if let tempData = data,
+                           let image = UIImage(data: tempData) {
                             //если это запрашиваемый url
                             if self.attachURL!.contains(url) {
-                                self.contentImages?.append(imageToCache)
+                                self.contentImages?.append(image)
                             }
-                            //сохранияем в кеш
-                            imageCache.setObject(imageToCache, forKey: attachments[i].url as NSString)
                         }
-                    }
+                        imageGroup.leave()
+                    }.resume()
                 }
             }
         } else { //нет прикрепленного
@@ -225,7 +219,7 @@ class FeedCell: UICollectionViewCell {
             NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
             layoutIfNeeded()
         }
-
+        
         //все задания из группы закончились
         imageGroup.notify(queue: DispatchQueue.main) {
             self.contentImageViews.forEach { $0.image = nil }
