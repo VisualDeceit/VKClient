@@ -7,8 +7,6 @@
 
 import UIKit
 
-let imageCache = NSCache<NSString, UIImage>()
-
 class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
@@ -144,7 +142,7 @@ class FeedCell: UICollectionViewCell {
         }
     }
     
-    //заголовок поста
+    ///заголовок поста
     private func setPostCaption() {
         let dateFormatter = DateFormatter()
         let date = Date(timeIntervalSince1970: Double(newsPost.date))
@@ -154,7 +152,7 @@ class FeedCell: UICollectionViewCell {
         nameLabel.setAttributedText(text: newsPost.name, subtext: dateFormatter.string(from: date))
     }
     
-    //лайки просмотры и пт
+    ///лайки просмотры и пт
     private func setPostParam() {
         //лайки и просмотры
         likeButton.totalCount = newsPost.likesCount
@@ -169,7 +167,7 @@ class FeedCell: UICollectionViewCell {
         viewsButton.setTitle(viewsCountString, for: .normal)
     }
     
-    //содержимое поста
+    ///содержимое поста
     private func setPostContent(){
         
         contentText.text = newsPost.text
@@ -184,10 +182,8 @@ class FeedCell: UICollectionViewCell {
             attachURL?.removeAll()
             
             for i in 0..<attachments.count where i < 4 {
-                
                 //  эти пока обрабатываем
-                // if attachments[i].type == "doc"  || attachments[i].type == "poll"  { continue }
-                guard attachments[i].type == "post" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
+                guard attachments[i].type == "photo" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
                 
                 subcontentImageViewsHeight?.isActive = false
                 
@@ -195,10 +191,10 @@ class FeedCell: UICollectionViewCell {
                 if attachURL?.append(URL(string: attachments[i].url)!) == nil {
                     attachURL = [ URL(string: attachments[i].url)! ]
                 }
-                //создаем очередь
                 
+                //создаем очередь
+                imageGroup.enter()
                 if let url = URL(string: attachments[i].url) {
-                    imageGroup.enter()
                     let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
                     URLSession.shared.dataTask(with: request) { (data, _, _) in
                         if let tempData = data,
