@@ -100,35 +100,7 @@ class NetworkServices {
                     }
                 }.resume()
             }
-            
         }
-        
-//        //создаем сессию
-//        let session = URLSession(configuration: URLSessionConfiguration.default)
-//        //проверяем url
-//        if let url  = urlComponent.url {
-//            //создаем задание
-//            let task = session.dataTask(with: url) { (data, _, _) in
-//                if let data = data {
-//                    do {
-//                        let json = try JSON(data: data)
-//                        let items = json["response"]["items"].arrayValue
-//                        let friends = items.map { User($0) }
-//
-//                        return
-//                        //сохранение данных в Realm
-//                        DispatchQueue.main.async {
-//                            try? RealmService.save(items: friends)
-//                        }
-//                    }
-//                    catch {
-//                        print(error)
-//                    }
-//                }
-//            }
-//            task.resume()
-//        }
-        
     }
     
     //получение всех фото
