@@ -58,9 +58,7 @@ class NetworkServices {
                         try RealmService.delete(object: objectsToDelete)
       
                         //сохранение данных в Realm
-                        DispatchQueue.main.async {
                             try? RealmService.save(items: friends)
-                        }
                     }
                     catch {
                         print(error)

@@ -43,7 +43,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         let networkService = NetworkServices()
         //networkService.getUserFriends()
         networkService.getUserFriendsPromise()
-            .done(on: .main) { (friends) in
+            .done(on: .global()) { (friends) in
                 // удаляем старых друзей
                 let ids = friends.map { $0.id}
                 let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
