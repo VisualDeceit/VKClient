@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import PromiseKit
 
 public struct NewsFeedType: RawRepresentable {
     public static let post = NewsFeedType(rawValue: "post")
@@ -25,6 +26,7 @@ class NetworkServices {
     private let vAPI = "5.130"
     
 //получение списка друзей
+    ///обычный
     func getUserFriends() {
         //собираем url
         let urlComponent: URLComponents = {
@@ -56,9 +58,7 @@ class NetworkServices {
                         try RealmService.delete(object: objectsToDelete)
       
                         //сохранение данных в Realm
-                        DispatchQueue.main.async {
                             try? RealmService.save(items: friends)
-                        }
                     }
                     catch {
                         print(error)
@@ -67,7 +67,38 @@ class NetworkServices {
             }
             task.resume()
         }
-        
+    }
+    
+    ///promisKit
+    func getUserFriendsPromise() -> Promise<[User]> {
+        let urlComponent: URLComponents = {
+            var url = URLComponents()
+            url.scheme = "https"
+            url.host = "api.vk.com"
+            url.path = "/method/friends.get"
+            url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
+                              URLQueryItem(name: "v", value: vAPI),
+                              URLQueryItem(name: "fields", value: "photo_50")]
+            return url
+        }()
+
+        return Promise { seal in
+            if let url  = urlComponent.url {
+                URLSession.shared.dataTask(with: url) { (data, _, _) in
+                    if let data = data {
+                        do {
+                            let json = try JSON(data: data)
+                            let items = json["response"]["items"].arrayValue
+                            let friends = items.map { User($0) }
+                            seal.fulfill(friends)
+                        }
+                        catch {
+                            seal.reject(error)
+                        }
+                    }
+                }.resume()
+            }
+        }
     }
     
     //получение всех фото

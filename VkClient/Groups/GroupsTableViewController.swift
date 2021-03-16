@@ -7,7 +7,7 @@
 
 import UIKit
 import RealmSwift
-//import Firebase
+import SwiftyJSON
 
 class GroupsTableViewController: UITableViewController {
 
@@ -15,6 +15,9 @@ class GroupsTableViewController: UITableViewController {
     private var groupsBackup: Results<Group>!
     var token: NotificationToken?
     var isSearching: Bool = false
+    
+    // очередь
+    let operationQ = OperationQueue()
         
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -24,11 +27,7 @@ class GroupsTableViewController: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         searchBar.delegate = self
-        
-        //загрузка данных из сети
-        let networkService = NetworkServices()
-        networkService.getUserGroups()
-        
+                
         //устанавливаем уведомления
         do {
             groups = try RealmService.load(typeOf: Group.self).sorted(byKeyPath: "name")
@@ -41,7 +40,24 @@ class GroupsTableViewController: UITableViewController {
         catch {
             print(error)
         }
+        
+        //операции получения данных
+       setOperations()
 
+    }
+    
+    //MARK: - Операции
+    func setOperations() {
+        //сырые данные
+        let getGroupsOperation = GetGroupsOperation()
+        //парсинг
+        let parsingGroupsOperation = ParsingGroupsOperation()
+        parsingGroupsOperation.addDependency(getGroupsOperation)
+        //сохранение в Realm
+        let saveToRealmOperation = SaveToRealmOperation()
+        saveToRealmOperation.addDependency(parsingGroupsOperation)
+        
+        operationQ.addOperations([getGroupsOperation, parsingGroupsOperation, saveToRealmOperation], waitUntilFinished: false)
     }
     
     func addNotification(for results: Results<Group>) {
@@ -73,9 +89,7 @@ class GroupsTableViewController: UITableViewController {
         
     @objc
     func refresh(sender:AnyObject) {
-        //загрузка данных из сети
-        let networkService = NetworkServices()
-        networkService.getUserGroups()
+        setOperations()
         self.refreshControl?.endRefreshing()
     }
 

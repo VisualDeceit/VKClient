@@ -41,7 +41,19 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         
         //загрузка данных из сети
         let networkService = NetworkServices()
-        networkService.getUserFriends()
+        //networkService.getUserFriends()
+        networkService.getUserFriendsPromise()
+            .done(on: .global()) { (friends) in
+                // удаляем старых друзей
+                let ids = friends.map { $0.id}
+                let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
+                try RealmService.delete(object: objectsToDelete)
+                //сохранение данных в Realm
+                try RealmService.save(items: friends)
+            }
+            .catch { (error) in
+                print(error)
+            }
         
         //на первый запуск
         if (allFriends?.count == 0) {
@@ -149,8 +161,21 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     @objc func refresh(sender:AnyObject) {
         //загрузка данных из сети
         let networkService = NetworkServices()
-        networkService.getUserFriends()
-        self.refreshControl?.endRefreshing()
+        //networkService.getUserFriends()
+        networkService.getUserFriendsPromise()
+            .done(on: .main) {[weak self] (friends) in
+                // удаляем старых друзей
+                let ids = friends.map { $0.id}
+                let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
+                try RealmService.delete(object: objectsToDelete)
+                //сохранение данных в Realm
+                try RealmService.save(items: friends)
+                self?.refreshControl?.endRefreshing()
+            }
+            .catch { (error) in
+                print(error)
+            }
+       
     }
     
     // MARK: - Table view data source
