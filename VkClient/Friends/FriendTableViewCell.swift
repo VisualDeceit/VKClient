@@ -20,14 +20,11 @@ class FriendTableViewCell: UITableViewCell {
         friendName.text = nil
     }
     
-    func populate(user: User, service: PhotoService) {
+    func populate(user: User, image: UIImage?) {
         imageURL = URL(string: user.avatarUrl)
         friendName.text = "\(user.firstName) \(user.lastName)"
-        service.getPhoto(urlString: user.avatarUrl) {[weak self] (image) in
-            DispatchQueue.main.async {
-                self?.friendAvatar.logoView.image = image
-            }
-        }
+        friendAvatar.logoView.image = image
+    
 //        friendAvatar.logoView.download(from: imageURL!) {[weak self] url in
 //            self?.imageURL == url
 //        }

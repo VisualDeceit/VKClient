@@ -15,6 +15,8 @@ class PhotoService {
     
     private let serviceQ = DispatchQueue(label: "com.vkclient.photoservice.q", qos: .default)
     
+    private let container: DataReloadable
+    
     private static let pathName: String = {
         let pathName = "images"
         guard let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return pathName }
@@ -26,6 +28,14 @@ class PhotoService {
         
         return pathName
     }()
+    
+    init(container: UITableView) {
+        self.container = Table(table: container)
+    }
+    
+    init(container: UICollectionView) {
+        self.container = Collection(collection: container)
+    }
     
     private func getFilePath(url: String) -> String? {
         guard let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
@@ -60,30 +70,71 @@ class PhotoService {
         return image
     }
     
-    private func loadPhoto(urlString: String, complition: @escaping (UIImage?) -> () ) {
+    private func loadPhoto(at indexPath: IndexPath, urlString: String ) {
         
-        guard let url = URL(string: urlString) else { complition(nil); return }
+        guard let url = URL(string: urlString) else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] (data, _, _) in
             guard let data = data,
                   let image = UIImage(data: data)
-            else { complition(nil); return }
-            self?.memoryCache[urlString] = image
+            else { return }
+            
+            self?.serviceQ.async {
+                self?.memoryCache[urlString] = image
+            }
+
             self?.saveImageToDiskCache(url: urlString, image: image)
-            complition(image)
+            
+            DispatchQueue.main.async {
+                self?.container.reloadRow(at: indexPath)
+            }
+
         }.resume()
     }
     
     // MARK: - Public API
-    public func getPhoto(urlString: String, completion: @escaping (UIImage?) -> ()) {
-       
-        if let image = memoryCache[urlString] {
-            completion(image)
-        } else if let image = getImageFromDiskCache(url: urlString) {
-            completion(image)
+    public func photo(at indexPAth: IndexPath, urlString: String) -> UIImage? {
+        var image: UIImage?
+        if let imageFromCache = memoryCache[urlString] {
+            image = imageFromCache
+        } else if let imageFromCache = getImageFromDiskCache(url: urlString) {
+           image = imageFromCache
         } else {
-            loadPhoto(urlString: urlString, complition: completion)
+            loadPhoto(at: indexPAth, urlString: urlString)
         }
+        return image
     }
     
+}
+
+fileprivate protocol DataReloadable {
+    func reloadRow(at indexPath: IndexPath)
+}
+
+extension PhotoService {
+    
+    private class Table: DataReloadable {
+        let table: UITableView
+        
+        init(table: UITableView) {
+            self.table = table
+        }
+        
+        func reloadRow(at indexPath: IndexPath) {
+            table.reloadRows(at: [indexPath], with: .none)
+        }
+        
+    }
+    
+    private class Collection: DataReloadable {
+        let collection: UICollectionView
+        
+        init(collection: UICollectionView) {
+            self.collection = collection
+        }
+        
+        func reloadRow(at indexPath: IndexPath) {
+            collection.reloadItems(at: [indexPath])
+        }
+    }
 }

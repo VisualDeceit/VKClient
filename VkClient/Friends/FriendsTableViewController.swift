@@ -28,7 +28,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    let photoService  = PhotoService()
+    var photoService: PhotoService?
     
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
@@ -81,6 +81,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         searchBar.delegate = self
+        
+        photoService = PhotoService(container: tableView)
     }
     
     // MARK: - Notifications
@@ -198,7 +200,9 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             return UITableViewCell()
         }
         //передаем данные в ячейку
-        cell.populate(user: friendsBySection[indexPath.section][indexPath.row], service: photoService)
+        let user = friendsBySection[indexPath.section][indexPath.row]
+        let image = photoService?.photo(at: indexPath, urlString: user.avatarUrl)
+        cell.populate(user: user, image: image)
         return cell
     }
     
