@@ -28,6 +28,8 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     
     @IBOutlet weak var searchBar: UISearchBar!
     
+    let photoService  = PhotoService()
+    
     //реализуем протокол FriendsTableViewControllerDelegate
     func update(indexPhoto: Int, like: Like) {
         //получаем данные из делегата
@@ -196,7 +198,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             return UITableViewCell()
         }
         //передаем данные в ячейку
-        cell.populate(user: friendsBySection[indexPath.section][indexPath.row])
+        cell.populate(user: friendsBySection[indexPath.section][indexPath.row], service: photoService)
         return cell
     }
     
