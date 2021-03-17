@@ -306,8 +306,13 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
                 self.toolBar.transform = CGAffineTransform(translationX: 0, y: 44)
                 self.toolBarIsHidden.toggle()
             }
-        }       
+        }
     }
     
+    
+    @IBAction func didSaveButtonTapped(_ sender: Any) {
+        let activityViewController = UIActivityViewController(activityItems: [centerImageView.image!], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
     
 }

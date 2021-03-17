@@ -169,7 +169,7 @@
                                 <rect key="frame" x="0.0" y="84" width="375" height="70.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bUw-4E-NXr" id="aK1-t1-VTe">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RT-nZ-k3T">
@@ -416,8 +416,11 @@
                                     <constraint firstAttribute="height" constant="44" id="ohh-Dd-5u5"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="FkN-Hm-faL"/>
-                                    <barButtonItem systemItem="action" id="3gG-XY-hS7"/>
+                                    <barButtonItem style="plain" systemItem="action" id="3gG-XY-hS7">
+                                        <connections>
+                                            <action selector="didSaveButtonTapped:" destination="x22-fL-NUt" id="mYb-jg-g5x"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="fgu-i9-Sd1"/>
                                 </items>
                             </toolbar>
