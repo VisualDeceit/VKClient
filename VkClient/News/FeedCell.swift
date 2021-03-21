@@ -13,6 +13,7 @@ class FeedCell: UICollectionViewCell {
     
     var imageURL: URL?
     var attachURL: [URL]?
+    var stringDate: String = ""
         
     var newsPost: NewsPost! {
         didSet {
@@ -132,6 +133,7 @@ class FeedCell: UICollectionViewCell {
         contentText.text = nil
         contentImages?.removeAll()
         contentImageViews.forEach { $0.image = nil }
+        stringDate = ""
     }
     
     // загрузка аватара
@@ -144,12 +146,7 @@ class FeedCell: UICollectionViewCell {
     
     ///заголовок поста
     private func setPostCaption() {
-        let dateFormatter = DateFormatter()
-        let date = Date(timeIntervalSince1970: Double(newsPost.date))
-        dateFormatter.timeStyle = DateFormatter.Style.short //Set time style
-        dateFormatter.dateStyle = DateFormatter.Style.short //Set date style
-        dateFormatter.timeZone = .current
-        nameLabel.setAttributedText(text: newsPost.name, subtext: dateFormatter.string(from: date))
+        nameLabel.setAttributedText(text: newsPost.name, subtext: stringDate)
     }
     
     ///лайки просмотры и пт

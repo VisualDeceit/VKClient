@@ -11,6 +11,15 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var newsPosts = [NewsPost]()
     
+    let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.timeStyle = DateFormatter.Style.short //Set time style
+        df.dateStyle = DateFormatter.Style.short //Set date style
+        df.timeZone = .current
+        return df
+    }()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +44,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
+        feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
         feedCell.newsPost = newsPosts[indexPath.item]
         return feedCell
     }
@@ -70,5 +80,10 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
         
         return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 21 + 30 )
+    }
+    
+    func getStringDate(from value: Int) -> String {
+        let date = Date(timeIntervalSince1970: Double(value))
+        return dateFormatter.string(from: date)
     }
 }
