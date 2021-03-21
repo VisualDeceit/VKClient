@@ -202,7 +202,7 @@ class NetworkServices {
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
                               URLQueryItem(name: "filters", value: type.rawValue),
-                              URLQueryItem(name: "count", value: "100"),
+                              URLQueryItem(name: "count", value: "50"),
                               URLQueryItem(name: "max_photos", value: "4"),
             ]
             return url

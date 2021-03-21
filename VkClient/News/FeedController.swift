@@ -58,8 +58,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         //MARK: - Calculate text height
         if !newsPosts[indexPath.row].text.isEmpty {
             let contentText = newsPosts[indexPath.row].text
-            let rect = NSString(string: contentText).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
-            
+            let textBlock = CGSize(width: view.frame.width, height: CGFloat.greatestFiniteMagnitude)
+            let rect = contentText.boundingRect(with: textBlock, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
             textHeight = rect.height + 24
         }
         
