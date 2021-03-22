@@ -109,8 +109,8 @@ struct NewsPostAttachment: Decodable {
         }
         
         if self.type == "link" {
-            self.url = "https://www.pngitem.com/pimgs/m/249-2499939_url-chain-link-transparent-images-link-to-website.png"
-            self.ratio = CGFloat( 860.0 / 903.0)
+            self.url = "https://prettylinks.com/wp-content/uploads/2016/11/arrow_url.png"
+            self.ratio = CGFloat( 720.0 / 540.0)
         }
 
     }

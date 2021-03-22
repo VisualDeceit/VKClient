@@ -35,14 +35,15 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 self?.collectionView.reloadData()
             }
         }
-    
     }
+    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         newsPosts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print(#function)
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
         feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
         feedCell.newsPost = newsPosts[indexPath.item]
@@ -58,9 +59,11 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         //MARK: - Calculate text height
         if !newsPosts[indexPath.row].text.isEmpty {
             let contentText = newsPosts[indexPath.row].text
-            let textBlock = CGSize(width: view.frame.width, height: CGFloat.greatestFiniteMagnitude)
-            let rect = contentText.boundingRect(with: textBlock, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
-            textHeight = rect.height + 24
+            let style = NSMutableParagraphStyle()
+            style.lineBreakMode = .byWordWrapping
+            let textBlock = CGSize(width: view.frame.width - 16, height: CGFloat.greatestFiniteMagnitude)
+            let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),NSAttributedString.Key.paragraphStyle: style], context: nil)
+            textHeight = rect.height + 8
         }
         
         var imagesHeight: CGFloat = 0
@@ -79,11 +82,13 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
     }
         
-        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 21 + 30 )
+        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 8 + 1 + 8 + 30 )
     }
     
     func getStringDate(from value: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(value))
         return dateFormatter.string(from: date)
     }
+    
+
 }

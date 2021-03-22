@@ -11,32 +11,21 @@ class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
-    var imageURL: URL?
-    var attachURL: [URL]?
-    var stringDate: String = ""
-        
     var newsPost: NewsPost! {
         didSet {
+            print(#function)
             setPostLogo()
             setPostCaption()
             setPostParam()
             setPostContent()
+            
+            setNeedsLayout()
         }
     }
     
-    let nameLabel = UILabel()
-    
-    let profileImageView = CellLogo()
-    
-    let contentText: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.lineBreakMode = .byWordWrapping
-        label.textColor = .label
-        return label
-    }()
-    
+    var imageURL: URL?
+    var attachURL: [URL]?
+    var stringDate: String = ""
     var contentImages: [UIImage]? = []
     var contentImageViews = [UIImageView]()
     var contentImageViewsHeight: NSLayoutConstraint?
@@ -44,9 +33,44 @@ class FeedCell: UICollectionViewCell {
     var contentImageViewsAspect1: NSLayoutConstraint?
     var contentImageViewsAspect2: NSLayoutConstraint?
     
+    
+    //let iconImageView = CellLogo()
+    let likeButton = LikeControl()
+    
+    let iconImageView =  UIImageView()
+    
+    let captionName: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = true
+        label.font = UIFont.boldSystemFont(ofSize: 14.0)
+        label.backgroundColor = .systemBackground
+        return label
+    }()
+    
+    let captionDate: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = true
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.textColor =  UIColor(white: 0.6, alpha: 1)
+        label.backgroundColor = .systemBackground
+        return label
+    }()
+    
+    
+    let contentText: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = true
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.lineBreakMode = .byWordWrapping
+        label.textColor = .label
+        label.backgroundColor = .systemBackground
+        return label
+    }()
+        
     let imagesStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = true
         stackView.spacing = 4
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -56,7 +80,7 @@ class FeedCell: UICollectionViewCell {
     
     let subImagesStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = true
         stackView.spacing = 4
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -67,11 +91,12 @@ class FeedCell: UICollectionViewCell {
     
     let bottomStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = true
         stackView.spacing = 0
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
+        stackView.backgroundColor = .systemBackground
         return stackView
     }()
     
@@ -80,9 +105,7 @@ class FeedCell: UICollectionViewCell {
         view.backgroundColor = .systemGray4
         return view
     }()
-    
-    let likeButton = LikeControl()
-    
+        
     let commentButton: UIButton = {
         let button = UIButton(type: .system)
         //для выравнивания символов по высоте
@@ -90,6 +113,7 @@ class FeedCell: UICollectionViewCell {
         let message = UIImage(systemName: "message", withConfiguration: imgConfig)
         button.setImage(message, for: .normal)
         button.tintColor = .label
+        button.backgroundColor = .systemBackground
        return button
     }()
     
@@ -100,6 +124,7 @@ class FeedCell: UICollectionViewCell {
         let share = UIImage(systemName: "repeat", withConfiguration: imgConfig)
         button.setImage(share, for: .normal)
         button.tintColor = .label
+        button.backgroundColor = .systemBackground
        return button
     }()
     
@@ -109,14 +134,15 @@ class FeedCell: UICollectionViewCell {
         let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
         let views = UIImage(systemName: "eye", withConfiguration: imgConfig)
         button.setImage(views, for: .normal)
-
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.isEnabled = false
+        button.backgroundColor = .systemBackground
        return button
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupViews()
     }
     
@@ -127,29 +153,45 @@ class FeedCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        nameLabel.text = nil
-        profileImageView.logoView.image = nil
+
+        captionName.text = nil
+        captionDate.text = nil
+        iconImageView.image = nil
         contentText.text = nil
         contentImages?.removeAll()
         contentImageViews.forEach { $0.image = nil }
         stringDate = ""
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+  
+        iconImageViewFrame()
+        captionNameFrame()
+        captionDateFrame()
+        contentTextFrame()
+        imagesStackViewFrame()
+        deviderFrame()
+        bottomStackViewFrame() 
+    }
+
+    
     // загрузка аватара
     private func setPostLogo() {
         imageURL = URL(string: newsPost.avatarUrl)
-        profileImageView.logoView.download(from: (imageURL)!) {[weak self] url in
+        iconImageView.download(from: (imageURL)!) {[weak self] url in
             self?.imageURL == url
         }
     }
     
-    ///заголовок поста
+    ///Функция заполнения заголовка поста
     private func setPostCaption() {
-        nameLabel.setAttributedText(text: newsPost.name, subtext: stringDate)
+        captionName.text = newsPost.name
+        captionDate.text = stringDate
     }
     
-    ///лайки просмотры и пт
+    ///Функция заполнениия statusbar поста -
+    ///нравится, комментарии, просмотры
     private func setPostParam() {
         //лайки и просмотры
         likeButton.totalCount = newsPost.likesCount
@@ -164,25 +206,19 @@ class FeedCell: UICollectionViewCell {
         viewsButton.setTitle(viewsCountString, for: .normal)
     }
     
-    ///содержимое поста
+    ///Функция заполнения поста содержимым
     private func setPostContent(){
-        
         contentText.text = newsPost.text
-        
         self.contentImageViews.forEach { $0.isHidden = true }
-        
         let imageGroup = DispatchGroup()
-        
         //есть содержимое
         if let attachments = newsPost.attachments {
-            
             attachURL?.removeAll()
-            
             for i in 0..<attachments.count where i < 4 {
                 //  эти пока обрабатываем
                 guard attachments[i].type == "photo" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
                 
-                subcontentImageViewsHeight?.isActive = false
+                //subcontentImageViewsHeight?.isActive = false
                 
                 //сохранияем url
                 if attachURL?.append(URL(string: attachments[i].url)!) == nil {
@@ -206,11 +242,7 @@ class FeedCell: UICollectionViewCell {
                 }
             }
         } else { //нет прикрепленного
-            //сжимаем область картинок
-            contentImageViewsHeight?.constant = 0
-            subcontentImageViewsHeight?.isActive = true
-            NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
-            layoutIfNeeded()
+            setNeedsLayout()
         }
         
         //все задания из группы закончились
@@ -223,40 +255,108 @@ class FeedCell: UICollectionViewCell {
                     self.contentImageViews[i].isHidden = false
                 }
             }
-            self.setupContentImagesSize()
-            self.layoutIfNeeded()
+            self.setNeedsLayout()
         }
     }
     
-    func setupContentImagesSize() {
-        
-        let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width)
-        
-        contentImageViewsHeight?.constant = imagesHeight
-        
-        NSLayoutConstraint.deactivate([contentImageViewsAspect1!, contentImageViewsAspect2!])
-        if let images  = contentImages {
-            switch images.count {
-            case 1:
-                imagesStackView.spacing = 0
-            case 2:
-                NSLayoutConstraint.activate([contentImageViewsAspect1!])
-                imagesStackView.spacing = 4
-            case 3...:
-                NSLayoutConstraint.activate([contentImageViewsAspect2!])
-                imagesStackView.spacing = 4
-            default:
-                ()
-            }
-        }
+    
+    //MARK: - Frames Layout
+    let spacer: CGFloat = 8
+    
+    func iconImageViewFrame() {
+        iconImageView.translatesAutoresizingMaskIntoConstraints = true
+        let iconSideLenght: CGFloat = 44
+        let iconSize = CGSize(width: iconSideLenght, height: iconSideLenght)
+        let iconOrigin = CGPoint(x: spacer, y: spacer)
+        iconImageView.frame = CGRect(origin: iconOrigin, size: iconSize)
     }
+    
+    func getCaptionSize(text: String, font: UIFont) -> CGSize {
+        let maxWidth = bounds.width - spacer * 3 - iconImageView.frame.width
+        let textBlock = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
+        let style = NSMutableParagraphStyle()
+        style.lineBreakMode = .byTruncatingTail
+        let rect = text.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font, NSAttributedString.Key.paragraphStyle: style], context: nil)
+        let width = Double(rect.size.width)
+        let height = Double(rect.size.height)
+        let size = CGSize(width: ceil(width), height: ceil(height))
+        return size
+    }
+    
+    func captionNameFrame() {
+        let captionNameSize = getCaptionSize(text: newsPost.name, font: captionName.font)
+        let captionNameX = iconImageView.frame.width + spacer * 2
+        let captionNameOrigin =  CGPoint(x: captionNameX, y: spacer)
+        captionName.frame = CGRect(origin: captionNameOrigin, size: captionNameSize)
+    }
+    
+    func captionDateFrame() {
+        let captionDateSize = getCaptionSize(text: stringDate, font: captionDate.font)
+        let captionDateX = iconImageView.frame.width + spacer * 2
+        let captionDateY = captionName.frame.origin.y + captionName.frame.height + spacer
+        let captionDateOrigin =  CGPoint(x: captionDateX, y: captionDateY)
+        captionDate.frame = CGRect(origin: captionDateOrigin, size: captionDateSize)
+    }
+    
+    func getContentTextSize(text: String, font: UIFont) -> CGSize {
+        let maxWidth = bounds.width - spacer * 2
+        let textBlock = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
+        let style = NSMutableParagraphStyle()
+        style.lineBreakMode = .byWordWrapping
+        let rect = text.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: font, NSAttributedString.Key.paragraphStyle: style], context: nil)
+        let width = Double(rect.size.width)
+        let height = Double(rect.size.height)
+        let size = CGSize(width: ceil(width), height: ceil(height))
+        return size
+    }
+    
+    func contentTextFrame() {
+        let contentTextSize: CGSize
+        if newsPost.text == "" {
+            contentTextSize = .zero
+        } else {
+            contentTextSize = getContentTextSize(text: contentText.text ?? "", font: contentText.font)
+        }
+        let contentTextX = spacer
+        let contentTextY = iconImageView.frame.origin.y + iconImageView.frame.height + spacer
+        let contentTextOrigin = CGPoint(x: contentTextX, y: contentTextY)
+        contentText.frame = CGRect(origin: contentTextOrigin, size: contentTextSize)
+    }
+    
+    func imagesStackViewFrame() {
+        let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width )
+        let imagesStackViewSize = CGSize(width: self.frame.width - 2 * spacer, height: imagesHeight)
+        let imagesStackViewX = spacer
+        let imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
+        let imagesStackViewOrigin =  CGPoint(x: imagesStackViewX, y: imagesStackViewY)
+        imagesStackView.frame = CGRect(origin: imagesStackViewOrigin, size: imagesStackViewSize)
+    }
+    
+    func deviderFrame() {
+        let devideLength = bounds.width - 4 * spacer
+        let deviderSize = CGSize(width: devideLength, height: 1)
+        let deviderX = 2 * spacer
+        let deviderY = imagesStackView.frame.origin.y + imagesStackView.frame.height + (imagesStackView.frame.height == 0 ? 0 : spacer)
+        let deviderOrigin = CGPoint(x: deviderX, y: deviderY)
+        devider.frame = CGRect(origin: deviderOrigin, size: deviderSize)
+    }
+    
+    func bottomStackViewFrame() {
+        let bottomStackViewSize = CGSize(width: bounds.width - 2 * spacer, height: 30)
+        let bottomStackViewX =  spacer
+        let bottomStackViewY = devider.frame.origin.y + devider.frame.height + spacer
+        let bottomStackViewOrigin = CGPoint(x: bottomStackViewX, y: bottomStackViewY)
+        bottomStackView.frame = CGRect(origin: bottomStackViewOrigin, size: bottomStackViewSize)
+    }
+    
     
     func setupViews() {
         
         backgroundColor = .systemBackground
         
-        addSubview(nameLabel)
-        addSubview(profileImageView)
+        addSubview(captionName)
+        addSubview(captionDate)
+        addSubview(iconImageView)
         addSubview(contentText)
         addSubview(imagesStackView)
         addSubview(devider)
@@ -267,7 +367,6 @@ class FeedCell: UICollectionViewCell {
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFill
             imageView.layer.masksToBounds = true
-            imageView.translatesAutoresizingMaskIntoConstraints = false
             contentImageViews.append(imageView)
         }
         
@@ -283,33 +382,14 @@ class FeedCell: UICollectionViewCell {
         bottomStackView.addArrangedSubview(commentButton)
         bottomStackView.addArrangedSubview(shareButton)
         bottomStackView.addArrangedSubview(viewsButton)
-        
-        //настройка ограничений
-        addConstrainsWithFormat(format: "H:|-8-[v0(44)]-8-[v1]|", views: profileImageView, nameLabel)
-        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: contentText)
-        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: imagesStackView)
-        addConstrainsWithFormat(format: "H:|-12-[v0]-12-|", views: devider)
-        addConstrainsWithFormat(format: "H:|-4-[v0]-4-|", views: bottomStackView)
-        addConstrainsWithFormat(format: "V:|-12-[v0]", views: nameLabel)
-        addConstrainsWithFormat(format: "V:|-8-[v0(44)]-8-[v1]-4-[v2]-12-[v3(1)]-4-[v4(30)]|", views: profileImageView, contentText, imagesStackView, devider, bottomStackView)
-        
-        //высота поля с картинками
-        contentImageViewsHeight = imagesStackView.heightAnchor.constraint(equalToConstant: 100)
-        imagesStackView.addConstraint(contentImageViewsHeight!)
-        subcontentImageViewsHeight = subImagesStackView.heightAnchor.constraint(equalToConstant: 0)
-        
-        //соотношение сторон для области картинок в зависимоти от кол-ва
-        contentImageViewsAspect1 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 1)
-        contentImageViewsAspect2 = contentImageViews[0].widthAnchor.constraint(equalTo: subImagesStackView.widthAnchor, multiplier: 3)
     }
 }
 
-//MARK: - Calculate image height
+//MARK: - Calculate images height
 func calculateImageHeight (images: [UIImage]?, width: CGFloat) -> CGFloat {
-    
-    guard let unwrapImages = images else {
-        return 0
-    }
+    guard let unwrapImages = images,
+          images?.count != 0
+    else { return 0 }
     
     switch unwrapImages.count {
     case 1:
