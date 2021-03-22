@@ -40,6 +40,7 @@
 		15B3E5BB258F670C001C025E /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5BA258F670C001C025E /* NewsTableViewCell.swift */; };
 		15B3E5BF258F777B001C025E /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B3E5BE258F777B001C025E /* NewsTableViewController.swift */; };
 		15C6ACBB25DEC5790060E0E9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15C6ACBA25DEC5790060E0E9 /* WebKit.framework */; };
+		15CAD638260267FE0046B807 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15CAD637260267FE0046B807 /* PhotoService.swift */; };
 		15D31FE425AED4B0003D312E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FE325AED4B0003D312E /* UIView.swift */; };
 		15D31FE825AED4E8003D312E /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FE725AED4E8003D312E /* UILabel.swift */; };
 		15D31FEB25AED521003D312E /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D31FEA25AED521003D312E /* UIImage.swift */; };
@@ -93,6 +94,7 @@
 		15B3E5BA258F670C001C025E /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		15B3E5BE258F777B001C025E /* NewsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
 		15C6ACBA25DEC5790060E0E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		15CAD637260267FE0046B807 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		15D31FE325AED4B0003D312E /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		15D31FE725AED4E8003D312E /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		15D31FEA25AED521003D312E /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				15A901C425B429A6006C5A25 /* NetworkService.swift */,
 				1535228F25AF0A6F006498A6 /* Session.swift */,
 				1572BDB825C6837D00B320F9 /* RealmService.swift */,
+				15CAD637260267FE0046B807 /* PhotoService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 				15F45D7F25F920FA001DD0BE /* AsyncOperation.swift in Sources */,
 				15D91F5225BC400300169520 /* UserPhoto.swift in Sources */,
 				1504D9312583ADA400B4EBEE /* FriendTableViewCell.swift in Sources */,
+				15CAD638260267FE0046B807 /* PhotoService.swift in Sources */,
 				1504D92D2583AD7C00B4EBEE /* FriendsTableViewController.swift in Sources */,
 				153F21A52577F3780018A18D /* SceneDelegate.swift in Sources */,
 				15D31FE425AED4B0003D312E /* UIView.swift in Sources */,

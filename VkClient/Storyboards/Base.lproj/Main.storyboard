@@ -169,7 +169,7 @@
                                 <rect key="frame" x="0.0" y="84" width="375" height="70.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bUw-4E-NXr" id="aK1-t1-VTe">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RT-nZ-k3T">
@@ -410,15 +410,35 @@
                                 <rect key="frame" x="259" y="160" width="100" height="103"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="CPs-5N-VfJ">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="ohh-Dd-5u5"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="action" id="3gG-XY-hS7">
+                                        <connections>
+                                            <action selector="didSaveButtonTapped:" destination="x22-fL-NUt" id="mYb-jg-g5x"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="fgu-i9-Sd1"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="iHL-wa-8Xz"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="iHL-wa-8Xz" firstAttribute="bottom" secondItem="CPs-5N-VfJ" secondAttribute="bottom" id="NHH-mZ-CoN"/>
+                            <constraint firstItem="CPs-5N-VfJ" firstAttribute="trailing" secondItem="iHL-wa-8Xz" secondAttribute="trailing" id="XhE-qd-scJ"/>
+                            <constraint firstItem="CPs-5N-VfJ" firstAttribute="leading" secondItem="iHL-wa-8Xz" secondAttribute="leading" id="eAq-UP-Dc4"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="akd-TK-ZmZ"/>
                     <connections>
                         <outlet property="imageView1" destination="Lah-Ju-rnl" id="wfv-hV-CCd"/>
                         <outlet property="imageView2" destination="bip-aZ-yR2" id="Xh5-kD-hGo"/>
                         <outlet property="imageView3" destination="Xd0-rO-CcI" id="N4N-mz-3zn"/>
+                        <outlet property="toolBar" destination="CPs-5N-VfJ" id="78s-Vf-mva"/>
                         <segue destination="APu-YI-BYc" kind="unwind" identifier="unwindToFriendsPhotos" unwindAction="closeGallery:" id="XAS-zh-IAf"/>
                     </connections>
                 </viewController>

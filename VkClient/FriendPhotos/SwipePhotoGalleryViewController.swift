@@ -12,10 +12,12 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     @IBOutlet weak var imageView1: UIImageView!
     @IBOutlet weak var imageView2: UIImageView!
     @IBOutlet weak var imageView3: UIImageView!
+    @IBOutlet weak var toolBar: UIToolbar!
     
     var panGesture: UIPanGestureRecognizer!
     var animator: UIViewPropertyAnimator!
     var swipeGesture: UISwipeGestureRecognizer!
+    var tapGesture: UITapGestureRecognizer!
     
     var direction: Direction = .Left
     
@@ -27,8 +29,9 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     var rightFramePosition: CGRect!
     var leftFramePosition: CGRect!
     
-    var datasource = [UserPhoto]() //[Photo]()
+    var datasource = [UserPhoto]()
     var index: Int = 0
+    var toolBarIsHidden = true
     
     enum Direction {
         case Left, Right
@@ -58,6 +61,8 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         imageView.download(from: datasource[index].link) {[weak self] url in
             URL(string: (self?.datasource[index].link)!) == url
         }
+        
+        
     }
     
 
@@ -119,6 +124,13 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
         swipeGesture.direction = .down
         view.addGestureRecognizer(swipeGesture)
         swipeGesture.delegate = self
+        
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))
+        view.addGestureRecognizer(tapGesture)
+        tapGesture.delegate = self
+        
+        //смещаем toolbar
+        toolBar.transform = CGAffineTransform(translationX: 0, y: 44)
         
     }
     
@@ -266,7 +278,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
 
     }
     
-    /* для возварта на прошлый экран + нужно еще подписать на UIGestureRecognizerDelegate
+    /* для возврата на прошлый экран + нужно еще подписать на UIGestureRecognizerDelegate
       и реализовать  shouldBeRequiredToFailBy чтобы не забивалась swipe от pan
      */
     
@@ -285,5 +297,22 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
        return false
     }
     
+    @objc func didTap(_ tapGestureRecognizer: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.25) {
+            if self.toolBarIsHidden {
+                self.toolBar.transform = .identity
+                self.toolBarIsHidden.toggle()
+            } else {
+                self.toolBar.transform = CGAffineTransform(translationX: 0, y: 44)
+                self.toolBarIsHidden.toggle()
+            }
+        }
+    }
+    
+    
+    @IBAction func didSaveButtonTapped(_ sender: Any) {
+        let activityViewController = UIActivityViewController(activityItems: [centerImageView.image!], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
     
 }
