@@ -193,7 +193,7 @@ class NetworkServices {
     }
     
     // новости типа post
-    func getNewsFeed(type: NewsFeedType, startTime: Int = 0, startFrom: String = "", completion: @escaping ([NewsPost], String) ->()) {
+    func getNewsFeed(type: NewsFeedType, startTime: Int = 0, startFrom: String = "", completion: @escaping ([NewsPost], String?) ->()) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"

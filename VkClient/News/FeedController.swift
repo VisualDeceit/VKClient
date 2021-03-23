@@ -105,7 +105,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 DispatchQueue.main.async {
                     self.refresher.endRefreshing()
                 }
-                if self.nextFrom == "" {
+                if let nextFrom = nextFrom, self.nextFrom == "" {
                     self.nextFrom = nextFrom
                 }
                 guard news.count > 0 else { return }
@@ -132,7 +132,9 @@ extension FeedController: UICollectionViewDataSourcePrefetching {
             isLoading = true
             networkService.getNewsFeed(type: .post, startFrom: nextFrom) { [weak self] (news, nextFrom) in
                 if let self = self {
-                    self.nextFrom = nextFrom
+                    if let nextFrom = nextFrom {
+                        self.nextFrom = nextFrom
+                    }
                     //создаем индексы для вставки
                     let indexPath = (self.newsPosts.count..<self.newsPosts.count + news.count).map {IndexPath(row: $0, section: 0)}
                     //новости добавляем в конец

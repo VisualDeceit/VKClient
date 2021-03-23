@@ -13,7 +13,7 @@ struct NewsPostResponse: Decodable {
     let items: [NewsPost]
     let profiles: [NewsPostProfiles]
     let gpoups: [NewsPostGroups]
-    let nextFrom: String
+    let nextFrom: String?
     
     enum ResponseCodingKeys: String, CodingKey {
         case response
@@ -29,7 +29,7 @@ struct NewsPostResponse: Decodable {
         self.items = try response.decode([NewsPost].self, forKey: .items)
         self.profiles = try response.decode([NewsPostProfiles].self, forKey: .profiles)
         self.gpoups = try response.decode([NewsPostGroups].self, forKey: .groups)
-        self.nextFrom = try response.decode(String.self, forKey: .nextFrom)
+        self.nextFrom = try? response.decode(String.self, forKey: .nextFrom)
     }
 }
 
