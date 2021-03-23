@@ -111,8 +111,9 @@ class FeedCell: UICollectionViewCell {
         let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
         let message = UIImage(systemName: "message", withConfiguration: imgConfig)
         button.setImage(message, for: .normal)
-        button.tintColor = .label
+        button.titleLabel?.font = .systemFont(ofSize: 12)
         button.backgroundColor = .systemBackground
+        button.tintColor = .label
        return button
     }()
     
@@ -122,8 +123,9 @@ class FeedCell: UICollectionViewCell {
         let imgConfig = UIImage.SymbolConfiguration(scale: .medium)
         let share = UIImage(systemName: "repeat", withConfiguration: imgConfig)
         button.setImage(share, for: .normal)
-        button.tintColor = .label
+        button.titleLabel?.font = .systemFont(ofSize: 12)
         button.backgroundColor = .systemBackground
+        button.tintColor = .label
        return button
     }()
     
@@ -189,20 +191,25 @@ class FeedCell: UICollectionViewCell {
         captionDate.text = stringDate
     }
     
+    private func postParamToString(countInt: Int?) -> String{
+        let count = countInt ?? 0
+            if count < 1000 {
+               return String(count)
+            } else {
+                return String(format: "%.1fk", Double(count)/1000.0)
+            }
+    }
+    
     ///Функция заполнениия statusbar поста -
     ///нравится, комментарии, просмотры
     private func setPostParam() {
         //лайки и просмотры
         likeButton.totalCount = newsPost.likesCount
         likeButton.isLiked = (newsPost.isLiked != 0)
-        var viewsCountString = ""
-        let viewsCount =  newsPost.viewsCount ?? 0
-            if viewsCount < 1000 {
-                viewsCountString = "\(viewsCount)"
-            } else {
-                viewsCountString = String(format: "%.1fk", Double(viewsCount)/1000.0)
-            }
-        viewsButton.setTitle(viewsCountString, for: .normal)
+
+        viewsButton.setTitle(postParamToString(countInt: newsPost.viewsCount), for: .normal)
+        commentButton.setTitle(postParamToString(countInt: newsPost.commentsCount), for: .normal)
+        shareButton.setTitle(postParamToString(countInt: newsPost.repostsCount), for: .normal)
     }
     
     ///Функция заполнения поста содержимым

@@ -65,14 +65,14 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             textHeight = rect.height + 8
         }
         
-        var imagesHeight: CGFloat = 0
+        var imagesHeight: CGFloat = -8
         if let count = newsPosts[indexPath.item].attachments?.count {
             switch count {
             case 1:
                 if let ratio = newsPosts[indexPath.item].attachments?.first?.ratio, ratio != 0  {
                     imagesHeight =  view.frame.width / ratio
                 } else {
-                    imagesHeight = 0
+                    imagesHeight = -8
                 }
             case 2...:
                 imagesHeight =  view.frame.width

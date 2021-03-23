@@ -126,6 +126,7 @@ class NewsPost: Decodable {
     var isLiked = 0
     var repostsCount = 0
     var viewsCount: Int?
+    var commentsCount = 0
     var text = ""
     var attachments : [NewsPostAttachment]?
     
@@ -142,6 +143,10 @@ class NewsPost: Decodable {
         case viewsCount = "count"
     }
     
+    enum CommentsCodingKeys: String, CodingKey {
+        case commentsCount = "count"
+    }
+    
     enum AttachmentsCodingKeys: String, CodingKey {
         case attType = "type"
     }
@@ -153,6 +158,7 @@ class NewsPost: Decodable {
         case likes
         case reposts
         case views
+        case comments
         case attachments
     }
     
@@ -173,7 +179,10 @@ class NewsPost: Decodable {
         
         let viewsContainer = try? container.nestedContainer(keyedBy: ViewsCodingKeys.self, forKey: .views)
         self.viewsCount = try? viewsContainer?.decode(Int.self, forKey: .viewsCount)
-        
+       
+        let commentsContainer = try container.nestedContainer(keyedBy: CommentsCodingKeys.self, forKey: .comments)
+        self.commentsCount = try commentsContainer.decode(Int.self, forKey: .commentsCount)
+       
         self.attachments = try? container.decode([NewsPostAttachment].self, forKey: .attachments)
     }
     
