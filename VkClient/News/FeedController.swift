@@ -10,6 +10,8 @@ import UIKit
 class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var newsPosts = [NewsPost]()
+    var refresher: UIRefreshControl!
+    let networkService = NetworkServices()
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -28,13 +30,13 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView.alwaysBounceVertical = true
         
         //загрузка данных из сети
-        let networkService = NetworkServices()
-        networkService.getNewsFeed(type: .post) { [weak self] news in
-            self?.newsPosts = news
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-            }
-        }
+        newsRequest()
+        
+        //MARK: - Pull-to-refresh
+        refresher = UIRefreshControl()
+        refresher.attributedTitle = NSAttributedString(string: "Fetching data...")
+        refresher.addTarget(self, action: #selector(newsRequest), for: .valueChanged)
+        collectionView.addSubview(refresher)
     }
     
     
@@ -89,5 +91,26 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return dateFormatter.string(from: date)
     }
     
+    //загрузка данных из сети
+    @objc
+    func newsRequest() {
+        let requestTime = newsPosts.count == 0 ? 0 : (newsPosts.first?.date ?? 0)
+        networkService.getNewsFeed(type: .post, startTime: requestTime + 1) { [weak self] news in
+            if let self = self {
+                DispatchQueue.main.async {
+                    self.refresher.endRefreshing()
+                }
+                guard news.count > 0 else { return }
+                //новости добавляем в начало
+                self.newsPosts = news + self.newsPosts
+                DispatchQueue.main.async {
+                    //создаем индексы для вставки
+                    let indexPath = (0..<news.count).map {IndexPath(row: $0, section: 0)}
+                    self.collectionView.insertItems(at: indexPath)
+                }
+                
+            }
+        }
+    }
 
 }

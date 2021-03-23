@@ -193,7 +193,7 @@ class NetworkServices {
     }
     
     // новости типа post
-    func getNewsFeed(type: NewsFeedType, completion: @escaping ([NewsPost]) ->()) {
+    func getNewsFeed(type: NewsFeedType, startTime: Int, completion: @escaping ([NewsPost]) ->()) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -202,8 +202,9 @@ class NetworkServices {
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
                               URLQueryItem(name: "filters", value: type.rawValue),
-                              URLQueryItem(name: "count", value: "50"),
+                              URLQueryItem(name: "count", value: "20"),
                               URLQueryItem(name: "max_photos", value: "4"),
+                              URLQueryItem(name: "start_time", value: "\(startTime)"),
             ]
             return url
         }()
