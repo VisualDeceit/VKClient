@@ -13,7 +13,6 @@ class FeedCell: UICollectionViewCell {
     
     var newsPost: NewsPost! {
         didSet {
-            print(#function)
             setPostLogo()
             setPostCaption()
             setPostParam()
@@ -325,11 +324,11 @@ class FeedCell: UICollectionViewCell {
     
     func imagesStackViewFrame() {
         let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width )
-        let imagesStackViewSize = CGSize(width: self.frame.width - 2 * spacer, height: imagesHeight)
-        let imagesStackViewX = spacer
+        let imagesStackViewSize = CGSize(width: self.frame.width, height: imagesHeight)
         let imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
-        let imagesStackViewOrigin =  CGPoint(x: imagesStackViewX, y: imagesStackViewY)
+        let imagesStackViewOrigin =  CGPoint(x: 0, y: imagesStackViewY)
         imagesStackView.frame = CGRect(origin: imagesStackViewOrigin, size: imagesStackViewSize)
+        imagesStackView.spacing = contentImages?.count ?? 0 > 1 ? 4 : 0
     }
     
     func deviderFrame() {

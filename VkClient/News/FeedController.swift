@@ -43,7 +43,6 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print(#function)
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
         feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
         feedCell.newsPost = newsPosts[indexPath.item]
