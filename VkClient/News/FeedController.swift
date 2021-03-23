@@ -12,6 +12,9 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var newsPosts = [NewsPost]()
     var refresher: UIRefreshControl!
     let networkService = NetworkServices()
+    var nextFrom = ""
+    var isLoading = false
+
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -37,6 +40,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         refresher.attributedTitle = NSAttributedString(string: "Fetching data...")
         refresher.addTarget(self, action: #selector(newsRequest), for: .valueChanged)
         collectionView.addSubview(refresher)
+        
+        collectionView.prefetchDataSource = self
     }
     
     
@@ -95,22 +100,52 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc
     func newsRequest() {
         let requestTime = newsPosts.count == 0 ? 0 : (newsPosts.first?.date ?? 0)
-        networkService.getNewsFeed(type: .post, startTime: requestTime + 1) { [weak self] news in
+        networkService.getNewsFeed(type: .post, startTime: requestTime + 1) { [weak self] (news, nextFrom) in
             if let self = self {
                 DispatchQueue.main.async {
                     self.refresher.endRefreshing()
                 }
+                if self.nextFrom == "" {
+                    self.nextFrom = nextFrom
+                }
                 guard news.count > 0 else { return }
                 //новости добавляем в начало
                 self.newsPosts = news + self.newsPosts
+                //создаем индексы для вставки
+                let indexPath = (0..<news.count).map {IndexPath(row: $0, section: 0)}
                 DispatchQueue.main.async {
-                    //создаем индексы для вставки
-                    let indexPath = (0..<news.count).map {IndexPath(row: $0, section: 0)}
                     self.collectionView.insertItems(at: indexPath)
                 }
                 
             }
         }
     }
+    
+}
 
+//MARK: - Паттерн Infinite Scrolling
+
+extension FeedController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        guard let maxItem = indexPaths.max()?.item else {   return }
+        if  maxItem > newsPosts.count - 5, !isLoading {
+            isLoading = true
+            networkService.getNewsFeed(type: .post, startFrom: nextFrom) { [weak self] (news, nextFrom) in
+                if let self = self {
+                    self.nextFrom = nextFrom
+                    //создаем индексы для вставки
+                    let indexPath = (self.newsPosts.count..<self.newsPosts.count + news.count).map {IndexPath(row: $0, section: 0)}
+                    //новости добавляем в конец
+                    self.newsPosts.append(contentsOf: news)
+                    DispatchQueue.main.async {
+                        self.collectionView.insertItems(at: indexPath)
+                        self.isLoading = false
+                    }
+                    
+                }
+            }
+            
+        }
+    }
+    
 }
