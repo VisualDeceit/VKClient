@@ -14,7 +14,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let networkService = NetworkServices()
     var nextFrom = ""
     var isLoading = false
-    var canShowMoreButton = false
+    var isShowMoreButton = false
+    var isShowMoreDict = [IndexPath: Bool]()
 
     
     let dateFormatter: DateFormatter = {
@@ -43,6 +44,9 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView.addSubview(refresher)
         
         collectionView.prefetchDataSource = self
+        
+        let reloadCellNotification = Notification.Name("reloadCell")
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCell(_:)), name: reloadCellNotification, object: nil)
     }
     
     
@@ -53,6 +57,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
         feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
+        feedCell.indexPath = indexPath
+        feedCell.isShowMore = isShowMoreDict[indexPath] ?? false
         feedCell.newsPost = newsPosts[indexPath.item]
         return feedCell
     }
@@ -60,10 +66,11 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     //Feed cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let isShowMore = isShowMoreDict[indexPath] ?? false
         
         var textHeight: CGFloat = 0
         
-        //MARK: - Calculate text height
         if !newsPosts[indexPath.row].text.isEmpty {
             let contentText = newsPosts[indexPath.row].text
             let style = NSMutableParagraphStyle()
@@ -71,14 +78,25 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             let textBlock = CGSize(width: view.frame.width - 16, height: CGFloat.greatestFiniteMagnitude)
             let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),NSAttributedString.Key.paragraphStyle: style], context: nil)
             textHeight = rect.height + 8
-            canShowMoreButton = textHeight > 200 ? true : false
-            if canShowMoreButton {
+            isShowMoreButton = textHeight > 200 ? true : false
+            if isShowMoreButton, !isShowMore {
                 textHeight = 200
             }
         }
         
         var imagesHeight: CGFloat = -8
-        let showMoreButton: CGFloat = canShowMoreButton ? 14 : 0
+        let showMoreButton: CGFloat
+        
+        if  isShowMoreButton {
+            if !isShowMore {
+                showMoreButton = 22
+            } else {
+                showMoreButton = 22
+            }
+        } else {
+            showMoreButton = 0
+        }
+        
         
         if let count = newsPosts[indexPath.item].attachments?.count {
             switch count {
@@ -129,6 +147,18 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
+    @objc func reloadCell(_ notification: Notification) {
+        print(#function)
+        notification.userInfo!.forEach {
+            isShowMoreDict[$0.key as! IndexPath] = $0.value as? Bool
+        }
+        if let indexPath =  notification.userInfo?.keys.first as? IndexPath {
+            collectionView.reloadData()
+            print(indexPath)
+            print(isShowMoreDict)
+        }
+    }
+
 }
 
 //MARK: - Паттерн Infinite Scrolling

@@ -11,6 +11,8 @@ class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
+    var indexPath: IndexPath! 
+    
     var newsPost: NewsPost! {
         didSet {
             setPostLogo()
@@ -37,7 +39,16 @@ class FeedCell: UICollectionViewCell {
     let likeButton = LikeControl()
     let iconImageView =  UIImageView()
     
-    var canShowMoreButton = false
+    var isShowMoreButton = false
+    var isShowMore: Bool! {
+        didSet {
+            if isShowMore {
+                showMoreButton.setTitle("Show less...", for: .normal)
+            } else {
+                showMoreButton.setTitle("Show more...", for: .normal)
+            }
+        }
+    }
     
     let captionName: UILabel = {
         let label = UILabel()
@@ -62,7 +73,7 @@ class FeedCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = true
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 14)
-        label.lineBreakMode = .byTruncatingTail
+        label.lineBreakMode = .byWordWrapping
         label.textColor = .label
         label.backgroundColor = .systemBackground
         return label
@@ -149,6 +160,7 @@ class FeedCell: UICollectionViewCell {
         button.tintColor = .blue
         button.setTitle("Show more...", for: .normal)
         button.contentHorizontalAlignment = .leading
+        print("button")
        return button
     }()
     
@@ -177,7 +189,6 @@ class FeedCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-  
         iconImageViewFrame()
         captionNameFrame()
         captionDateFrame()
@@ -335,8 +346,10 @@ class FeedCell: UICollectionViewCell {
         } else {
             contentTextSize = getContentTextSize(text: contentText.text ?? "", font: contentText.font)
         }
-        canShowMoreButton = contentTextSize.height > 200 ? true : false
-        if canShowMoreButton {
+        //нужно показать кнопку
+        isShowMoreButton = contentTextSize.height > 200 ? true : false
+        //текст не развернут
+        if isShowMoreButton, !isShowMore {
             contentTextSize.height = 200
         }
         let contentTextX = spacer
@@ -346,12 +359,14 @@ class FeedCell: UICollectionViewCell {
     }
     
     func showMoreButtonFrame() {
-        guard canShowMoreButton else {
+        //не нужно показывать кнопку
+        guard isShowMoreButton else {
             let buttonSize = CGSize.zero
             let buttonOrigin = CGPoint(x: 0, y: 0)
             showMoreButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
             return
         }
+
         let buttonLength = bounds.width - 2 * spacer
         let buttonSize = CGSize(width: buttonLength, height: 14)
         let buttonX = spacer
@@ -365,8 +380,9 @@ class FeedCell: UICollectionViewCell {
         let imagesStackViewSize = CGSize(width: self.frame.width, height: imagesHeight)
         
         let imagesStackViewY: CGFloat
-        if canShowMoreButton {
-            imagesStackViewY = showMoreButton.frame.origin.y + showMoreButton.frame.height + spacer
+        
+        if isShowMoreButton {
+            imagesStackViewY = showMoreButton.frame.origin.y + showMoreButton.frame.height + spacer +  (!isShowMore ? 0 : 8)
         } else {
             imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
         }
@@ -427,7 +443,24 @@ class FeedCell: UICollectionViewCell {
         bottomStackView.addArrangedSubview(commentButton)
         bottomStackView.addArrangedSubview(shareButton)
         bottomStackView.addArrangedSubview(viewsButton)
+        
+        showMoreButton.addTarget(self, action: #selector(expandText), for: .touchUpInside)
     }
+    
+    // разворачиваем текст
+    @objc func expandText() {
+        print(#function)
+        isShowMore.toggle()
+        if isShowMore {
+            showMoreButton.setTitle("Show less...", for: .normal)
+        } else {
+            showMoreButton.setTitle("Show more...", for: .normal)
+        }
+        setNeedsLayout()
+        let reloadCellNotification = Notification.Name("reloadCell")
+        NotificationCenter.default.post(name: reloadCellNotification, object: nil, userInfo: [self.indexPath!: isShowMore])
+    }
+    
 }
 
 //MARK: - Calculate images height
@@ -443,4 +476,5 @@ func calculateImageHeight (images: [UIImage]?, width: CGFloat) -> CGFloat {
     default:
         return width
     }
+    
 }
