@@ -147,15 +147,15 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
+    ///Обработка нотификации от ячейки, что нажали на кнопку "Show more..."
     @objc func reloadCell(_ notification: Notification) {
-        print(#function)
+        // заполняем словарь
         notification.userInfo!.forEach {
             isShowMoreDict[$0.key as! IndexPath] = $0.value as? Bool
         }
+        // перерисовываем ячейку
         if let indexPath =  notification.userInfo?.keys.first as? IndexPath {
-            collectionView.reloadData()
-            print(indexPath)
-            print(isShowMoreDict)
+            collectionView.reloadItems(at: [indexPath])
         }
     }
 

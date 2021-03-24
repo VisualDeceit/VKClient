@@ -19,7 +19,6 @@ class FeedCell: UICollectionViewCell {
             setPostCaption()
             setPostParam()
             setPostContent()
-            
             setNeedsLayout()
         }
     }
@@ -38,15 +37,13 @@ class FeedCell: UICollectionViewCell {
     //let iconImageView = CellLogo()
     let likeButton = LikeControl()
     let iconImageView =  UIImageView()
-    
+    ///Показывать или нет кнопку "Show more..."
     var isShowMoreButton = false
+    ///true - развернут, false - свернут
     var isShowMore: Bool! {
         didSet {
-            if isShowMore {
-                showMoreButton.setTitle("Show less...", for: .normal)
-            } else {
-                showMoreButton.setTitle("Show more...", for: .normal)
-            }
+            let buttonTitle = isShowMore ? "Show less..." : "Show more..."
+            showMoreButton.setTitle(buttonTitle, for: .normal)
         }
     }
     
@@ -157,10 +154,8 @@ class FeedCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.titleLabel?.font = .systemFont(ofSize: 14)
         button.backgroundColor = .systemBackground
-        button.tintColor = .blue
         button.setTitle("Show more...", for: .normal)
         button.contentHorizontalAlignment = .leading
-        print("button")
        return button
     }()
     
@@ -246,8 +241,6 @@ class FeedCell: UICollectionViewCell {
             for i in 0..<attachments.count where i < 4 {
                 //  эти пока обрабатываем
                 guard attachments[i].type == "photo" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
-                
-                //subcontentImageViewsHeight?.isActive = false
                 
                 //сохранияем url
                 if attachURL?.append(URL(string: attachments[i].url)!) == nil {
@@ -359,7 +352,6 @@ class FeedCell: UICollectionViewCell {
     }
     
     func showMoreButtonFrame() {
-        //не нужно показывать кнопку
         guard isShowMoreButton else {
             let buttonSize = CGSize.zero
             let buttonOrigin = CGPoint(x: 0, y: 0)
@@ -370,7 +362,7 @@ class FeedCell: UICollectionViewCell {
         let buttonLength = bounds.width - 2 * spacer
         let buttonSize = CGSize(width: buttonLength, height: 14)
         let buttonX = spacer
-        let buttonY = contentText.frame.origin.y + contentText.frame.height
+        let buttonY = contentText.frame.origin.y + contentText.frame.height + (!isShowMore ? 0 : 8)
         let buttonOrigin = CGPoint(x: buttonX, y: buttonY)
         showMoreButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
     }
@@ -382,7 +374,7 @@ class FeedCell: UICollectionViewCell {
         let imagesStackViewY: CGFloat
         
         if isShowMoreButton {
-            imagesStackViewY = showMoreButton.frame.origin.y + showMoreButton.frame.height + spacer +  (!isShowMore ? 0 : 8)
+            imagesStackViewY = showMoreButton.frame.origin.y + showMoreButton.frame.height + spacer
         } else {
             imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
         }
@@ -447,18 +439,14 @@ class FeedCell: UICollectionViewCell {
         showMoreButton.addTarget(self, action: #selector(expandText), for: .touchUpInside)
     }
     
-    // разворачиваем текст
+    // MARK: - Expand/collapse text
     @objc func expandText() {
-        print(#function)
         isShowMore.toggle()
-        if isShowMore {
-            showMoreButton.setTitle("Show less...", for: .normal)
-        } else {
-            showMoreButton.setTitle("Show more...", for: .normal)
-        }
-        setNeedsLayout()
+        let buttonTitle = isShowMore ? "Show less..." : "Show more..."
+        showMoreButton.setTitle(buttonTitle, for: .normal)
+        // передаем в контроллер словарь Индекс:Развернут_ли_текст
         let reloadCellNotification = Notification.Name("reloadCell")
-        NotificationCenter.default.post(name: reloadCellNotification, object: nil, userInfo: [self.indexPath!: isShowMore])
+        NotificationCenter.default.post(name: reloadCellNotification, object: nil, userInfo: [self.indexPath!: isShowMore ?? false])
     }
     
 }
