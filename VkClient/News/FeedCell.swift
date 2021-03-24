@@ -35,8 +35,9 @@ class FeedCell: UICollectionViewCell {
     
     //let iconImageView = CellLogo()
     let likeButton = LikeControl()
-    
     let iconImageView =  UIImageView()
+    
+    var canShowMoreButton = false
     
     let captionName: UILabel = {
         let label = UILabel()
@@ -61,7 +62,7 @@ class FeedCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = true
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 14)
-        label.lineBreakMode = .byWordWrapping
+        label.lineBreakMode = .byTruncatingTail
         label.textColor = .label
         label.backgroundColor = .systemBackground
         return label
@@ -141,6 +142,16 @@ class FeedCell: UICollectionViewCell {
        return button
     }()
     
+    let showMoreButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.backgroundColor = .systemBackground
+        button.tintColor = .blue
+        button.setTitle("Show more...", for: .normal)
+        button.contentHorizontalAlignment = .leading
+       return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -171,6 +182,7 @@ class FeedCell: UICollectionViewCell {
         captionNameFrame()
         captionDateFrame()
         contentTextFrame()
+        showMoreButtonFrame()
         imagesStackViewFrame()
         deviderFrame()
         bottomStackViewFrame() 
@@ -317,11 +329,15 @@ class FeedCell: UICollectionViewCell {
     }
     
     func contentTextFrame() {
-        let contentTextSize: CGSize
+        var contentTextSize: CGSize
         if newsPost.text == "" {
             contentTextSize = .zero
         } else {
             contentTextSize = getContentTextSize(text: contentText.text ?? "", font: contentText.font)
+        }
+        canShowMoreButton = contentTextSize.height > 200 ? true : false
+        if canShowMoreButton {
+            contentTextSize.height = 200
         }
         let contentTextX = spacer
         let contentTextY = iconImageView.frame.origin.y + iconImageView.frame.height + spacer
@@ -329,10 +345,32 @@ class FeedCell: UICollectionViewCell {
         contentText.frame = CGRect(origin: contentTextOrigin, size: contentTextSize)
     }
     
+    func showMoreButtonFrame() {
+        guard canShowMoreButton else {
+            let buttonSize = CGSize.zero
+            let buttonOrigin = CGPoint(x: 0, y: 0)
+            showMoreButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
+            return
+        }
+        let buttonLength = bounds.width - 2 * spacer
+        let buttonSize = CGSize(width: buttonLength, height: 14)
+        let buttonX = spacer
+        let buttonY = contentText.frame.origin.y + contentText.frame.height
+        let buttonOrigin = CGPoint(x: buttonX, y: buttonY)
+        showMoreButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
+    }
+    
     func imagesStackViewFrame() {
         let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width )
         let imagesStackViewSize = CGSize(width: self.frame.width, height: imagesHeight)
-        let imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
+        
+        let imagesStackViewY: CGFloat
+        if canShowMoreButton {
+            imagesStackViewY = showMoreButton.frame.origin.y + showMoreButton.frame.height + spacer
+        } else {
+            imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
+        }
+        
         let imagesStackViewOrigin =  CGPoint(x: 0, y: imagesStackViewY)
         imagesStackView.frame = CGRect(origin: imagesStackViewOrigin, size: imagesStackViewSize)
         imagesStackView.spacing = contentImages?.count ?? 0 > 1 ? 4 : 0
@@ -364,6 +402,7 @@ class FeedCell: UICollectionViewCell {
         addSubview(captionDate)
         addSubview(iconImageView)
         addSubview(contentText)
+        addSubview(showMoreButton)
         addSubview(imagesStackView)
         addSubview(devider)
         addSubview(bottomStackView)

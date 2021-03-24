@@ -14,6 +14,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let networkService = NetworkServices()
     var nextFrom = ""
     var isLoading = false
+    var canShowMoreButton = false
 
     
     let dateFormatter: DateFormatter = {
@@ -70,9 +71,15 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             let textBlock = CGSize(width: view.frame.width - 16, height: CGFloat.greatestFiniteMagnitude)
             let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),NSAttributedString.Key.paragraphStyle: style], context: nil)
             textHeight = rect.height + 8
+            canShowMoreButton = textHeight > 200 ? true : false
+            if canShowMoreButton {
+                textHeight = 200
+            }
         }
         
         var imagesHeight: CGFloat = -8
+        let showMoreButton: CGFloat = canShowMoreButton ? 14 : 0
+        
         if let count = newsPosts[indexPath.item].attachments?.count {
             switch count {
             case 1:
@@ -88,7 +95,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
     }
         
-        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 8 + 1 + 8 + 30 )
+        return .init(width: view.frame.width, height: 60 + textHeight + showMoreButton + imagesHeight + 8 + 1 + 8 + 30 )
     }
     
     func getStringDate(from value: Int) -> String {
@@ -105,6 +112,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 DispatchQueue.main.async {
                     self.refresher.endRefreshing()
                 }
+
                 if let nextFrom = nextFrom, self.nextFrom == "" {
                     self.nextFrom = nextFrom
                 }
