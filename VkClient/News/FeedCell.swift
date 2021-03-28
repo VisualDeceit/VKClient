@@ -11,13 +11,14 @@ class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
+    var indexPath: IndexPath! 
+    
     var newsPost: NewsPost! {
         didSet {
             setPostLogo()
             setPostCaption()
             setPostParam()
             setPostContent()
-            
             setNeedsLayout()
         }
     }
@@ -35,8 +36,16 @@ class FeedCell: UICollectionViewCell {
     
     //let iconImageView = CellLogo()
     let likeButton = LikeControl()
-    
     let iconImageView =  UIImageView()
+    ///Показывать или нет кнопку "Show more..."
+    var isShowMoreButton = false
+    ///true - развернут, false - свернут
+    var isShowMore: Bool! {
+        didSet {
+            let buttonTitle = isShowMore ? "Show less..." : "Show more..."
+            showMoreButton.setTitle(buttonTitle, for: .normal)
+        }
+    }
     
     let captionName: UILabel = {
         let label = UILabel()
@@ -141,6 +150,15 @@ class FeedCell: UICollectionViewCell {
        return button
     }()
     
+    let showMoreButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.backgroundColor = .systemBackground
+        button.setTitle("Show more...", for: .normal)
+        button.contentHorizontalAlignment = .leading
+       return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -166,11 +184,11 @@ class FeedCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-  
         iconImageViewFrame()
         captionNameFrame()
         captionDateFrame()
         contentTextFrame()
+        showMoreButtonFrame()
         imagesStackViewFrame()
         deviderFrame()
         bottomStackViewFrame() 
@@ -223,8 +241,6 @@ class FeedCell: UICollectionViewCell {
             for i in 0..<attachments.count where i < 4 {
                 //  эти пока обрабатываем
                 guard attachments[i].type == "photo" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
-                
-                //subcontentImageViewsHeight?.isActive = false
                 
                 //сохранияем url
                 if attachURL?.append(URL(string: attachments[i].url)!) == nil {
@@ -317,11 +333,17 @@ class FeedCell: UICollectionViewCell {
     }
     
     func contentTextFrame() {
-        let contentTextSize: CGSize
+        var contentTextSize: CGSize
         if newsPost.text == "" {
             contentTextSize = .zero
         } else {
             contentTextSize = getContentTextSize(text: contentText.text ?? "", font: contentText.font)
+        }
+        //нужно показать кнопку
+        isShowMoreButton = contentTextSize.height > 200 ? true : false
+        //текст не развернут
+        if isShowMoreButton, !isShowMore {
+            contentTextSize.height = 200
         }
         let contentTextX = spacer
         let contentTextY = iconImageView.frame.origin.y + iconImageView.frame.height + spacer
@@ -329,10 +351,34 @@ class FeedCell: UICollectionViewCell {
         contentText.frame = CGRect(origin: contentTextOrigin, size: contentTextSize)
     }
     
+    func showMoreButtonFrame() {
+        guard isShowMoreButton else {
+            let buttonSize = CGSize.zero
+            let buttonOrigin = CGPoint(x: 0, y: 0)
+            showMoreButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
+            return
+        }
+
+        let buttonLength = bounds.width - 2 * spacer
+        let buttonSize = CGSize(width: buttonLength, height: 14)
+        let buttonX = spacer
+        let buttonY = contentText.frame.origin.y + contentText.frame.height + (!isShowMore ? 0 : 8)
+        let buttonOrigin = CGPoint(x: buttonX, y: buttonY)
+        showMoreButton.frame = CGRect(origin: buttonOrigin, size: buttonSize)
+    }
+    
     func imagesStackViewFrame() {
         let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width )
         let imagesStackViewSize = CGSize(width: self.frame.width, height: imagesHeight)
-        let imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
+        
+        let imagesStackViewY: CGFloat
+        
+        if isShowMoreButton {
+            imagesStackViewY = showMoreButton.frame.origin.y + showMoreButton.frame.height + spacer
+        } else {
+            imagesStackViewY = contentText.frame.origin.y + contentText.frame.height + (contentText.frame.height == 0 ? 0 : spacer)
+        }
+        
         let imagesStackViewOrigin =  CGPoint(x: 0, y: imagesStackViewY)
         imagesStackView.frame = CGRect(origin: imagesStackViewOrigin, size: imagesStackViewSize)
         imagesStackView.spacing = contentImages?.count ?? 0 > 1 ? 4 : 0
@@ -364,6 +410,7 @@ class FeedCell: UICollectionViewCell {
         addSubview(captionDate)
         addSubview(iconImageView)
         addSubview(contentText)
+        addSubview(showMoreButton)
         addSubview(imagesStackView)
         addSubview(devider)
         addSubview(bottomStackView)
@@ -388,7 +435,20 @@ class FeedCell: UICollectionViewCell {
         bottomStackView.addArrangedSubview(commentButton)
         bottomStackView.addArrangedSubview(shareButton)
         bottomStackView.addArrangedSubview(viewsButton)
+        
+        showMoreButton.addTarget(self, action: #selector(expandText), for: .touchUpInside)
     }
+    
+    // MARK: - Expand/collapse text
+    @objc func expandText() {
+        isShowMore.toggle()
+        let buttonTitle = isShowMore ? "Show less..." : "Show more..."
+        showMoreButton.setTitle(buttonTitle, for: .normal)
+        // передаем в контроллер словарь Индекс:Развернут_ли_текст
+        let reloadCellNotification = Notification.Name("reloadCell")
+        NotificationCenter.default.post(name: reloadCellNotification, object: nil, userInfo: [self.indexPath!: isShowMore ?? false])
+    }
+    
 }
 
 //MARK: - Calculate images height
@@ -404,4 +464,5 @@ func calculateImageHeight (images: [UIImage]?, width: CGFloat) -> CGFloat {
     default:
         return width
     }
+    
 }

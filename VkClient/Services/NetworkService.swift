@@ -193,7 +193,7 @@ class NetworkServices {
     }
     
     // новости типа post
-    func getNewsFeed(type: NewsFeedType, completion: @escaping ([NewsPost]) ->()) {
+    func getNewsFeed(type: NewsFeedType, startTime: Int = 0, startFrom: String = "", completion: @escaping ([NewsPost], String?) ->()) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -202,8 +202,10 @@ class NetworkServices {
             url.queryItems = [URLQueryItem(name: "access_token", value: Session.shared.token),
                               URLQueryItem(name: "v", value: vAPI),
                               URLQueryItem(name: "filters", value: type.rawValue),
-                              URLQueryItem(name: "count", value: "50"),
+                              URLQueryItem(name: "count", value: "20"),
                               URLQueryItem(name: "max_photos", value: "4"),
+                              URLQueryItem(name: "start_time", value: "\(startTime)"),
+                              URLQueryItem(name: "start_from", value: startFrom),
             ]
             return url
         }()
@@ -221,6 +223,7 @@ class NetworkServices {
                         let newsPosts = try JSONDecoder().decode(NewsPostResponse.self, from: data).items
                         let groups = try JSONDecoder().decode(NewsPostResponse.self, from: data).gpoups
                         let profiles = try JSONDecoder().decode(NewsPostResponse.self, from: data).profiles
+                        let nextFrom = try JSONDecoder().decode(NewsPostResponse.self, from: data).nextFrom
                         newsPosts.forEach { news in
                             if news.sourceId < 0 {
                                 //groups
@@ -238,7 +241,7 @@ class NetworkServices {
                                  news.avatarUrl = profile?.photoURL ?? "https://vk.com/images/camera_50.png"
                             }
                         }
-                        completion(newsPosts)
+                        completion(newsPosts, nextFrom)
                     }
                     catch {
                         print(error)
