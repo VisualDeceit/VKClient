@@ -193,7 +193,7 @@ class NetworkServices {
     }
     
     // новости типа post
-    func getNewsFeed(type: NewsFeedType, startTime: Int = 0, startFrom: String = "", completion: @escaping ([NewsPost], String?) ->()) {
+    func getNewsFeed(type: NewsFeedType, startTime: TimeInterval? = nil, startFrom: String = "", completion: @escaping ([NewsPost], String?) ->()) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -204,9 +204,11 @@ class NetworkServices {
                               URLQueryItem(name: "filters", value: type.rawValue),
                               URLQueryItem(name: "count", value: "20"),
                               URLQueryItem(name: "max_photos", value: "4"),
-                              URLQueryItem(name: "start_time", value: "\(startTime)"),
                               URLQueryItem(name: "start_from", value: startFrom),
             ]
+            if let startTime = startTime {
+                url.queryItems?.append(URLQueryItem(name: "start_time", value: "\(Int(startTime + 1))"))
+            }
             return url
         }()
         

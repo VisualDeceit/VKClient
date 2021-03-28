@@ -116,16 +116,16 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return .init(width: view.frame.width, height: 60 + textHeight + showMoreButton + imagesHeight + 8 + 1 + 8 + 30 )
     }
     
-    func getStringDate(from value: Int) -> String {
-        let date = Date(timeIntervalSince1970: Double(value))
+    func getStringDate(from timeInterval: TimeInterval) -> String {
+        let date = Date(timeIntervalSince1970: timeInterval)
         return dateFormatter.string(from: date)
     }
     
     //загрузка данных из сети
     @objc
     func newsRequest() {
-        let requestTime = newsPosts.count == 0 ? 0 : (newsPosts.first?.date ?? 0)
-        networkService.getNewsFeed(type: .post, startTime: requestTime + 1) { [weak self] (news, nextFrom) in
+        let requestTime = newsPosts.first?.date
+        networkService.getNewsFeed(type: .post, startTime: requestTime) { [weak self] (news, nextFrom) in
             if let self = self {
                 DispatchQueue.main.async {
                     self.refresher.endRefreshing()

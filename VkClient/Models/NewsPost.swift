@@ -124,7 +124,7 @@ class NewsPost: Decodable {
     var sourceId = 0
     var name = ""
     var avatarUrl = ""
-    var date = 0
+    var date: TimeInterval = 0
     var likesCount = 0
     var isLiked = 0
     var repostsCount = 0
@@ -169,7 +169,7 @@ class NewsPost: Decodable {
         self.init()
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.date = try container.decode(Int.self, forKey: .date)
+        self.date = try container.decode(Double.self, forKey: .date)
         self.text = try container.decode(String.self, forKey: .text)
         self.sourceId = try container.decode(Int.self, forKey: .sourceId)
 
