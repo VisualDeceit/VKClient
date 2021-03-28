@@ -11,6 +11,15 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var newsPosts = [NewsPost]()
     
+    let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.timeStyle = DateFormatter.Style.short //Set time style
+        df.dateStyle = DateFormatter.Style.short //Set date style
+        df.timeZone = .current
+        return df
+    }()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,8 +35,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 self?.collectionView.reloadData()
             }
         }
-    
     }
+    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         newsPosts.count
@@ -35,6 +44,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
+        feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
         feedCell.newsPost = newsPosts[indexPath.item]
         return feedCell
     }
@@ -48,19 +58,21 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         //MARK: - Calculate text height
         if !newsPosts[indexPath.row].text.isEmpty {
             let contentText = newsPosts[indexPath.row].text
-            let rect = NSString(string: contentText).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)], context: nil)
-            
-            textHeight = rect.height + 24
+            let style = NSMutableParagraphStyle()
+            style.lineBreakMode = .byWordWrapping
+            let textBlock = CGSize(width: view.frame.width - 16, height: CGFloat.greatestFiniteMagnitude)
+            let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),NSAttributedString.Key.paragraphStyle: style], context: nil)
+            textHeight = rect.height + 8
         }
         
-        var imagesHeight: CGFloat = 0
+        var imagesHeight: CGFloat = -8
         if let count = newsPosts[indexPath.item].attachments?.count {
             switch count {
             case 1:
                 if let ratio = newsPosts[indexPath.item].attachments?.first?.ratio, ratio != 0  {
                     imagesHeight =  view.frame.width / ratio
                 } else {
-                    imagesHeight = 0
+                    imagesHeight = -8
                 }
             case 2...:
                 imagesHeight =  view.frame.width
@@ -69,6 +81,13 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
     }
         
-        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 21 + 30 )
+        return .init(width: view.frame.width, height: 60 + textHeight + imagesHeight + 8 + 1 + 8 + 30 )
     }
+    
+    func getStringDate(from value: Int) -> String {
+        let date = Date(timeIntervalSince1970: Double(value))
+        return dateFormatter.string(from: date)
+    }
+    
+
 }

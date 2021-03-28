@@ -19,7 +19,7 @@ class VKLoginViewController: UIViewController {
         urlComp.host = "oauth.vk.com"
         urlComp.path = "/authorize"
         urlComp.queryItems = [
-            URLQueryItem(name: "client_id", value: "7783207"),
+            URLQueryItem(name: "client_id", value: "7798270"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
             URLQueryItem(name: "scope", value: "270342"), //270342 //offline
