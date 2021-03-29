@@ -16,19 +16,18 @@ class ASPhotoGalleryCell: ASCellNode {
     
     init(reference: ThreadSafeReference<UserPhoto>) {
         self.gallegalleryPhotoRef = reference
- 
         super.init()
         let realm = try! Realm()
         //возвращаем объект, но для текущего потока
         let userPhoto = realm.resolve(self.gallegalleryPhotoRef)
-        backgroundColor = .yellow
+        backgroundColor = .systemBackground
         imageNode.shouldRenderProgressImages = true
         imageNode.url = URL(string: userPhoto!.link)
         addSubnode(imageNode)
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let photoDimension: CGFloat = (constrainedSize.max.width - 20.0) / 2.0
+        let photoDimension: CGFloat = (constrainedSize.max.width - 1) / 2.0
         imageNode.style.preferredSize = CGSize(width: photoDimension, height: photoDimension)
 
         return ASCenterLayoutSpec(centeringOptions: .Y, sizingOptions: .minimumX, child: imageNode)

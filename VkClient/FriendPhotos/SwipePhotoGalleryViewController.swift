@@ -7,12 +7,12 @@
 
 import UIKit
 
-class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDelegate {
+class PhotoBrowseController: UIViewController, UIGestureRecognizerDelegate {
 
-    @IBOutlet weak var imageView1: UIImageView!
-    @IBOutlet weak var imageView2: UIImageView!
-    @IBOutlet weak var imageView3: UIImageView!
-    @IBOutlet weak var toolBar: UIToolbar!
+    var imageView1: UIImageView
+    var imageView2: UIImageView
+    var imageView3: UIImageView
+    var toolBar: UIToolbar
     
     var panGesture: UIPanGestureRecognizer!
     var animator: UIViewPropertyAnimator!
@@ -50,9 +50,40 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
     var toLeftAnimation = {}
     var toRigtAnimation = {}
     
-    override func viewDidLoad() {
+    init() {
+        imageView1  = UIImageView()
+        imageView1.clipsToBounds = true
+        imageView1.contentMode = .scaleAspectFit
+        imageView1.backgroundColor = .systemBackground
+  
+        imageView2  = UIImageView()
+        imageView2.clipsToBounds = true
+        imageView2.contentMode = .scaleAspectFit
+        imageView2.backgroundColor = .systemBackground
         
+        imageView3  = UIImageView()
+        imageView3.clipsToBounds = true
+        imageView3.contentMode = .scaleAspectFit
+        imageView3.backgroundColor = .systemBackground
+        toolBar = UIToolbar()
+        
+
+        
+        super.init(nibName: nil, bundle: nil)
+        
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(imageView1)
+        view.addSubview(imageView2)
+        view.addSubview(imageView3)
         setupGallery()
         setupAnimations()
     }
@@ -283,7 +314,7 @@ class SwipePhotoGalleryViewController: UIViewController, UIGestureRecognizerDele
      */
     
     @objc func didSwipe(_ swipeGesture: UISwipeGestureRecognizer) {
-        performSegue(withIdentifier: "unwindToFriendsPhotos", sender: nil)
+        dismiss(animated: true)
 
     }
     

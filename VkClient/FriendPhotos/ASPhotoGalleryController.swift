@@ -26,7 +26,6 @@ class ASPhotoGalleryController: ASDKViewController<ASCollectionNode> {
         
         flowLayout.minimumInteritemSpacing = 1
         flowLayout.minimumLineSpacing = 1
-        
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("storyboards are incompatible with truth and beauty")
@@ -37,8 +36,7 @@ class ASPhotoGalleryController: ASDKViewController<ASCollectionNode> {
         
         collectionNode.delegate = self
         collectionNode.dataSource = self
-        collectionNode.view.allowsSelection = false
-        collectionNode.view.backgroundColor = .white
+        collectionNode.view.backgroundColor = .systemBackground
         
         self.navigationItem.title = "\(user.firstName) \(user.lastName)"
         
@@ -104,5 +102,14 @@ extension ASPhotoGalleryController: ASCollectionDataSource {
 }
 
 extension ASPhotoGalleryController: ASCollectionDelegate {
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
+
+        let photoBrowseController = PhotoBrowseController()
+        photoBrowseController.modalPresentationStyle = .automatic
+        photoBrowseController.datasource = Array(galleryPhotos)
+        photoBrowseController.index = indexPath.item
+        present(photoBrowseController, animated: true)
+    }
     
 }
