@@ -23,7 +23,8 @@ class RealmService {
     }
     
     static func load<T:Object>(typeOf: T.Type) throws -> Results<T> {
-            let realm = try Realm()
+        print(Realm.Configuration().fileURL ?? "")
+        let realm = try Realm()
             let object =  realm.objects(T.self)
         return object
     }
