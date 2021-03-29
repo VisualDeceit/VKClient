@@ -216,7 +216,6 @@
                                 <connections>
                                     <outlet property="friendAvatar" destination="oHQ-2u-zWy" id="8Qt-NO-hS1"/>
                                     <outlet property="friendName" destination="0RT-nZ-k3T" id="WmC-mU-qel"/>
-                                    <segue destination="E2E-tI-6dW" kind="show" identifier="showUserPhotos" id="akZ-cI-laP"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

@@ -127,7 +127,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard
             segue.identifier == "ShowGallery",
-            let controller = segue.destination as? SwipePhotoGalleryViewController,
+            let controller = segue.destination as? PhotoBrowseController,
             let cell = sender as? PhotoCollectionViewCell
         else { return }
         

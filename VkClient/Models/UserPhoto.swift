@@ -29,7 +29,7 @@ class UserPhoto: Object, Decodable {
     @objc dynamic var likesCount: Int = 0
     @objc dynamic var isLiked: Int = 0
     @objc dynamic var repostsCount: Int = 0
-   // let sizes = List<PhotoSize>()
+    let photoSizes = List<PhotoSize>()
     @objc dynamic var link: String = ""
     @objc dynamic var width: Int = 0
     @objc dynamic var height: Int = 0
@@ -62,6 +62,8 @@ class UserPhoto: Object, Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
         let sizesArray = try container.decode([PhotoSize].self, forKey: .sizes)
+        
+        self.photoSizes.append(objectsIn: sizesArray)
 
         // поиск максимальный размер
         var maxSize = sizesArray.reduce(sizesArray[0]) { current, next -> PhotoSize in
@@ -92,10 +94,10 @@ class UserPhoto: Object, Decodable {
     }
 }
 
-class PhotoSize: Decodable {
-    var height: Int = 0
-    var width: Int = 0
-    var type: String = ""
-    var url: String = ""
+class PhotoSize: Object, Decodable {
+    @objc dynamic var height: Int = 0
+    @objc dynamic var width: Int = 0
+    @objc dynamic var type: String = ""
+    @objc dynamic var url: String = ""
 }
 

@@ -10,6 +10,8 @@ import RealmSwift
 class RealmService {
     static let deleteIfMigration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
     
+    static let realmQ = DispatchQueue(label: "com.VkClient.Realm")
+    
     static func save <T: Object>(items: [T],
                                  configuration: Realm.Configuration = deleteIfMigration,
                                  update: Realm.UpdatePolicy = .modified) throws {
@@ -21,8 +23,10 @@ class RealmService {
     }
     
     static func load<T:Object>(typeOf: T.Type) throws -> Results<T> {
+        print(Realm.Configuration().fileURL ?? "")
         let realm = try Realm()
-        return realm.objects(T.self)
+            let object =  realm.objects(T.self)
+        return object
     }
     
     static func delete<T:Object>(object: Results<T>) throws {
