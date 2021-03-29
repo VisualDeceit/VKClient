@@ -12,5 +12,6 @@ pod 'SwiftyJSON'
 pod 'RealmSwift'
 #pod 'Firebase/Database'
 pod 'PromiseKit'
+pod 'Texture'
 
 end

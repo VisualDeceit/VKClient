@@ -29,7 +29,6 @@ class UserPhoto: Object, Decodable {
     @objc dynamic var likesCount: Int = 0
     @objc dynamic var isLiked: Int = 0
     @objc dynamic var repostsCount: Int = 0
-   // let sizes = List<PhotoSize>()
     @objc dynamic var link: String = ""
     @objc dynamic var width: Int = 0
     @objc dynamic var height: Int = 0

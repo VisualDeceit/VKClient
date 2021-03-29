@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1500DDCF26109BF4008DD553 /* ASPhotoGalleryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1500DDCE26109BF4008DD553 /* ASPhotoGalleryController.swift */; };
+		1500DDD22610B04A008DD553 /* ASPhotoGalleryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1500DDD12610B04A008DD553 /* ASPhotoGalleryCell.swift */; };
 		1504D92D2583AD7C00B4EBEE /* FriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D92C2583AD7C00B4EBEE /* FriendsTableViewController.swift */; };
 		1504D9312583ADA400B4EBEE /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D9302583ADA400B4EBEE /* FriendTableViewCell.swift */; };
 		1504D9342583AE9500B4EBEE /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D9332583AE9500B4EBEE /* Data.swift */; };
@@ -59,6 +61,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1500DDCE26109BF4008DD553 /* ASPhotoGalleryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASPhotoGalleryController.swift; sourceTree = "<group>"; };
+		1500DDD12610B04A008DD553 /* ASPhotoGalleryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASPhotoGalleryCell.swift; sourceTree = "<group>"; };
 		1504D92C2583AD7C00B4EBEE /* FriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewController.swift; sourceTree = "<group>"; };
 		1504D9302583ADA400B4EBEE /* FriendTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
 		1504D9332583AE9500B4EBEE /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
@@ -166,6 +170,8 @@
 				1504D9372583BEBF00B4EBEE /* PhotoCollectionViewController.swift */,
 				15FE1DC7259754310001481E /* SwipePhotoGalleryViewController.swift */,
 				1504D93B2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift */,
+				1500DDCE26109BF4008DD553 /* ASPhotoGalleryController.swift */,
+				1500DDD12610B04A008DD553 /* ASPhotoGalleryCell.swift */,
 			);
 			path = FriendPhotos;
 			sourceTree = "<group>";
@@ -449,6 +455,7 @@
 				15F45D8325F925EB001DD0BE /* GetGroupsOperation.swift in Sources */,
 				1542524D25A2EF240014F40A /* FeedController.swift in Sources */,
 				15B176092586793D00042450 /* LikeControl.swift in Sources */,
+				1500DDD22610B04A008DD553 /* ASPhotoGalleryCell.swift in Sources */,
 				1542525725AB74AE0014F40A /* FeedCell.swift in Sources */,
 				1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */,
 				15F45D8625F93286001DD0BE /* ParsingGroupsOperation.swift in Sources */,
@@ -464,6 +471,7 @@
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
 				15D31FE825AED4E8003D312E /* UILabel.swift in Sources */,
 				15A901C525B429A6006C5A25 /* NetworkService.swift in Sources */,
+				1500DDCF26109BF4008DD553 /* ASPhotoGalleryController.swift in Sources */,
 				1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */,
 				15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */,
 				15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */,

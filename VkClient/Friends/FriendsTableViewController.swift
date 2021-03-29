@@ -207,7 +207,14 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         return friendsLastNameTitles
    }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedUser = friendsBySection[indexPath.section][indexPath.row]
+        let photoGalleryController = ASPhotoGalleryController(user: selectedUser)
+        navigationController?.pushViewController(photoGalleryController, animated: true)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         guard segue.identifier == "showUserPhotos",
               let controller = segue.destination as? PhotoCollectionViewController else { return }
        
