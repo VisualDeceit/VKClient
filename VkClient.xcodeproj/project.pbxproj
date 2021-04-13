@@ -28,6 +28,8 @@
 		1542524D25A2EF240014F40A /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542524C25A2EF240014F40A /* FeedController.swift */; };
 		1542525025A2F4AD0014F40A /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542524F25A2F4AD0014F40A /* MainTabBarController.swift */; };
 		1542525725AB74AE0014F40A /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542525625AB74AD0014F40A /* FeedCell.swift */; };
+		15439A072624B15700ACA661 /* UIColor+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A062624B15700ACA661 /* UIColor+extension.swift */; };
+		15439A0A2624B4E200ACA661 /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A092624B4E200ACA661 /* UIFont+extension.swift */; };
 		15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15462828259D9AD9008F9411 /* CustomNavigationController.swift */; };
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1572BDB825C6837D00B320F9 /* RealmService.swift */; };
@@ -82,6 +84,8 @@
 		1542524C25A2EF240014F40A /* FeedController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
 		1542524F25A2F4AD0014F40A /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		1542525625AB74AD0014F40A /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
+		15439A062624B15700ACA661 /* UIColor+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
+		15439A092624B4E200ACA661 /* UIFont+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
 		15462828259D9AD9008F9411 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		1572BDB825C6837D00B320F9 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
@@ -284,11 +288,13 @@
 			isa = PBXGroup;
 			children = (
 				15D31FE325AED4B0003D312E /* UIView.swift */,
+				15439A062624B15700ACA661 /* UIColor+extension.swift */,
 				15D31FE725AED4E8003D312E /* UILabel.swift */,
 				15D31FEA25AED521003D312E /* UIImage.swift */,
 				15D91F4225BBDED900169520 /* UIImageView.swift */,
 				15FE81C525CAC440009E7445 /* UITableView.swift */,
 				1528B35025FA4C6400923B73 /* URLCache.swift */,
+				15439A092624B4E200ACA661 /* UIFont+extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -456,6 +462,7 @@
 				15D31FEB25AED521003D312E /* UIImage.swift in Sources */,
 				15B3E5BF258F777B001C025E /* NewsTableViewController.swift in Sources */,
 				1542525025A2F4AD0014F40A /* MainTabBarController.swift in Sources */,
+				15439A072624B15700ACA661 /* UIColor+extension.swift in Sources */,
 				1504D9402583D16100B4EBEE /* GroupsTableViewController.swift in Sources */,
 				1504D9342583AE9500B4EBEE /* Data.swift in Sources */,
 				15B17600258621F500042450 /* CellLogo.swift in Sources */,
@@ -467,6 +474,7 @@
 				1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */,
 				15A901C225B4166E006C5A25 /* VKLoginViewController.swift in Sources */,
 				15B3E5B2258E4913001C025E /* MyCustomSectionHeaderView.swift in Sources */,
+				15439A0A2624B4E200ACA661 /* UIFont+extension.swift in Sources */,
 				153F21A32577F3780018A18D /* AppDelegate.swift in Sources */,
 				15FE9B2325EFFE55009C3087 /* NewsPost.swift in Sources */,
 				15F45D7F25F920FA001DD0BE /* AsyncOperation.swift in Sources */,

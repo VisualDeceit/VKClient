@@ -50,7 +50,7 @@ class FeedCell: UICollectionViewCell {
     let captionName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = true
-        label.font = UIFont.boldSystemFont(ofSize: 14.0)
+        label.font = UIFont.bolt14
         label.backgroundColor = .systemBackground
         return label
     }()
@@ -58,8 +58,8 @@ class FeedCell: UICollectionViewCell {
     let captionDate: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = true
-        label.font = UIFont.systemFont(ofSize: 12.0)
-        label.textColor =  UIColor(white: 0.6, alpha: 1)
+        label.font = UIFont.regular12
+        label.textColor =  UIColor.labelGray
         label.backgroundColor = .systemBackground
         return label
     }()
@@ -69,7 +69,7 @@ class FeedCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = true
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.regular14
         label.lineBreakMode = .byWordWrapping
         label.textColor = .label
         label.backgroundColor = .systemBackground

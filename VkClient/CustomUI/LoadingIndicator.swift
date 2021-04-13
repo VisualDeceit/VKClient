@@ -112,7 +112,7 @@ class Сircle: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.setFillColor(UIColor(red: 0.153, green: 0.529, blue: 0.961, alpha: 1) .cgColor)
+        context.setFillColor(UIColor.vkBrandBlue.cgColor)
         let circleSize = min(self.frame.width, self.frame.height)
         context.fillEllipse(in: CGRect(x: self.frame.width/2 - circleSize/2, y: self.frame.height/2 - circleSize/2, width: circleSize, height: circleSize))
     }

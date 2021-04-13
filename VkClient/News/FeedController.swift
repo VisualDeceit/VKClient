@@ -76,7 +76,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             let style = NSMutableParagraphStyle()
             style.lineBreakMode = .byWordWrapping
             let textBlock = CGSize(width: view.frame.width - 16, height: CGFloat.greatestFiniteMagnitude)
-            let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),NSAttributedString.Key.paragraphStyle: style], context: nil)
+            let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.regular14,NSAttributedString.Key.paragraphStyle: style], context: nil)
             textHeight = rect.height + 8
             isShowMoreButton = textHeight > 200 ? true : false
             if isShowMoreButton, !isShowMore {
