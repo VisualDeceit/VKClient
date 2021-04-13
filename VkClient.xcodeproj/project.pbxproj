@@ -30,6 +30,7 @@
 		1542525725AB74AE0014F40A /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1542525625AB74AD0014F40A /* FeedCell.swift */; };
 		15439A072624B15700ACA661 /* UIColor+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A062624B15700ACA661 /* UIColor+extension.swift */; };
 		15439A0A2624B4E200ACA661 /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A092624B4E200ACA661 /* UIFont+extension.swift */; };
+		15439A1B2625FC6D00ACA661 /* NetworkServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A1A2625FC6D00ACA661 /* NetworkServiceAdapter.swift */; };
 		15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15462828259D9AD9008F9411 /* CustomNavigationController.swift */; };
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1572BDB825C6837D00B320F9 /* RealmService.swift */; };
@@ -86,6 +87,7 @@
 		1542525625AB74AD0014F40A /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		15439A062624B15700ACA661 /* UIColor+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
 		15439A092624B4E200ACA661 /* UIFont+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
+		15439A1A2625FC6D00ACA661 /* NetworkServiceAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceAdapter.swift; sourceTree = "<group>"; };
 		15462828259D9AD9008F9411 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		1572BDB825C6837D00B320F9 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				15A901C425B429A6006C5A25 /* NetworkService.swift */,
+				15439A1A2625FC6D00ACA661 /* NetworkServiceAdapter.swift */,
 				1535228F25AF0A6F006498A6 /* Session.swift */,
 				1572BDB825C6837D00B320F9 /* RealmService.swift */,
 				15CAD637260267FE0046B807 /* PhotoService.swift */,
@@ -469,6 +472,7 @@
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
 				15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */,
 				1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */,
+				15439A1B2625FC6D00ACA661 /* NetworkServiceAdapter.swift in Sources */,
 				15D31FE825AED4E8003D312E /* UILabel.swift in Sources */,
 				15A901C525B429A6006C5A25 /* NetworkService.swift in Sources */,
 				1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */,

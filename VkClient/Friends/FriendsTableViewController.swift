@@ -213,7 +213,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
        
         //передача данных в PhotoCollectionViewController
         let selectedUser = tableView.indexPathForSelectedRow
-        controller.user = friendsBySection[selectedUser!.section][selectedUser!.row]
+        controller.userObject = friendsBySection[selectedUser!.section][selectedUser!.row]
         controller.delegate = self // подписали на делегат
 
     }

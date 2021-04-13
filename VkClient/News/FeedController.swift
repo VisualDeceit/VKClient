@@ -142,7 +142,6 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 DispatchQueue.main.async {
                     self.collectionView.insertItems(at: indexPath)
                 }
-                
             }
         }
     }
@@ -158,7 +157,6 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             collectionView.reloadItems(at: [indexPath])
         }
     }
-
 }
 
 //MARK: - Паттерн Infinite Scrolling
@@ -181,11 +179,8 @@ extension FeedController: UICollectionViewDataSourcePrefetching {
                         self.collectionView.insertItems(at: indexPath)
                         self.isLoading = false
                     }
-                    
                 }
             }
-            
         }
     }
-    
 }
