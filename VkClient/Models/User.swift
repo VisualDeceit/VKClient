@@ -11,7 +11,7 @@ import RealmSwift
 
 //эта модель через SwiftyJSON
 
-class User: Object {
+class RLMUser: Object {
     
     @objc dynamic var id: Int = 0
     @objc dynamic var firstName: String = ""
@@ -30,3 +30,11 @@ class User: Object {
         "id"
     }
 }
+
+// модель для после применения адаптера
+//struct UserAdapted {
+//    var id: Int
+//    var firstName: String
+//    var lastName: String
+//    var avatarUrl: String
+//}

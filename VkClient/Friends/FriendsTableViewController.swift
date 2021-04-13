@@ -15,14 +15,14 @@ protocol FriendsTableViewControllerDelegate: class {
 
 class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
     
-    private var friendsBySection = [Results<User>]()
-    private var friendsBySectionBackup = [Results<User>]()
+    private var friendsBySection = [Results<RLMUser>]()
+    private var friendsBySectionBackup = [Results<RLMUser>]()
     var notificationTokens = [NotificationToken]()
     var friendsLastNameTitles = [String]()
     var friendsLastNameTitlesBackup = [String]()
     var isSearching: Bool = false
     
-    private var allFriends = try? RealmService.load(typeOf: User.self)
+    private var allFriends = try? RealmService.load(typeOf: RLMUser.self)
 
     var allFriendsToken: NotificationToken?
     
@@ -48,7 +48,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             .done(on: .global()) { (friends) in
                 // удаляем старых друзей
                 let ids = friends.map { $0.id}
-                let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
+                let objectsToDelete = try RealmService.load(typeOf: RLMUser.self).filter("NOT id IN %@", ids)
                 try RealmService.delete(object: objectsToDelete)
                 //сохранение данных в Realm
                 try RealmService.save(items: friends)
@@ -85,7 +85,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     
     // MARK: - Notifications
     
-    func setNotificatoins(for container: Results<User>) {
+    func setNotificatoins(for container: Results<RLMUser>) {
         //рабиваем на секции
         friendsLastNameTitles = splitOnSections(for: container)
         // подписываем
@@ -98,7 +98,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     func initFriendsBySection (sections: [String]) {
         //получаем коллекцию для каждой секции по первой букве фамилии
         for section in sections {
-            let friends =  try? RealmService.load(typeOf: User.self).filter("lastName BEGINSWITH %@", section)
+            let friends =  try? RealmService.load(typeOf: RLMUser.self).filter("lastName BEGINSWITH %@", section)
             if let friends = friends {
                 friendsBySection.append(friends)
             }
@@ -110,7 +110,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     
-    func addNotification(for container: Results<User>, in section:Int) {
+    func addNotification(for container: Results<RLMUser>, in section:Int) {
         let token = (container.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
             switch changes {
@@ -136,9 +136,9 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     }
     
     //находим массив первых букв
-    func splitOnSections(for inputArray: Results<User>) -> [String] {
+    func splitOnSections(for inputArray: Results<RLMUser>) -> [String] {
         
-        var dictionary = [String: [User]]()
+        var dictionary = [String: [RLMUser]]()
        
         //разбираем исходный массив в словарь для индексации таблицы
         for user in Array(inputArray) {
@@ -168,7 +168,7 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
             .done(on: .main) {[weak self] (friends) in
                 // удаляем старых друзей
                 let ids = friends.map { $0.id}
-                let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
+                let objectsToDelete = try RealmService.load(typeOf: RLMUser.self).filter("NOT id IN %@", ids)
                 try RealmService.delete(object: objectsToDelete)
                 //сохранение данных в Realm
                 try RealmService.save(items: friends)
@@ -243,7 +243,7 @@ extension FriendsTableViewController: UISearchBarDelegate {
         do {
             isSearching = true
             let predicate = NSPredicate(format: "firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@"  , searchText.lowercased(), searchText.lowercased())
-            let filteredFriends =  try RealmService.load(typeOf: User.self).filter(predicate)
+            let filteredFriends =  try RealmService.load(typeOf: RLMUser.self).filter(predicate)
             ///рабиваем на секции
             friendsLastNameTitles.removeAll()
             friendsLastNameTitles = splitOnSections(for: filteredFriends)

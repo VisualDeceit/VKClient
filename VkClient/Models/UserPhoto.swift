@@ -34,7 +34,7 @@ class UserPhoto: Object, Decodable {
     @objc dynamic var width: Int = 0
     @objc dynamic var height: Int = 0
     @objc dynamic var type: String = ""
-    @objc dynamic var owner: User?
+    @objc dynamic var owner: RLMUser?
 
     
     enum RepostsCodingKeys: String, CodingKey{

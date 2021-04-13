@@ -20,7 +20,7 @@ class FriendTableViewCell: UITableViewCell {
         friendName.text = nil
     }
     
-    func populate(user: User, service: PhotoService) {
+    func populate(user: RLMUser, service: PhotoService) {
         imageURL = URL(string: user.avatarUrl)
         friendName.text = "\(user.firstName) \(user.lastName)"
         service.getPhoto(urlString: user.avatarUrl) {[weak self] (image) in

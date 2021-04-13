@@ -12,7 +12,7 @@ import RealmSwift
 
 class PhotoCollectionViewController: UICollectionViewController {
     
-    var user = User()
+    var user = RLMUser()
     var userPhotos: Results<UserPhoto>!
     var token: NotificationToken?
     var refresher: UIRefreshControl!
