@@ -44,6 +44,7 @@ struct NewsPostProfiles: Decodable {
         case lastName = "last_name"
         case photoURL = "photo_50"
     }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id =  try container.decode(Int.self, forKey: .id)
@@ -64,13 +65,13 @@ struct NewsPostGroups: Decodable {
         case name
         case photoURL = "photo_50"
     }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id =  try container.decode(Int.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         self.photoURL = try container.decode(String.self, forKey: .photoURL)
     }
-    
 }
 
 
@@ -106,6 +107,7 @@ struct NewsPostAttachment: Decodable {
             self.url = maxSize.url
             self.ratio = CGFloat( maxSize.width) / CGFloat( maxSize.height)
         }
+        
         if self.type == "video" {
             self.url = "https://www.geirangerfjord.no/upload/images/2018_general/film-and-vid.jpg"
             self.ratio = CGFloat( 1240.0 / 711.0 )
@@ -115,9 +117,7 @@ struct NewsPostAttachment: Decodable {
             self.url = "https://prettylinks.com/wp-content/uploads/2016/11/arrow_url.png"
             self.ratio = CGFloat( 720.0 / 540.0)
         }
-
     }
-    
 }
 
 class NewsPost: Decodable {
@@ -188,5 +188,4 @@ class NewsPost: Decodable {
        
         self.attachments = try? container.decode([NewsPostAttachment].self, forKey: .attachments)
     }
-    
 }

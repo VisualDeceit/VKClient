@@ -23,6 +23,16 @@ class FeedCell: UICollectionViewCell {
         }
     }
     
+    var viewModel: NewsPostViewModel! {
+        didSet {
+            setPostLogo()
+            setPostCaption()
+            setPostParam()
+            setPostContent()
+            setNeedsLayout()
+        }
+    }
+    
     var imageURL: URL?
     var attachURL: [URL]?
     var stringDate: String = ""
@@ -197,90 +207,41 @@ class FeedCell: UICollectionViewCell {
     
     // загрузка аватара
     private func setPostLogo() {
-        imageURL = URL(string: newsPost.avatarUrl)
-        iconImageView.download(from: (imageURL)!) {[weak self] url in
-            self?.imageURL == url
-        }
+        iconImageView.image = viewModel.iconImage
     }
     
     ///Функция заполнения заголовка поста
     private func setPostCaption() {
-        captionName.text = newsPost.name
-        captionDate.text = stringDate
+        captionName.text = viewModel.caption
+        captionDate.text = viewModel.date
     }
     
-    private func postParamToString(countInt: Int?) -> String{
-        let count = countInt ?? 0
-            if count < 1000 {
-               return String(count)
-            } else {
-                return String(format: "%.1fk", Double(count)/1000.0)
-            }
-    }
     
     ///Функция заполнениия statusbar поста -
     ///нравится, комментарии, просмотры
     private func setPostParam() {
         //лайки и просмотры
-        likeButton.totalCount = newsPost.likesCount
-        likeButton.isLiked = (newsPost.isLiked != 0)
+        likeButton.totalCount = viewModel.likesCount
+        likeButton.isLiked = (viewModel.isLiked != 0)
 
-        viewsButton.setTitle(postParamToString(countInt: newsPost.viewsCount), for: .normal)
-        commentButton.setTitle(postParamToString(countInt: newsPost.commentsCount), for: .normal)
-        shareButton.setTitle(postParamToString(countInt: newsPost.repostsCount), for: .normal)
+        viewsButton.setTitle(viewModel.viewsCount, for: .normal)
+        commentButton.setTitle(viewModel.commentsCount, for: .normal)
+        shareButton.setTitle(viewModel.repostsCount, for: .normal)
     }
     
     ///Функция заполнения поста содержимым
     private func setPostContent(){
-        contentText.text = newsPost.text
+        contentText.text = viewModel.text
         self.contentImageViews.forEach { $0.isHidden = true }
-        let imageGroup = DispatchGroup()
-        //есть содержимое
-        if let attachments = newsPost.attachments {
-            attachURL?.removeAll()
-            for i in 0..<attachments.count where i < 4 {
-                //  эти пока обрабатываем
-                guard attachments[i].type == "photo" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
-                
-                //сохранияем url
-                if attachURL?.append(URL(string: attachments[i].url)!) == nil {
-                    attachURL = [ URL(string: attachments[i].url)! ]
-                }
-                
-                //создаем очередь
-                imageGroup.enter()
-                if let url = URL(string: attachments[i].url) {
-                    let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
-                    URLSession.shared.dataTask(with: request) { (data, _, _) in
-                        if let tempData = data,
-                           let image = UIImage(data: tempData) {
-                            //если это запрашиваемый url
-                            if self.attachURL!.contains(url) {
-                                self.contentImages?.append(image)
-                            }
-                        }
-                        imageGroup.leave()
-                    }.resume()
-                }
+        self.contentImageViews.forEach { $0.image = nil }
+        if let attachments = self.viewModel.attachments {
+            for i in 0..<attachments.count {
+                if i >= 4  { break }
+                self.contentImageViews[i].image = attachments[i].image
+                self.contentImageViews[i].isHidden = false
             }
-        } else { //нет прикрепленного
-            setNeedsLayout()
         }
-        
-        //все задания из группы закончились
-        imageGroup.notify(queue: DispatchQueue.main) {
-            self.contentImageViews.forEach { $0.image = nil }
-            if let images = self.contentImages {
-                for i in 0..<images.count {
-                    if i >= 4  { break }
-                    self.contentImageViews[i].image = images[i]
-                    self.contentImageViews[i].isHidden = false
-                }
-            }
-            self.setNeedsLayout()
-        }
-    }
-    
+    }    
     
     //MARK: - Frames Layout
     let spacer: CGFloat = 8

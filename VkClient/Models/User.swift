@@ -30,11 +30,3 @@ class RLMUser: Object {
         "id"
     }
 }
-
-// модель для после применения адаптера
-//struct UserAdapted {
-//    var id: Int
-//    var firstName: String
-//    var lastName: String
-//    var avatarUrl: String
-//}

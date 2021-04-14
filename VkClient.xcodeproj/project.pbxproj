@@ -31,6 +31,8 @@
 		15439A072624B15700ACA661 /* UIColor+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A062624B15700ACA661 /* UIColor+extension.swift */; };
 		15439A0A2624B4E200ACA661 /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A092624B4E200ACA661 /* UIFont+extension.swift */; };
 		15439A1B2625FC6D00ACA661 /* NetworkServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A1A2625FC6D00ACA661 /* NetworkServiceAdapter.swift */; };
+		15439A1E26262F9800ACA661 /* NewsPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A1D26262F9800ACA661 /* NewsPostViewModel.swift */; };
+		15439A23262630B000ACA661 /* NewsPostViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A22262630B000ACA661 /* NewsPostViewModelFactory.swift */; };
 		15462829259D9AD9008F9411 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15462828259D9AD9008F9411 /* CustomNavigationController.swift */; };
 		1546282E259D9C34008F9411 /* CustomNavigationControllerTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */; };
 		1572BDB925C6837D00B320F9 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1572BDB825C6837D00B320F9 /* RealmService.swift */; };
@@ -88,6 +90,8 @@
 		15439A062624B15700ACA661 /* UIColor+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
 		15439A092624B4E200ACA661 /* UIFont+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
 		15439A1A2625FC6D00ACA661 /* NetworkServiceAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceAdapter.swift; sourceTree = "<group>"; };
+		15439A1D26262F9800ACA661 /* NewsPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPostViewModel.swift; sourceTree = "<group>"; };
+		15439A22262630B000ACA661 /* NewsPostViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPostViewModelFactory.swift; sourceTree = "<group>"; };
 		15462828259D9AD9008F9411 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		1546282D259D9C34008F9411 /* CustomNavigationControllerTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationControllerTransitions.swift; sourceTree = "<group>"; };
 		1572BDB825C6837D00B320F9 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 		1504D9292583AD2200B4EBEE /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				15439A26262630EB00ACA661 /* ViewModel */,
 				1504D9332583AE9500B4EBEE /* Data.swift */,
 				15D91F0B25BA9B2C00169520 /* User.swift */,
 				15D91F4A25BC162300169520 /* Group.swift */,
@@ -229,6 +234,7 @@
 		153F21A12577F3780018A18D /* VkClient */ = {
 			isa = PBXGroup;
 			children = (
+				15439A212626308800ACA661 /* Factories */,
 				15F45D7825F91F00001DD0BE /* Operations */,
 				1572BDB725C6835E00B320F9 /* Services */,
 				1535229425AF0D0E006498A6 /* Application */,
@@ -244,6 +250,22 @@
 				15B176022586222500042450 /* Storyboards */,
 			);
 			path = VkClient;
+			sourceTree = "<group>";
+		};
+		15439A212626308800ACA661 /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				15439A22262630B000ACA661 /* NewsPostViewModelFactory.swift */,
+			);
+			path = Factories;
+			sourceTree = "<group>";
+		};
+		15439A26262630EB00ACA661 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				15439A1D26262F9800ACA661 /* NewsPostViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		1546282B259D9BB4008F9411 /* NavigationController */ = {
@@ -446,6 +468,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15439A23262630B000ACA661 /* NewsPostViewModelFactory.swift in Sources */,
 				15D91F4B25BC162300169520 /* Group.swift in Sources */,
 				15F45D8A25F93912001DD0BE /* SaveToRealmOperation.swift in Sources */,
 				1535229025AF0A6F006498A6 /* Session.swift in Sources */,
@@ -455,6 +478,7 @@
 				15FE81C625CAC440009E7445 /* UITableView.swift in Sources */,
 				15D91F0C25BA9B2C00169520 /* User.swift in Sources */,
 				1528B35125FA4C6400923B73 /* URLCache.swift in Sources */,
+				15439A1E26262F9800ACA661 /* NewsPostViewModel.swift in Sources */,
 				15F45D8325F925EB001DD0BE /* GetGroupsOperation.swift in Sources */,
 				1542524D25A2EF240014F40A /* FeedController.swift in Sources */,
 				15B176092586793D00042450 /* LikeControl.swift in Sources */,

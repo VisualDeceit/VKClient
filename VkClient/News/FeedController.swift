@@ -16,16 +16,9 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var isLoading = false
     var isShowMoreButton = false
     var isShowMoreDict = [IndexPath: Bool]()
-
     
-    let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.timeStyle = DateFormatter.Style.short //Set time style
-        df.dateStyle = DateFormatter.Style.short //Set date style
-        df.timeZone = .current
-        return df
-    }()
-
+    private let viewModelFactory = NewsPostViewModelFactory()
+    private var viewModels: [NewsPostViewModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,15 +44,16 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        newsPosts.count
+        viewModels.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
-        feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
-        feedCell.indexPath = indexPath
-        feedCell.isShowMore = isShowMoreDict[indexPath] ?? false
-        feedCell.newsPost = newsPosts[indexPath.item]
+//        feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
+//        feedCell.indexPath = indexPath
+//        feedCell.isShowMore = isShowMoreDict[indexPath] ?? false
+//        feedCell.newsPost = newsPosts[indexPath.item]
+        feedCell.viewModel = viewModels[indexPath.item]
         return feedCell
     }
     
@@ -71,8 +65,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         var textHeight: CGFloat = 0
         
-        if !newsPosts[indexPath.row].text.isEmpty {
-            let contentText = newsPosts[indexPath.row].text
+        if !viewModels[indexPath.row].text.isEmpty {
+            let contentText = viewModels[indexPath.row].text
             let style = NSMutableParagraphStyle()
             style.lineBreakMode = .byWordWrapping
             let textBlock = CGSize(width: view.frame.width - 16, height: CGFloat.greatestFiniteMagnitude)
@@ -98,7 +92,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         
         
-        if let count = newsPosts[indexPath.item].attachments?.count {
+        if let count = viewModels[indexPath.item].attachments?.count {
             switch count {
             case 1:
                 if let ratio = newsPosts[indexPath.item].attachments?.first?.ratio, ratio != 0  {
@@ -114,11 +108,6 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
         
         return .init(width: view.frame.width, height: 60 + textHeight + showMoreButton + imagesHeight + 8 + 1 + 8 + 30 )
-    }
-    
-    func getStringDate(from timeInterval: TimeInterval) -> String {
-        let date = Date(timeIntervalSince1970: timeInterval)
-        return dateFormatter.string(from: date)
     }
     
     //загрузка данных из сети
@@ -137,8 +126,9 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 guard news.count > 0 else { return }
                 //новости добавляем в начало
                 self.newsPosts = news + self.newsPosts
+                self.viewModels = self.viewModelFactory.constructViewModels(from: self.newsPosts)
                 //создаем индексы для вставки
-                let indexPath = (0..<news.count).map {IndexPath(row: $0, section: 0)}
+                let indexPath = (0..<self.viewModels.count).map {IndexPath(row: $0, section: 0)}
                 DispatchQueue.main.async {
                     self.collectionView.insertItems(at: indexPath)
                 }
@@ -175,6 +165,7 @@ extension FeedController: UICollectionViewDataSourcePrefetching {
                     let indexPath = (self.newsPosts.count..<self.newsPosts.count + news.count).map {IndexPath(row: $0, section: 0)}
                     //новости добавляем в конец
                     self.newsPosts.append(contentsOf: news)
+                    self.viewModels = self.viewModelFactory.constructViewModels(from: self.newsPosts)
                     DispatchQueue.main.async {
                         self.collectionView.insertItems(at: indexPath)
                         self.isLoading = false
