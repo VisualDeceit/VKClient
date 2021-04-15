@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1504D92D2583AD7C00B4EBEE /* FriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D92C2583AD7C00B4EBEE /* FriendsTableViewController.swift */; };
 		1504D9312583ADA400B4EBEE /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D9302583ADA400B4EBEE /* FriendTableViewCell.swift */; };
-		1504D9342583AE9500B4EBEE /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D9332583AE9500B4EBEE /* Data.swift */; };
 		1504D9382583BEBF00B4EBEE /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D9372583BEBF00B4EBEE /* PhotoCollectionViewController.swift */; };
 		1504D93C2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D93B2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift */; };
 		1504D9402583D16100B4EBEE /* GroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D93F2583D16100B4EBEE /* GroupsTableViewController.swift */; };
@@ -66,7 +65,6 @@
 /* Begin PBXFileReference section */
 		1504D92C2583AD7C00B4EBEE /* FriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewController.swift; sourceTree = "<group>"; };
 		1504D9302583ADA400B4EBEE /* FriendTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
-		1504D9332583AE9500B4EBEE /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		1504D9372583BEBF00B4EBEE /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
 		1504D93B2583BEEC00B4EBEE /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		1504D93F2583D16100B4EBEE /* GroupsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsTableViewController.swift; sourceTree = "<group>"; };
@@ -141,7 +139,6 @@
 			isa = PBXGroup;
 			children = (
 				15439A26262630EB00ACA661 /* ViewModel */,
-				1504D9332583AE9500B4EBEE /* Data.swift */,
 				15D91F0B25BA9B2C00169520 /* User.swift */,
 				15D91F4A25BC162300169520 /* Group.swift */,
 				15D91F5125BC400300169520 /* UserPhoto.swift */,
@@ -491,7 +488,6 @@
 				1542525025A2F4AD0014F40A /* MainTabBarController.swift in Sources */,
 				15439A072624B15700ACA661 /* UIColor+extension.swift in Sources */,
 				1504D9402583D16100B4EBEE /* GroupsTableViewController.swift in Sources */,
-				1504D9342583AE9500B4EBEE /* Data.swift in Sources */,
 				15B17600258621F500042450 /* CellLogo.swift in Sources */,
 				1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */,
 				15FE1DC8259754310001481E /* SwipePhotoGalleryViewController.swift in Sources */,

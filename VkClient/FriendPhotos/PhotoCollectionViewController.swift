@@ -17,9 +17,6 @@ class PhotoCollectionViewController: UICollectionViewController {
     var refresher: UIRefreshControl!
     let networkService = NetworkServiceAdapter()
     
-    //объявляем слабую ссылку на делегат для передачи данных
-    weak var delegate: FriendsTableViewControllerDelegate?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "\(userObject.firstName) \(userObject.lastName)"

@@ -17,21 +17,37 @@ class NewsPostViewModelFactory {
         return df
     }()
     
-    var attachURL: [URL]?
+    let imageGroup = DispatchGroup()
+    var newsPostViewMode = [NewsPostViewModel]()
     
-    func constructViewModels(from news: [NewsPost]) -> [NewsPostViewModel] {
-        var newsPostViewMode = [NewsPostViewModel]()
-        news.forEach {
-            self.viewModel(from: $0) {(viewMode) in
-                newsPostViewMode.append(viewMode)
+    let dispatchGroup = DispatchGroup()
+    let dispatchQueue = DispatchQueue(label: "com.VkClient.NewsPostViewModelFactory.constructViewModels")
+    let dispatchSemaphore = DispatchSemaphore(value: 0)
+    
+    func constructViewModels(from news: [NewsPost], onComlition: @escaping ([NewsPostViewModel]) -> () ) {
+        
+        dispatchQueue.async {
+            
+            news.forEach {
+                self.dispatchGroup.enter()
+                self.viewModel(from: $0) {(viewMode) in
+                    self.newsPostViewMode.append(viewMode)
+                    self.dispatchSemaphore.signal()
+                    self.dispatchGroup.leave()
+                }
+                self.dispatchSemaphore.wait()
             }
         }
-        return newsPostViewMode
+        
+        dispatchGroup.notify(queue: dispatchQueue) {
+            DispatchQueue.main.async {
+                onComlition(self.newsPostViewMode)
+                self.newsPostViewMode.removeAll()
+            }
+        }
     }
     
-    let imageGroup = DispatchGroup()
-    
-    private func viewModel(from newsPost: NewsPost, handler: @escaping (NewsPostViewModel) -> ()) {
+    private func viewModel(from newsPost: NewsPost, onComplition: @escaping (NewsPostViewModel) -> ()) {
         
         var contentAttach = [ViewModelAttachment]()
         var iconImage = UIImage()
@@ -39,6 +55,7 @@ class NewsPostViewModelFactory {
         let caption = newsPost.name
         let date = Date(timeIntervalSince1970: newsPost.date)
         let dateText =  NewsPostViewModelFactory.dateFormatter.string(from: date)
+        let dateInt = newsPost.date
         let contentText = newsPost.text
         let likesCount = newsPost.likesCount
         let isLiked = newsPost.isLiked
@@ -48,15 +65,10 @@ class NewsPostViewModelFactory {
         
         //есть содержимое
         if let attachments = newsPost.attachments {
-            attachURL?.removeAll()
-            
             for i in 0..<attachments.count where i < 4 {
                 //  эти пока обрабатываем
                 guard attachments[i].type == "photo" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
-                //сохранияем url
-                if attachURL?.append(URL(string: attachments[i].url)!) == nil {
-                    attachURL = [ URL(string: attachments[i].url)! ]
-                }
+
                 //создаем очередь
                 self.imageGroup.enter()
                 if let url = URL(string: attachments[i].url) {
@@ -64,10 +76,7 @@ class NewsPostViewModelFactory {
                     URLSession.shared.dataTask(with: request) { (data, _, _) in
                         if let tempData = data,
                            let image = UIImage(data: tempData) {
-                            //если это запрашиваемый url
-                            if self.attachURL!.contains(url) {
                                 contentAttach.append(ViewModelAttachment(image: image, ratio: attachments[i].ratio))
-                            }
                         }
                         self.imageGroup.leave()
                     }.resume()
@@ -90,8 +99,8 @@ class NewsPostViewModelFactory {
         
         //все задания из группы закончились
         imageGroup.notify(queue: DispatchQueue.global()) {
-            let viewModel =  NewsPostViewModel(iconImage: iconImage, caption: caption, date: dateText, text: contentText, likesCount: likesCount, isLiked: isLiked, repostsCount: repostsCount, viewsCount: viewsCount, commentsCount: commentsCount, attachments: contentAttach)
-           handler(viewModel)
+            let viewModel =  NewsPostViewModel(iconImage: iconImage, caption: caption, dateText: dateText, dateInt: dateInt, contentText: contentText, likesCount: likesCount, isLiked: isLiked, repostsCount: repostsCount, viewsCount: viewsCount, commentsCount: commentsCount, attachments: contentAttach)
+            onComplition(viewModel)
         }
     }
 

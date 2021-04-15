@@ -10,8 +10,9 @@ import UIKit
 struct NewsPostViewModel {
     var iconImage: UIImage
     var caption: String
-    var date: String
-    var text: String
+    var dateText: String
+    var dateInt: TimeInterval = 0 // для запроса
+    var contentText: String
     var likesCount = 0
     var isLiked = 0
     var repostsCount: String

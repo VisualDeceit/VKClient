@@ -11,17 +11,7 @@ class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
-    var indexPath: IndexPath! 
-    
-    var newsPost: NewsPost! {
-        didSet {
-            setPostLogo()
-            setPostCaption()
-            setPostParam()
-            setPostContent()
-            setNeedsLayout()
-        }
-    }
+    var indexPath: IndexPath!
     
     var viewModel: NewsPostViewModel! {
         didSet {
@@ -33,10 +23,10 @@ class FeedCell: UICollectionViewCell {
         }
     }
     
-    var imageURL: URL?
-    var attachURL: [URL]?
-    var stringDate: String = ""
-    var contentImages: [UIImage]? = []
+   // var imageURL: URL?
+   // var attachURL: [URL]?
+   // var stringDate: String = ""
+    //var contentImages: [UIImage]? = []
     var contentImageViews = [UIImageView]()
     var contentImageViewsHeight: NSLayoutConstraint?
     var subcontentImageViewsHeight: NSLayoutConstraint?
@@ -187,9 +177,8 @@ class FeedCell: UICollectionViewCell {
         captionDate.text = nil
         iconImageView.image = nil
         contentText.text = nil
-        contentImages?.removeAll()
+        //contentImages?.removeAll()
         contentImageViews.forEach { $0.image = nil }
-        stringDate = ""
     }
     
     override func layoutSubviews() {
@@ -213,7 +202,7 @@ class FeedCell: UICollectionViewCell {
     ///Функция заполнения заголовка поста
     private func setPostCaption() {
         captionName.text = viewModel.caption
-        captionDate.text = viewModel.date
+        captionDate.text = viewModel.dateText
     }
     
     
@@ -231,7 +220,7 @@ class FeedCell: UICollectionViewCell {
     
     ///Функция заполнения поста содержимым
     private func setPostContent(){
-        contentText.text = viewModel.text
+        contentText.text = viewModel.contentText
         self.contentImageViews.forEach { $0.isHidden = true }
         self.contentImageViews.forEach { $0.image = nil }
         if let attachments = self.viewModel.attachments {
@@ -267,14 +256,14 @@ class FeedCell: UICollectionViewCell {
     }
     
     func captionNameFrame() {
-        let captionNameSize = getCaptionSize(text: newsPost.name, font: captionName.font)
+        let captionNameSize = getCaptionSize(text: viewModel.caption, font: captionName.font)
         let captionNameX = iconImageView.frame.width + spacer * 2
         let captionNameOrigin =  CGPoint(x: captionNameX, y: spacer)
         captionName.frame = CGRect(origin: captionNameOrigin, size: captionNameSize)
     }
     
     func captionDateFrame() {
-        let captionDateSize = getCaptionSize(text: stringDate, font: captionDate.font)
+        let captionDateSize = getCaptionSize(text: viewModel.dateText, font: captionDate.font)
         let captionDateX = iconImageView.frame.width + spacer * 2
         let captionDateY = captionName.frame.origin.y + captionName.frame.height + spacer
         let captionDateOrigin =  CGPoint(x: captionDateX, y: captionDateY)
@@ -295,10 +284,10 @@ class FeedCell: UICollectionViewCell {
     
     func contentTextFrame() {
         var contentTextSize: CGSize
-        if newsPost.text == "" {
+        if viewModel.contentText == "" {
             contentTextSize = .zero
         } else {
-            contentTextSize = getContentTextSize(text: contentText.text ?? "", font: contentText.font)
+            contentTextSize = getContentTextSize(text: viewModel.contentText, font: contentText.font)
         }
         //нужно показать кнопку
         isShowMoreButton = contentTextSize.height > 200 ? true : false
@@ -329,7 +318,7 @@ class FeedCell: UICollectionViewCell {
     }
     
     func imagesStackViewFrame() {
-        let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width )
+        let imagesHeight = calculateImageHeight(attachments: viewModel.attachments, width: self.frame.width )
         let imagesStackViewSize = CGSize(width: self.frame.width, height: imagesHeight)
         
         let imagesStackViewY: CGFloat
@@ -342,7 +331,7 @@ class FeedCell: UICollectionViewCell {
         
         let imagesStackViewOrigin =  CGPoint(x: 0, y: imagesStackViewY)
         imagesStackView.frame = CGRect(origin: imagesStackViewOrigin, size: imagesStackViewSize)
-        imagesStackView.spacing = contentImages?.count ?? 0 > 1 ? 4 : 0
+        imagesStackView.spacing = viewModel.attachments?.count ?? 0 > 1 ? 4 : 0
     }
     
     func deviderFrame() {
@@ -364,7 +353,6 @@ class FeedCell: UICollectionViewCell {
     
     
     func setupViews() {
-        
         backgroundColor = .systemBackground
         
         addSubview(captionName)
@@ -413,14 +401,14 @@ class FeedCell: UICollectionViewCell {
 }
 
 //MARK: - Calculate images height
-func calculateImageHeight (images: [UIImage]?, width: CGFloat) -> CGFloat {
-    guard let unwrapImages = images,
-          images?.count != 0
+func calculateImageHeight (attachments: [ViewModelAttachment]?, width: CGFloat) -> CGFloat {
+    guard let attachments = attachments,
+          attachments.count != 0
     else { return 0 }
     
-    switch unwrapImages.count {
+    switch attachments.count {
     case 1:
-        let ratio =  unwrapImages.first!.getCropRatio()
+        let ratio =  attachments.first!.image.getCropRatio()
         return width / ratio
     default:
         return width

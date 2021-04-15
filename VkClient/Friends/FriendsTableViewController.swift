@@ -8,12 +8,7 @@
 import UIKit
 import RealmSwift
 
-//протокол для делегата
-protocol FriendsTableViewControllerDelegate: class {
-    func update(indexPhoto: Int, like: Like)
-}
-
-class FriendsTableViewController: UITableViewController, FriendsTableViewControllerDelegate {
+class FriendsTableViewController: UITableViewController {
     
     private var friendsBySection = [Results<RLMUser>]()
     private var friendsBySectionBackup = [Results<RLMUser>]()
@@ -29,11 +24,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
     @IBOutlet weak var searchBar: UISearchBar!
     
     let photoService  = PhotoService()
-    
-    //реализуем протокол FriendsTableViewControllerDelegate
-    func update(indexPhoto: Int, like: Like) {
-        //получаем данные из делегата
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -214,8 +204,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         //передача данных в PhotoCollectionViewController
         let selectedUser = tableView.indexPathForSelectedRow
         controller.userObject = friendsBySection[selectedUser!.section][selectedUser!.row]
-        controller.delegate = self // подписали на делегат
-
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -224,7 +212,6 @@ class FriendsTableViewController: UITableViewController, FriendsTableViewControl
         view.title.text = friendsLastNameTitles[section]
         return view
     }
-    
 }
 
 //MARK: - Searching
