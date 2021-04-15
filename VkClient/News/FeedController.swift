@@ -120,7 +120,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 
                 guard news.count > 0 else { return }
                 //новости добавляем в начало
-                self.viewModelFactory.constructViewModels(from: news, onComlition: { [weak self] viewModels in
+                self.viewModelFactory.constructViewModels(from: news, onCompletion: { [weak self] viewModels in
                     if let self = self {
                         //создаем индексы для вставки
                         let indexPath = (0..<(self.viewModels.count)).map { IndexPath(row: $0, section: 0) }
@@ -158,7 +158,7 @@ extension FeedController: UICollectionViewDataSourcePrefetching {
                         self.nextFrom = nextFrom
                     }
                     //новости добавляем в конец
-                    self.viewModelFactory.constructViewModels(from: news, onComlition: { [weak self] viewModels in
+                    self.viewModelFactory.constructViewModels(from: news, onCompletion: { [weak self] viewModels in
                         if let self = self {
                             //создаем индексы для вставки
                             let indexPath = (self.viewModels.count..<self.viewModels.count + viewModels.count).map {IndexPath(row: $0, section: 0)}

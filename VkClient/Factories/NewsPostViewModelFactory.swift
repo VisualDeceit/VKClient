@@ -24,7 +24,7 @@ class NewsPostViewModelFactory {
     let dispatchQueue = DispatchQueue(label: "com.VkClient.NewsPostViewModelFactory.constructViewModels")
     let dispatchSemaphore = DispatchSemaphore(value: 0)
     
-    func constructViewModels(from news: [NewsPost], onComlition: @escaping ([NewsPostViewModel]) -> () ) {
+    func constructViewModels(from news: [NewsPost], onCompletion: @escaping ([NewsPostViewModel]) -> () ) {
         
         dispatchQueue.async {
             
@@ -41,13 +41,13 @@ class NewsPostViewModelFactory {
         
         dispatchGroup.notify(queue: dispatchQueue) {
             DispatchQueue.main.async {
-                onComlition(self.newsPostViewMode)
+                onCompletion(self.newsPostViewMode)
                 self.newsPostViewMode.removeAll()
             }
         }
     }
     
-    private func viewModel(from newsPost: NewsPost, onComplition: @escaping (NewsPostViewModel) -> ()) {
+    private func viewModel(from newsPost: NewsPost, onCompletion: @escaping (NewsPostViewModel) -> ()) {
         
         var contentAttach = [ViewModelAttachment]()
         var iconImage = UIImage()
@@ -100,7 +100,7 @@ class NewsPostViewModelFactory {
         //все задания из группы закончились
         imageGroup.notify(queue: DispatchQueue.global()) {
             let viewModel =  NewsPostViewModel(iconImage: iconImage, caption: caption, dateText: dateText, dateInt: dateInt, contentText: contentText, likesCount: likesCount, isLiked: isLiked, repostsCount: repostsCount, viewsCount: viewsCount, commentsCount: commentsCount, attachments: contentAttach)
-            onComplition(viewModel)
+            onCompletion(viewModel)
         }
     }
 
