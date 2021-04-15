@@ -38,8 +38,11 @@ class PhotoCollectionViewController: UICollectionViewController {
     
     @objc func refresh(sender:AnyObject) {
         //загрузка данных
-        let networkService = NetworkServices()
-        networkService.getPhotos(for: userObject)
+        networkService.getPhotos(for: userObject) {[weak self] photos in
+            self?.userPhotos = photos
+            self?.collectionView.reloadData()
+
+        }
         self.refresher?.endRefreshing()
     }
     
