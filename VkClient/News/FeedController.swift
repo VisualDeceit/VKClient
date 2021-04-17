@@ -41,7 +41,6 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         NotificationCenter.default.addObserver(self, selector: #selector(reloadCell(_:)), name: reloadCellNotification, object: nil)
     }
     
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModels.count
     }
@@ -100,7 +99,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             default:
                 ()
             }
-    }
+        }
         
         return .init(width: view.frame.width, height: 60 + textHeight + showMoreButton + imagesHeight + 8 + 1 + 8 + 30 )
     }

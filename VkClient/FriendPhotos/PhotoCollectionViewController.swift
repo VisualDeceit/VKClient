@@ -8,14 +8,14 @@
 import UIKit
 import RealmSwift
 
-//private let reuseIdentifier = "Cell"
-
 class PhotoCollectionViewController: UICollectionViewController {
     
     var userObject = RLMUser()
     var userPhotos = [UserPhoto]()
     var refresher: UIRefreshControl!
     let networkService = NetworkServiceAdapter()
+    
+    @IBAction func closeGallery(_ unwindSegue: UIStoryboardSegue) {}
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,34 +31,27 @@ class PhotoCollectionViewController: UICollectionViewController {
         networkService.getPhotos(for: userObject) {[weak self] photos in
             self?.userPhotos = photos
             self?.collectionView.reloadData()
-
         }
     }
         
-    
     @objc func refresh(sender:AnyObject) {
         //загрузка данных
         networkService.getPhotos(for: userObject) {[weak self] photos in
             self?.userPhotos = photos
             self?.collectionView.reloadData()
-
         }
         self.refresher?.endRefreshing()
     }
     
-    
-    // MARK: UICollectionViewDataSource
-
+    // MARK: - UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return  userPhotos.count 
     }
     
-
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCollectionViewCell
@@ -94,12 +87,7 @@ class PhotoCollectionViewController: UICollectionViewController {
         controller.datasource = Array(userPhotos)
         controller.index = indexPaths!.row
     }
-    
-    @IBAction func closeGallery(_ unwindSegue: UIStoryboardSegue) {}
-
 }
-    
-
 
 extension PhotoCollectionViewController: UICollectionViewDelegateFlowLayout {
     
@@ -108,5 +96,4 @@ extension PhotoCollectionViewController: UICollectionViewDelegateFlowLayout {
         let size = CGSize(width: width, height: width + 30)
         return size
     }
-    
 }
