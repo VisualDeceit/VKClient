@@ -11,9 +11,9 @@ class FeedCell: UICollectionViewCell {
     
     static let identifier = "FeedCell"
     
-    var indexPath: IndexPath! 
+    var indexPath: IndexPath!
     
-    var newsPost: NewsPost! {
+    var viewModel: NewsPostViewModel! {
         didSet {
             setPostLogo()
             setPostCaption()
@@ -23,10 +23,10 @@ class FeedCell: UICollectionViewCell {
         }
     }
     
-    var imageURL: URL?
-    var attachURL: [URL]?
-    var stringDate: String = ""
-    var contentImages: [UIImage]? = []
+   // var imageURL: URL?
+   // var attachURL: [URL]?
+   // var stringDate: String = ""
+    //var contentImages: [UIImage]? = []
     var contentImageViews = [UIImageView]()
     var contentImageViewsHeight: NSLayoutConstraint?
     var subcontentImageViewsHeight: NSLayoutConstraint?
@@ -50,7 +50,7 @@ class FeedCell: UICollectionViewCell {
     let captionName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = true
-        label.font = UIFont.boldSystemFont(ofSize: 14.0)
+        label.font = UIFont.bolt14
         label.backgroundColor = .systemBackground
         return label
     }()
@@ -58,8 +58,8 @@ class FeedCell: UICollectionViewCell {
     let captionDate: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = true
-        label.font = UIFont.systemFont(ofSize: 12.0)
-        label.textColor =  UIColor(white: 0.6, alpha: 1)
+        label.font = UIFont.regular12
+        label.textColor =  UIColor.labelGray
         label.backgroundColor = .systemBackground
         return label
     }()
@@ -69,7 +69,7 @@ class FeedCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = true
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.regular14
         label.lineBreakMode = .byWordWrapping
         label.textColor = .label
         label.backgroundColor = .systemBackground
@@ -177,9 +177,8 @@ class FeedCell: UICollectionViewCell {
         captionDate.text = nil
         iconImageView.image = nil
         contentText.text = nil
-        contentImages?.removeAll()
+        //contentImages?.removeAll()
         contentImageViews.forEach { $0.image = nil }
-        stringDate = ""
     }
     
     override func layoutSubviews() {
@@ -197,90 +196,41 @@ class FeedCell: UICollectionViewCell {
     
     // загрузка аватара
     private func setPostLogo() {
-        imageURL = URL(string: newsPost.avatarUrl)
-        iconImageView.download(from: (imageURL)!) {[weak self] url in
-            self?.imageURL == url
-        }
+        iconImageView.image = viewModel.iconImage
     }
     
     ///Функция заполнения заголовка поста
     private func setPostCaption() {
-        captionName.text = newsPost.name
-        captionDate.text = stringDate
+        captionName.text = viewModel.caption
+        captionDate.text = viewModel.dateText
     }
     
-    private func postParamToString(countInt: Int?) -> String{
-        let count = countInt ?? 0
-            if count < 1000 {
-               return String(count)
-            } else {
-                return String(format: "%.1fk", Double(count)/1000.0)
-            }
-    }
     
     ///Функция заполнениия statusbar поста -
     ///нравится, комментарии, просмотры
     private func setPostParam() {
         //лайки и просмотры
-        likeButton.totalCount = newsPost.likesCount
-        likeButton.isLiked = (newsPost.isLiked != 0)
+        likeButton.totalCount = viewModel.likesCount
+        likeButton.isLiked = (viewModel.isLiked != 0)
 
-        viewsButton.setTitle(postParamToString(countInt: newsPost.viewsCount), for: .normal)
-        commentButton.setTitle(postParamToString(countInt: newsPost.commentsCount), for: .normal)
-        shareButton.setTitle(postParamToString(countInt: newsPost.repostsCount), for: .normal)
+        viewsButton.setTitle(viewModel.viewsCount, for: .normal)
+        commentButton.setTitle(viewModel.commentsCount, for: .normal)
+        shareButton.setTitle(viewModel.repostsCount, for: .normal)
     }
     
     ///Функция заполнения поста содержимым
     private func setPostContent(){
-        contentText.text = newsPost.text
+        contentText.text = viewModel.contentText
         self.contentImageViews.forEach { $0.isHidden = true }
-        let imageGroup = DispatchGroup()
-        //есть содержимое
-        if let attachments = newsPost.attachments {
-            attachURL?.removeAll()
-            for i in 0..<attachments.count where i < 4 {
-                //  эти пока обрабатываем
-                guard attachments[i].type == "photo" || attachments[i].type == "video" || attachments[i].type == "link" else { continue }
-                
-                //сохранияем url
-                if attachURL?.append(URL(string: attachments[i].url)!) == nil {
-                    attachURL = [ URL(string: attachments[i].url)! ]
-                }
-                
-                //создаем очередь
-                imageGroup.enter()
-                if let url = URL(string: attachments[i].url) {
-                    let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
-                    URLSession.shared.dataTask(with: request) { (data, _, _) in
-                        if let tempData = data,
-                           let image = UIImage(data: tempData) {
-                            //если это запрашиваемый url
-                            if self.attachURL!.contains(url) {
-                                self.contentImages?.append(image)
-                            }
-                        }
-                        imageGroup.leave()
-                    }.resume()
-                }
+        self.contentImageViews.forEach { $0.image = nil }
+        if let attachments = self.viewModel.attachments {
+            for i in 0..<attachments.count {
+                if i >= 4  { break }
+                self.contentImageViews[i].image = attachments[i].image
+                self.contentImageViews[i].isHidden = false
             }
-        } else { //нет прикрепленного
-            setNeedsLayout()
         }
-        
-        //все задания из группы закончились
-        imageGroup.notify(queue: DispatchQueue.main) {
-            self.contentImageViews.forEach { $0.image = nil }
-            if let images = self.contentImages {
-                for i in 0..<images.count {
-                    if i >= 4  { break }
-                    self.contentImageViews[i].image = images[i]
-                    self.contentImageViews[i].isHidden = false
-                }
-            }
-            self.setNeedsLayout()
-        }
-    }
-    
+    }    
     
     //MARK: - Frames Layout
     let spacer: CGFloat = 8
@@ -306,14 +256,14 @@ class FeedCell: UICollectionViewCell {
     }
     
     func captionNameFrame() {
-        let captionNameSize = getCaptionSize(text: newsPost.name, font: captionName.font)
+        let captionNameSize = getCaptionSize(text: viewModel.caption, font: captionName.font)
         let captionNameX = iconImageView.frame.width + spacer * 2
         let captionNameOrigin =  CGPoint(x: captionNameX, y: spacer)
         captionName.frame = CGRect(origin: captionNameOrigin, size: captionNameSize)
     }
     
     func captionDateFrame() {
-        let captionDateSize = getCaptionSize(text: stringDate, font: captionDate.font)
+        let captionDateSize = getCaptionSize(text: viewModel.dateText, font: captionDate.font)
         let captionDateX = iconImageView.frame.width + spacer * 2
         let captionDateY = captionName.frame.origin.y + captionName.frame.height + spacer
         let captionDateOrigin =  CGPoint(x: captionDateX, y: captionDateY)
@@ -334,10 +284,10 @@ class FeedCell: UICollectionViewCell {
     
     func contentTextFrame() {
         var contentTextSize: CGSize
-        if newsPost.text == "" {
+        if viewModel.contentText == "" {
             contentTextSize = .zero
         } else {
-            contentTextSize = getContentTextSize(text: contentText.text ?? "", font: contentText.font)
+            contentTextSize = getContentTextSize(text: viewModel.contentText, font: contentText.font)
         }
         //нужно показать кнопку
         isShowMoreButton = contentTextSize.height > 200 ? true : false
@@ -368,7 +318,7 @@ class FeedCell: UICollectionViewCell {
     }
     
     func imagesStackViewFrame() {
-        let imagesHeight = calculateImageHeight(images: contentImages, width: self.frame.width )
+        let imagesHeight = calculateImageHeight(attachments: viewModel.attachments, width: self.frame.width )
         let imagesStackViewSize = CGSize(width: self.frame.width, height: imagesHeight)
         
         let imagesStackViewY: CGFloat
@@ -381,7 +331,7 @@ class FeedCell: UICollectionViewCell {
         
         let imagesStackViewOrigin =  CGPoint(x: 0, y: imagesStackViewY)
         imagesStackView.frame = CGRect(origin: imagesStackViewOrigin, size: imagesStackViewSize)
-        imagesStackView.spacing = contentImages?.count ?? 0 > 1 ? 4 : 0
+        imagesStackView.spacing = viewModel.attachments?.count ?? 0 > 1 ? 4 : 0
     }
     
     func deviderFrame() {
@@ -403,7 +353,6 @@ class FeedCell: UICollectionViewCell {
     
     
     func setupViews() {
-        
         backgroundColor = .systemBackground
         
         addSubview(captionName)
@@ -452,14 +401,14 @@ class FeedCell: UICollectionViewCell {
 }
 
 //MARK: - Calculate images height
-func calculateImageHeight (images: [UIImage]?, width: CGFloat) -> CGFloat {
-    guard let unwrapImages = images,
-          images?.count != 0
+func calculateImageHeight (attachments: [ViewModelAttachment]?, width: CGFloat) -> CGFloat {
+    guard let attachments = attachments,
+          attachments.count != 0
     else { return 0 }
     
-    switch unwrapImages.count {
+    switch attachments.count {
     case 1:
-        let ratio =  unwrapImages.first!.getCropRatio()
+        let ratio =  attachments.first!.image.getCropRatio()
         return width / ratio
     default:
         return width

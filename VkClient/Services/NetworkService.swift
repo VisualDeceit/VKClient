@@ -50,11 +50,11 @@ class NetworkServices {
                     do {
                         let json = try JSON(data: data)
                         let items = json["response"]["items"].arrayValue
-                        let friends = items.map { User($0) }
+                        let friends = items.map { RLMUser($0) }
                         
                         // удаляем старых друзей
                         let ids = friends.map { $0.id}
-                        let objectsToDelete = try RealmService.load(typeOf: User.self).filter("NOT id IN %@", ids)
+                        let objectsToDelete = try RealmService.load(typeOf: RLMUser.self).filter("NOT id IN %@", ids)
                         try RealmService.delete(object: objectsToDelete)
       
                         //сохранение данных в Realm
@@ -70,7 +70,7 @@ class NetworkServices {
     }
     
     ///promisKit
-    func getUserFriendsPromise() -> Promise<[User]> {
+    func getUserFriendsPromise() -> Promise<[RLMUser]> {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"
@@ -89,7 +89,7 @@ class NetworkServices {
                         do {
                             let json = try JSON(data: data)
                             let items = json["response"]["items"].arrayValue
-                            let friends = items.map { User($0) }
+                            let friends = items.map { RLMUser($0) }
                             seal.fulfill(friends)
                         }
                         catch {
@@ -102,7 +102,7 @@ class NetworkServices {
     }
     
     //получение всех фото
-    func getPhotos(for user: User) {
+    func getPhotos(for user: RLMUser) {
         let urlComponent: URLComponents = {
             var url = URLComponents()
             url.scheme = "https"

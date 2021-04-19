@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 struct UserPhotoResponse: Decodable {
-    let items: [UserPhoto]
+    let items: [RLMUserPhoto]
     
     enum ResponseCodingKeys: CodingKey {
         case response
@@ -20,11 +20,11 @@ struct UserPhotoResponse: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: ResponseCodingKeys.self)
         let response = try container.nestedContainer(keyedBy: ResponseCodingKeys.self, forKey: .response)
-        self.items = try response.decode([UserPhoto].self, forKey: .items)
+        self.items = try response.decode([RLMUserPhoto].self, forKey: .items)
     }
 }
 
-class UserPhoto: Object, Decodable {
+class RLMUserPhoto: Object, Decodable {
     @objc dynamic var id: Int = 0
     @objc dynamic var likesCount: Int = 0
     @objc dynamic var isLiked: Int = 0
@@ -34,7 +34,7 @@ class UserPhoto: Object, Decodable {
     @objc dynamic var width: Int = 0
     @objc dynamic var height: Int = 0
     @objc dynamic var type: String = ""
-    @objc dynamic var owner: User?
+    @objc dynamic var owner: RLMUser?
 
     
     enum RepostsCodingKeys: String, CodingKey{
@@ -97,5 +97,17 @@ class PhotoSize: Decodable {
     var width: Int = 0
     var type: String = ""
     var url: String = ""
+}
+
+
+struct UserPhoto: Decodable {
+    var id: Int = 0
+    var likesCount: Int = 0
+    var isLiked: Int = 0
+    var repostsCount: Int = 0
+    var link: String = ""
+    var width: Int = 0
+    var height: Int = 0
+    var type: String = ""
 }
 
