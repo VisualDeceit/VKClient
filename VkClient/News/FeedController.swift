@@ -9,26 +9,21 @@ import UIKit
 
 class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    var newsPosts = [NewsPost]()
     var refresher: UIRefreshControl!
-    let networkService = NetworkServices()
+    let networkServiceImpl = NetworkServices()
+    var networkService: NetworkServiceProxy!
     var nextFrom = ""
     var isLoading = false
     var isShowMoreButton = false
     var isShowMoreDict = [IndexPath: Bool]()
-
     
-    let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.timeStyle = DateFormatter.Style.short //Set time style
-        df.dateStyle = DateFormatter.Style.short //Set date style
-        df.timeZone = .current
-        return df
-    }()
-
+    private let viewModelFactory = NewsPostViewModelFactory()
+    private var viewModels: [NewsPostViewModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.networkService = NetworkServiceProxy(networkServiceImpl)
         
         collectionView.backgroundColor = .secondarySystemBackground
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.identifier)
@@ -49,34 +44,30 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         NotificationCenter.default.addObserver(self, selector: #selector(reloadCell(_:)), name: reloadCellNotification, object: nil)
     }
     
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        newsPosts.count
+        viewModels.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let feedCell =  collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as! FeedCell
-        feedCell.stringDate = getStringDate(from: newsPosts[indexPath.item].date)
         feedCell.indexPath = indexPath
         feedCell.isShowMore = isShowMoreDict[indexPath] ?? false
-        feedCell.newsPost = newsPosts[indexPath.item]
+        feedCell.viewModel = viewModels[indexPath.item]
         return feedCell
     }
     
-    
-    //Feed cell size
+    //MARK: - sizeForItemAt
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let isShowMore = isShowMoreDict[indexPath] ?? false
-        
         var textHeight: CGFloat = 0
         
-        if !newsPosts[indexPath.row].text.isEmpty {
-            let contentText = newsPosts[indexPath.row].text
+        if !viewModels[indexPath.row].contentText.isEmpty {
+            let contentText = viewModels[indexPath.row].contentText
             let style = NSMutableParagraphStyle()
             style.lineBreakMode = .byWordWrapping
             let textBlock = CGSize(width: view.frame.width - 16, height: CGFloat.greatestFiniteMagnitude)
-            let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),NSAttributedString.Key.paragraphStyle: style], context: nil)
+            let rect = contentText.boundingRect(with: textBlock, options: [.usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.regular14,NSAttributedString.Key.paragraphStyle: style], context: nil)
             textHeight = rect.height + 8
             isShowMoreButton = textHeight > 200 ? true : false
             if isShowMoreButton, !isShowMore {
@@ -98,10 +89,10 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         
         
-        if let count = newsPosts[indexPath.item].attachments?.count {
+        if let count = viewModels[indexPath.item].attachments?.count {
             switch count {
             case 1:
-                if let ratio = newsPosts[indexPath.item].attachments?.first?.ratio, ratio != 0  {
+                if let ratio = viewModels[indexPath.item].attachments?.first?.ratio, ratio != 0  {
                     imagesHeight =  view.frame.width / ratio
                 } else {
                     imagesHeight = -8
@@ -111,20 +102,14 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             default:
                 ()
             }
-    }
+        }
         
         return .init(width: view.frame.width, height: 60 + textHeight + showMoreButton + imagesHeight + 8 + 1 + 8 + 30 )
     }
     
-    func getStringDate(from timeInterval: TimeInterval) -> String {
-        let date = Date(timeIntervalSince1970: timeInterval)
-        return dateFormatter.string(from: date)
-    }
-    
     //загрузка данных из сети
-    @objc
-    func newsRequest() {
-        let requestTime = newsPosts.first?.date
+    @objc func newsRequest() {
+        let requestTime = viewModels.first?.dateInt
         networkService.getNewsFeed(type: .post, startTime: requestTime) { [weak self] (news, nextFrom) in
             if let self = self {
                 DispatchQueue.main.async {
@@ -134,15 +119,17 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 if let nextFrom = nextFrom, self.nextFrom == "" {
                     self.nextFrom = nextFrom
                 }
+                
                 guard news.count > 0 else { return }
                 //новости добавляем в начало
-                self.newsPosts = news + self.newsPosts
-                //создаем индексы для вставки
-                let indexPath = (0..<news.count).map {IndexPath(row: $0, section: 0)}
-                DispatchQueue.main.async {
-                    self.collectionView.insertItems(at: indexPath)
-                }
-                
+                self.viewModelFactory.constructViewModels(from: news, onCompletion: { [weak self] viewModels in
+                    if let self = self {
+                        //создаем индексы для вставки
+                        let indexPath = (0..<(self.viewModels.count)).map { IndexPath(row: $0, section: 0) }
+                        self.viewModels = viewModels + self.viewModels
+                        self.collectionView.insertItems(at: indexPath)
+                    }
+                })
             }
         }
     }
@@ -158,7 +145,6 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
             collectionView.reloadItems(at: [indexPath])
         }
     }
-
 }
 
 //MARK: - Паттерн Infinite Scrolling
@@ -166,26 +152,25 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
 extension FeedController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         guard let maxItem = indexPaths.max()?.item else {   return }
-        if  maxItem > newsPosts.count - 5, !isLoading {
+        if  maxItem > viewModels.count - 5, !isLoading {
             isLoading = true
             networkService.getNewsFeed(type: .post, startFrom: nextFrom) { [weak self] (news, nextFrom) in
                 if let self = self {
                     if let nextFrom = nextFrom {
                         self.nextFrom = nextFrom
                     }
-                    //создаем индексы для вставки
-                    let indexPath = (self.newsPosts.count..<self.newsPosts.count + news.count).map {IndexPath(row: $0, section: 0)}
                     //новости добавляем в конец
-                    self.newsPosts.append(contentsOf: news)
-                    DispatchQueue.main.async {
-                        self.collectionView.insertItems(at: indexPath)
-                        self.isLoading = false
-                    }
-                    
+                    self.viewModelFactory.constructViewModels(from: news, onCompletion: { [weak self] viewModels in
+                        if let self = self {
+                            //создаем индексы для вставки
+                            let indexPath = (self.viewModels.count..<self.viewModels.count + viewModels.count).map {IndexPath(row: $0, section: 0)}
+                            self.viewModels.append(contentsOf: viewModels)
+                            self.collectionView.insertItems(at: indexPath)
+                            self.isLoading = false
+                        }
+                    })
                 }
             }
-            
         }
     }
-    
 }

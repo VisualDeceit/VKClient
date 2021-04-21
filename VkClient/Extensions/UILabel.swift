@@ -14,12 +14,12 @@ extension UILabel {
         paragrathStyle.lineSpacing = 4
         
         let firstLineAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.boldSystemFont(ofSize: 14.0),
+            .font: UIFont.bolt14,
             .paragraphStyle: paragrathStyle
         ]
         let secontLineAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 12.0),
-            .foregroundColor: UIColor(white: 0.6, alpha: 1)
+            .font: UIFont.regular12,
+            .foregroundColor: UIColor.labelGray
         ]
         
         let firstLine = NSMutableAttributedString(string: text, attributes: firstLineAttributes)
