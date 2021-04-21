@@ -10,7 +10,8 @@ import UIKit
 class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var refresher: UIRefreshControl!
-    let networkService = NetworkServices()
+    let networkServiceImpl = NetworkServices()
+    var networkService: NetworkServiceProxy!
     var nextFrom = ""
     var isLoading = false
     var isShowMoreButton = false
@@ -21,6 +22,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.networkService = NetworkServiceProxy(networkServiceImpl)
         
         collectionView.backgroundColor = .secondarySystemBackground
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.identifier)

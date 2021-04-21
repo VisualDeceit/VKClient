@@ -32,7 +32,8 @@ class FriendsTableViewController: UITableViewController {
         tableView.register(MyCustomSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         
         //загрузка данных из сети
-        let networkService = NetworkServices()
+        let networkServiceImpl = NetworkServices()
+        let networkService = NetworkServiceProxy(networkServiceImpl)
         //networkService.getUserFriends()
         networkService.getUserFriendsPromise()
             .done(on: .global()) { (friends) in

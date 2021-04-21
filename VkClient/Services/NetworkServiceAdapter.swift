@@ -10,8 +10,14 @@ import RealmSwift
 
 class NetworkServiceAdapter {
     
-    private let networkService = NetworkServices()
+    private let networkServiceImpl: NetworkServices
+    private let networkService: NetworkServiceProxy
     var token: NotificationToken?
+    
+    init() {
+        networkServiceImpl = NetworkServices()
+        networkService = NetworkServiceProxy(self.networkServiceImpl)
+    }
  
     func getPhotos(for user: RLMUser, then complition: @escaping ([UserPhoto]) -> ()) {
         

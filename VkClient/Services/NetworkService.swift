@@ -21,7 +21,16 @@ public struct NewsFeedType: RawRepresentable {
     }
 }
 
-class NetworkServices {
+protocol NetworkServiceProtocol {
+    func getUserFriends()
+    func getUserFriendsPromise() -> Promise<[RLMUser]>
+    func getPhotos(for user: RLMUser)
+    func getUserGroups()
+    func searchGroups(by caption: String)
+    func getNewsFeed(type: NewsFeedType, startTime: TimeInterval?, startFrom: String, completion: @escaping ([NewsPost], String?) ->())
+}
+
+class NetworkServices: NetworkServiceProtocol {
     
     private let vAPI = "5.130"
     

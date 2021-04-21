@@ -15,6 +15,7 @@
 		1504D9442583D17700B4EBEE /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D9432583D17700B4EBEE /* GroupTableViewCell.swift */; };
 		1504D94825848BA600B4EBEE /* AllGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D94725848BA600B4EBEE /* AllGroupsTableViewController.swift */; };
 		1504D94B25848BB800B4EBEE /* AllGroupsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1504D94A25848BB800B4EBEE /* AllGroupsTableViewCell.swift */; };
+		151C9BA02630A186000D5576 /* NetworkServiceProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151C9B9F2630A186000D5576 /* NetworkServiceProxy.swift */; };
 		1528B35125FA4C6400923B73 /* URLCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1528B35025FA4C6400923B73 /* URLCache.swift */; };
 		1533D93F2593A6BB008A44EB /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1533D93E2593A6BB008A44EB /* LoadingIndicator.swift */; };
 		1535229025AF0A6F006498A6 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1535228F25AF0A6F006498A6 /* Session.swift */; };
@@ -71,6 +72,7 @@
 		1504D9432583D17700B4EBEE /* GroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		1504D94725848BA600B4EBEE /* AllGroupsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsTableViewController.swift; sourceTree = "<group>"; };
 		1504D94A25848BB800B4EBEE /* AllGroupsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsTableViewCell.swift; sourceTree = "<group>"; };
+		151C9B9F2630A186000D5576 /* NetworkServiceProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceProxy.swift; sourceTree = "<group>"; };
 		1528B35025FA4C6400923B73 /* URLCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCache.swift; sourceTree = "<group>"; };
 		1533D93E2593A6BB008A44EB /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		1535228F25AF0A6F006498A6 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 			children = (
 				15A901C425B429A6006C5A25 /* NetworkService.swift */,
 				15439A1A2625FC6D00ACA661 /* NetworkServiceAdapter.swift */,
+				151C9B9F2630A186000D5576 /* NetworkServiceProxy.swift */,
 				1535228F25AF0A6F006498A6 /* Session.swift */,
 				1572BDB825C6837D00B320F9 /* RealmService.swift */,
 				15CAD637260267FE0046B807 /* PhotoService.swift */,
@@ -466,6 +469,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15439A23262630B000ACA661 /* NewsPostViewModelFactory.swift in Sources */,
+				151C9BA02630A186000D5576 /* NetworkServiceProxy.swift in Sources */,
 				15D91F4B25BC162300169520 /* Group.swift in Sources */,
 				15F45D8A25F93912001DD0BE /* SaveToRealmOperation.swift in Sources */,
 				1535229025AF0A6F006498A6 /* Session.swift in Sources */,
